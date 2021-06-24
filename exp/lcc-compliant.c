@@ -5,6 +5,10 @@
 
 #define NULL_NODE 0x00
 
+/**
+ * TODO: make next node a single method which switches on the individual nodes.
+ */
+
 struct GAMESTATE_GameState {
     int some_varible;
     int some_other_variable;
@@ -95,6 +99,10 @@ void handle_node(struct NODE_Node * node){
 
 struct GAMESTATE_GameState GLOBAL_GAME_STATE = {0x00, 0x00, 0x00, 0x00};
 
+struct NODE_Node * get_next_node(struct NODE_Node * node)
+{
+    return &n_id_node_2;
+}
 
 int main() {
     //FONT SETUP
@@ -126,7 +134,7 @@ int main() {
     {
         next_node->game_state_modification(&GLOBAL_GAME_STATE);
         handle_node(next_node);
-        next_node = next_node->next_node_strategy();
+        next_node = get_next_node(next_node);
     }
     printf("%d", GLOBAL_GAME_STATE.some_varible);
     return 1;
