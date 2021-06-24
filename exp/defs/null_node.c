@@ -1,0 +1,3 @@
+#ifndef NULL_NODE_POINTER
+#define NULL_NODE_POINTER 0x00
+#endif
