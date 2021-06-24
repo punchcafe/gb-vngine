@@ -101,6 +101,7 @@ struct GAMESTATE_GameState GLOBAL_GAME_STATE = {0x00, 0x00, 0x00, 0x00};
 
 struct NODE_Node * get_next_node(struct NODE_Node * node)
 {
+    //TODO: implement this using different strategies depending on node type
     return &n_id_node_2;
 }
 
