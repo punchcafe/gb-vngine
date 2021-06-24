@@ -17,12 +17,30 @@ int GAMESTATE_PREDICATE_predicate_expression_2(struct GAMESTATE_GameState * game
 
 typedef struct Branch {
     int (*predicate)(struct GAMESTATE_GameState * game_state);
-    struct NODE_Node next_node;
+    struct NODE_Node * next_node;
 } Branch;
 
-typedef struct PredicateDefinedNextBranch {
+typedef struct PredicateDefinedNextBranches {
     Branch * branches_array;
     short number_of_branches;
     // array of branch pointers
     // number of brainches in array
 } PredicateDefinedNextBranch;
+
+struct NODE_Node * get_next_node(PredicateDefinedNextBranches * branches, struct GAMESTATE_GameState * game_state)
+{
+    int limit = branches->number_of_branches;
+    for(int i = 0;i < limit; i++)
+    {
+        Branch * branch = branches->branches_array[i];
+        if(branch->predicate(game_state))
+        {
+            return branch->node;
+        }
+    }
+    // Return default
+}
+/*
+make dependency graph of what types (predicates/GSM, type definitions (separate file), statics etc) depend on what types in 
+dependency graph
+*/
