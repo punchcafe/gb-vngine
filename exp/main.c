@@ -6,7 +6,7 @@
 #include "./types/node.c"
 //DEV ONLY
 #include "./gen/constant_next_node.c"
-struct Node * current_node = &n_id_node_2;
+struct Node * current_node = &n_id_node_1;
 struct GameState GLOBAL_GAME_STATE;
 int main()
 {
