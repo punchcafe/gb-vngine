@@ -7,7 +7,7 @@ struct Branch {
 };
 
 struct PredicateBasedTransition {
-    struct Branch * branches;
+    struct Branch ** branches;
     int number_of_branches;
 };
 #endif

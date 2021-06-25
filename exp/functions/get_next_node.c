@@ -17,8 +17,8 @@ struct Node * get_predicate_based_node(struct PredicateBasedTransition * transit
 {
     int number_of_branches = transition->number_of_branches;
     for(int i = 0; i < number_of_branches; i++){
-        if(transition->branches[i].predicate(game_state)){
-            return transition->branches[i].node;
+        if(transition->branches[i]->predicate(game_state)){
+            return transition->branches[i]->node;
         }
     }
     //TODO: implement default when in schema

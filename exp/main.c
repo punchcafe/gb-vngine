@@ -10,6 +10,7 @@ struct Node * current_node = &n_id_node_1;
 struct GameState GLOBAL_GAME_STATE;
 int main()
 {
+    set_up_variables();
     while(current_node != NULL_NODE_POINTER)
     {
         current_node->game_state_modification(&GLOBAL_GAME_STATE);
