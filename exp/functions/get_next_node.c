@@ -6,10 +6,51 @@
 #include "../types/predicate_based_transition.c"
 #include "../types/game_state.c"
 #include "../gen/constant_next_node.c"
-struct Node * get_player_based_node(struct PlayerBasedTransition * tranition, 
+#include <stdio.h>
+#include <gb/gb.h>
+
+#define UP_BUTTON_CHOICE_INDEX 0
+#define RIGHT_BUTTON_CHOICE_INDEX 1
+#define DOWN_BUTTON_CHOICE_INDEX 2
+#define LEFT_BUTTON_CHOICE_INDEX 3
+
+const char* prefix_array []  = {"up: ", "rt: ", "dn: ", "lt: "};
+
+void print_choices(char ** prompts, short number_of_prompts){
+    for(int i = 0; i < number_of_prompts; i++)
+    {
+        printf("\n");
+        printf(prefix_array[i]);
+        printf(prompts[i]);
+    }
+}
+
+short get_choice_index(int number_of_prompts){
+    short choice = 5;
+    while(1)
+    {
+        unsigned char input = joypad();
+        if(input & J_UP) {
+            choice = UP_BUTTON_CHOICE_INDEX;
+        } else if(input & J_RIGHT) {
+            choice = RIGHT_BUTTON_CHOICE_INDEX;
+        } else if(input & J_DOWN) {
+            choice = DOWN_BUTTON_CHOICE_INDEX;
+        } else if(input & J_LEFT) {
+            choice = LEFT_BUTTON_CHOICE_INDEX;
+        };
+        if(choice < number_of_prompts){
+            return choice;
+        }
+    }
+}
+
+struct Node * get_player_based_node(struct PlayerBasedTransition * transition, 
                                     struct GameState * game_state)
 {
-    return &n_id_node_2;
+    print_choices(transition->prompts, transition->number_of_prompts);
+    short choice = get_choice_index(transition->number_of_prompts);
+    return transition->node_choices[choice];
 }
 
 struct Node * get_predicate_based_node(struct PredicateBasedTransition * transition, 
