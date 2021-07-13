@@ -29,7 +29,7 @@ dependencies {
     implementation 'dev.punchcafe.vngine:pom:0.1'
     // Use JUnit Jupiter API for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
-
+    testImplementation 'io.github.json-snapshot:json-snapshot:1.0.17'
     // Use JUnit Jupiter Engine for testing.
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
 }

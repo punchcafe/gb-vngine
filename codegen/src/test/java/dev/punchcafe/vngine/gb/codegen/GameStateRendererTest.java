@@ -2,26 +2,22 @@ package dev.punchcafe.vngine.gb.codegen;
 
 import dev.punchcafe.vngine.pom.model.GameStateVariableConfig;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static io.github.jsonSnapshot.SnapshotMatcher.expect;
+import static io.github.jsonSnapshot.SnapshotMatcher.start;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GameStateRendererTest {
 
-    private static String EXPECTED_OUTPUT =
-        "#ifndef GAMESTATE_TYPE_DEFINITION\n" +
-        "#define GAMESTATE_TYPE_DEFINITION\n" +
-            "struct GameState {\n" +
-                "char str-property-1 [50];\n" +
-                "char str-property-2 [50];\n" +
-                "int int-property-1;\n" +
-                "int int-property-2;\n" +
-                "short bool-property-1;\n" +
-                "short bool-property-2;" +
-        "};\n" +
-        "struct GameState GAME_STATE_VARIABLE;";
+    @BeforeAll
+    void beforeAll() {
+        start(Snapshot::asJsonString);
+    }
 
     @Test
     void shouldRenderSimpleGameState() {
@@ -38,6 +34,6 @@ public class GameStateRendererTest {
                 .globalGameStateVariableName("GAME_STATE_VARIABLE")
                 .maxStringVariableLength(50)
                 .build();
-        assertEquals(renderer.render(), EXPECTED_OUTPUT);
+        expect(renderer.render()).toMatchSnapshot();
     }
 }

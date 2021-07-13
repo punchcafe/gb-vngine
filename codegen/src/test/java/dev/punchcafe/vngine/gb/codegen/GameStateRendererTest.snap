@@ -1,0 +1,3 @@
+dev.punchcafe.vngine.gb.codegen.GameStateRendererTest.shouldRenderSimpleGameState=[
+  "#ifndef GAMESTATE_TYPE_DEFINITION\n#define GAMESTATE_TYPE_DEFINITION\nstruct GameState {\n    char str-property-1 [50];\n    char str-property-2 [50];\n    int int-property-1;\n    int int-property-2;\n    short bool-property-1;\n    short bool-property-2;};\nstruct GameState GAME_STATE_VARIABLE;"
+]

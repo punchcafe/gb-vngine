@@ -39,6 +39,7 @@ public class GameStateRenderer {
                 .entrySet()
                 .stream()
                 .map(this::renderVariableOfType)
+                .map(variable -> RenderUtils.addIndentationOfLevel(variable, 1))
                 .sorted()
                 .collect(Collectors.joining("\n"));
     }
