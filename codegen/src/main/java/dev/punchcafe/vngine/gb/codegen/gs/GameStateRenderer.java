@@ -1,16 +1,18 @@
-package dev.punchcafe.vngine.gb.codegen;
+package dev.punchcafe.vngine.gb.codegen.gs;
 
+import dev.punchcafe.vngine.gb.codegen.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.GameStateVariableConfig;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Builder
 @Getter
-public class GameStateRenderer {
+public class GameStateRenderer implements ComponentRenderer {
 
     private static String DEFINITION_HEADERS = "" +
             "#ifndef GAMESTATE_TYPE_DEFINITION\n" +
@@ -31,6 +33,11 @@ public class GameStateRenderer {
                 .append(STRUCT_STATEMENT_CLOSER)
                 .append(this.renderGameStateSingleton())
                 .toString();
+    }
+
+    @Override
+    public List<Class<? extends ComponentRenderer>> dependencies() {
+        return List.of();
     }
 
     private String renderGameStateContents() {
@@ -60,8 +67,4 @@ public class GameStateRenderer {
     private String renderGameStateSingleton() {
         return String.format(GLOBAL_GAMESTATE_TEMPLATE, this.globalGameStateVariableName);
     }
-    /*
-    TODO:
-    consider a List<Class<? extends Renderer>> getDependencies() for rendering everything into one big c file in the right order?
-     */
 }
