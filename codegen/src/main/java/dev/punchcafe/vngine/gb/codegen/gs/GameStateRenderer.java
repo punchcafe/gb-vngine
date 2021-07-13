@@ -1,6 +1,7 @@
 package dev.punchcafe.vngine.gb.codegen.gs;
 
 import dev.punchcafe.vngine.gb.codegen.ComponentRenderer;
+import dev.punchcafe.vngine.gb.codegen.RenderUtils;
 import dev.punchcafe.vngine.pom.model.GameStateVariableConfig;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import lombok.Builder;
