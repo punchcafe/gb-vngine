@@ -2,8 +2,10 @@ package dev.punchcafe.vngine.gb.codegen.gs;
 
 import dev.punchcafe.vngine.gb.codegen.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.RenderUtils;
+import dev.punchcafe.vngine.gb.codegen.csan.CVariableNameSanitiser;
 import dev.punchcafe.vngine.pom.model.GameStateVariableConfig;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
+import dev.punchcafe.vngine.pom.model.vngpl.variable.GameVariableLevel;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -53,13 +55,16 @@ public class GameStateRenderer implements ComponentRenderer {
     }
 
     private String renderVariableOfType(final Map.Entry<String, VariableTypes> variableEntry) {
+        final var variableName = CVariableNameSanitiser.sanitiseVariableName(variableEntry.getKey(),
+                variableEntry.getValue(),
+                GameVariableLevel.GAME);
         switch (variableEntry.getValue()) {
             case BOOL:
-                return String.format("short %s;", variableEntry.getKey());
+                return String.format("short %s;", variableName);
             case STR:
-                return String.format("char %s [%d];", variableEntry.getKey(), this.maxStringVariableLength);
+                return String.format("char %s [%d];", variableName, this.maxStringVariableLength);
             case INT:
-                return String.format("int %s;", variableEntry.getKey());
+                return String.format("int %s;", variableName);
             default:
                 throw new UnsupportedOperationException();
         }
