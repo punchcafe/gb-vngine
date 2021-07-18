@@ -1,0 +1,14 @@
+#ifndef ACTOR_PATTERN_TABLE_MAP
+
+// sprtie pattern table
+
+#define LEFT_ACTOR_SPRITE_TABLE_OFFSET 0
+#define LEFT_ACTOR_SPRITE_TABLE_LIMIT 24
+#define LEFT_ACTOR_SPRITE_TABLE_OFFSET 24
+#define LEFT_ACTOR_SPRITE_TABLE_LIMIT 24
+
+// background pattern table
+
+#define FONTS_TABLE_OFFSET 0
+#define LEFT_ACTOR_SPRITE_TABLE_LIMIT 24
+#endif
