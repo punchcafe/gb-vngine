@@ -1,3 +1,6 @@
+#include <gb.h>
+#include "lhs-player-static.c"
+
 enum ActorMode { DIALOGUE_MODE, OBJECT_FOCUS_MODE } ACTOR_MODE;
 
 #define DIALOGUE_PORTRAIT_SIZE 24
@@ -44,4 +47,12 @@ void render_dialogue_mode_right(struct DailogueModeRenderObject * object)
 };
 void render_object_focus(struct ObjectFocusActorObject object){
     if(ACTOR_MODE != DIALOGUE_MODE) use_dialogue_actor_mode();
+}
+
+int main()
+{
+    for(int i =0; i < 40; i++){
+        set_sprite_data(i, 1, LHSTile);
+        //unsigned int position 
+    }
 }
