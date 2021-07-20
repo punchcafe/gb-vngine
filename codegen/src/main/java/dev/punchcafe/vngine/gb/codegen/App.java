@@ -4,6 +4,7 @@
 package dev.punchcafe.vngine.gb.codegen;
 
 import dev.punchcafe.vngine.gb.codegen.gs.GameStateRenderer;
+import dev.punchcafe.vngine.gb.codegen.gsmutate.GameStateMutationRenderer;
 import dev.punchcafe.vngine.pom.NarrativeAdaptor;
 import dev.punchcafe.vngine.pom.PomLoader;
 
@@ -36,15 +37,20 @@ public class App {
                 .maxStringVariableLength(30)
                 .build();
 
+        final var gameStateMutationRenderer = GameStateMutationRenderer.builder()
+                .gameModel(gameConfig)
+                .build();
+
         final var mainMethod = FixtureRender.builder()
                 .componentName("main_method")
                 .fixture("\nint main()\n{\n}")
-                .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME))
+                .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME, GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER))
                 .build();
 
         final var components = new ArrayList<ComponentRenderer>();
         components.add(mainMethod);
         components.add(gameStateRenderer);
+        components.add(gameStateMutationRenderer);
 
         final var scriptRenderer = ScriptRenderer.builder()
                 .componentRenderers(components)

@@ -25,7 +25,7 @@ public class GameStateRenderer implements ComponentRenderer {
 
     private static String DEFINITION_FOOTER = "\n#endif";
     private static String STRUCT_STATEMENT_OPENER = "struct GameState {\n";
-    private static String STRUCT_STATEMENT_CLOSER = "};\n";
+    private static String STRUCT_STATEMENT_CLOSER = "\n};\n";
     private static String GLOBAL_GAMESTATE_TEMPLATE = "struct GameState %s;";
 
     private final String globalGameStateVariableName;
@@ -72,7 +72,7 @@ public class GameStateRenderer implements ComponentRenderer {
             case BOOL:
                 return String.format("short %s;", variableName);
             case STR:
-                return String.format("char %s [%d];", variableName, this.maxStringVariableLength);
+                return String.format("char * %s;", variableName, this.maxStringVariableLength);
             case INT:
                 return String.format("int %s;", variableName);
             default:
