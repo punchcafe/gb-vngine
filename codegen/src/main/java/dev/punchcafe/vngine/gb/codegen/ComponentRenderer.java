@@ -5,5 +5,6 @@ import java.util.List;
 public interface ComponentRenderer {
 
     String render();
-    List<Class<? extends ComponentRenderer>> dependencies();
+    List<String> dependencies();
+    String componentName();
 }

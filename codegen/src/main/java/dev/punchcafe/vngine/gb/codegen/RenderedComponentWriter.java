@@ -1,15 +1,26 @@
 package dev.punchcafe.vngine.gb.codegen;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.io.IOException;
 import java.io.Writer;
 
-public class RenderedComponentWriter<T extends ComponentRenderer> {
-    private boolean hasWritten;
-    private T renderer;
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+public class RenderedComponentWriter {
 
-    public void write(final Writer writer) throws IOException {
+    public static RenderedComponentWriter from(final ComponentRenderer componentRenderer){
+        return new RenderedComponentWriter(false, componentRenderer);
+    }
+
+    private boolean hasWritten;
+    @Getter
+    private ComponentRenderer renderer;
+
+    public void write(final StringBuilder builder) {
         if(!hasWritten){
-            writer.write(renderer.render());
+            builder.append(renderer.render());
             this.hasWritten = true;
         }
     }

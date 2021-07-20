@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 @Getter
 public class GameStateRenderer implements ComponentRenderer {
 
+    public static String GAME_STATE_RENDERER_NAME = "GAME_STATE_RENDERER_NAME";
+
     private static String DEFINITION_HEADERS = "" +
             "#ifndef GAMESTATE_TYPE_DEFINITION\n" +
             "#define GAMESTATE_TYPE_DEFINITION\n";
@@ -39,8 +41,13 @@ public class GameStateRenderer implements ComponentRenderer {
     }
 
     @Override
-    public List<Class<? extends ComponentRenderer>> dependencies() {
+    public List<String> dependencies() {
         return List.of();
+    }
+
+    @Override
+    public String componentName() {
+        return GAME_STATE_RENDERER_NAME;
     }
 
     private String renderGameStateContents() {
