@@ -3,12 +3,56 @@
  */
 package dev.punchcafe.vngine.gb.codegen;
 
+import dev.punchcafe.vngine.gb.codegen.gs.GameStateRenderer;
+import dev.punchcafe.vngine.pom.NarrativeAdaptor;
+import dev.punchcafe.vngine.pom.PomLoader;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class App {
+
+
+
     public String getGreeting() {
         return "Hello world.";
     }
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
+    }
+
+    public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
+        final NarrativeAdaptor<Object> narrativeReader = (file) -> List.of();
+        final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
+
+        final var gameStateRenderer = GameStateRenderer.builder()
+                .gameStateVariableConfig(gameConfig.getGameStateVariableConfig())
+                .globalGameStateVariableName("GAME_STATE")
+                .maxStringVariableLength(30)
+                .build();
+
+        final var mainMethod = FixtureRender.builder()
+                .componentName("main_method")
+                .fixture("\nint main()\n{\n}")
+                .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME))
+                .build();
+
+        final var components = new ArrayList<ComponentRenderer>();
+        components.add(mainMethod);
+        components.add(gameStateRenderer);
+
+        final var scriptRenderer = ScriptRenderer.builder()
+                .componentRenderers(components)
+                .build();
+
+        final var renderedScript = scriptRenderer.render();
+        final var out = new BufferedWriter(new FileWriter(scriptDestination));
+        out.write(renderedScript);
+        out.close();
     }
 }

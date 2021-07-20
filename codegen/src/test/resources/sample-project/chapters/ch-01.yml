@@ -1,0 +1,68 @@
+chapter-id: ch-01
+chapter-variables:
+nodes:
+  - id: 0
+    type: PLAYER
+    narrative-id: 0
+    game-state-modifiers:
+    branches:
+      - prompt: "1-0"
+        node-id: 1-0
+      - prompt: "1-1"
+        node-id: 1-1
+      - prompt: "1-2"
+        node-id: 1-2
+  - id: 1-0
+    type: AUTOMATIC
+    narrative-id: 1-0
+    game-state-modifiers:
+      - "increase $int.gs-int-var-1 by 1"
+    branches:
+      - predicate-expression: "$int.gs-int-var-1 more_than 0"
+        node-id: 2
+    # TODO: need default branch
+  - id: 1-1
+    type: AUTOMATIC
+    narrative-id: 1-1
+    game-state-modifiers:
+# TODO: consider whether to ignore case?
+      - "set $str.gs-str-var-1 to 'str-1-is-set'"
+    branches:
+      - predicate-expression: "$str.gs-str-var-1 is 'str-1-is-set'"
+        node-id: 2
+    # TODO: need default branch
+  - id: 1-2
+    type: AUTOMATIC
+    narrative-id: 1-2
+    game-state-modifiers:
+      - "set $bool.gs-bool-var-1 to true"
+    branches:
+      - predicate-expression: "$bool.gs-bool-var-1 is true"
+        node-id: 2
+    # TODO: need default branch
+  - id: 2
+    type: AUTOMATIC
+    narrative-id: 2
+    branches:
+      - predicate-expression: "$int.gs-int-var-1 more_than 0"
+        node-id: 3-0
+      - predicate-expression: "$str.gs-str-var-1 is 'str-1-is-set'"
+        node-id: 3-1
+      - predicate-expression: "$bool.gs-bool-var-1 is true"
+        node-id: 3-2
+    # TODO: need default branch
+  - id: 3-0
+    type: AUTOMATIC
+    narrative-id: 3-0
+    game-state-modifiers:
+    branches:
+  - id: 3-1
+    type: AUTOMATIC
+    narrative-id: 3-1
+    game-state-modifiers:
+    branches:
+  - id: 3-2
+    type: AUTOMATIC
+    narrative-id: 3-2
+    game-state-modifiers:
+    branches:

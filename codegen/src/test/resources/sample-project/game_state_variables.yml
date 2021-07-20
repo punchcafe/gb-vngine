@@ -1,0 +1,7 @@
+game-state-variables:
+  gs-int-var-1: INT
+  gs-int-var-2: INT
+  gs-str-var-1: STR
+  gs-str-var-2: STR
+  gs-bool-var-1: BOOL
+  gs-bool-var-2: BOOL

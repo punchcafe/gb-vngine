@@ -22,6 +22,8 @@ public class GameStateRenderer implements ComponentRenderer {
     private static String DEFINITION_HEADERS = "" +
             "#ifndef GAMESTATE_TYPE_DEFINITION\n" +
             "#define GAMESTATE_TYPE_DEFINITION\n";
+
+    private static String DEFINITION_FOOTER = "\n#endif";
     private static String STRUCT_STATEMENT_OPENER = "struct GameState {\n";
     private static String STRUCT_STATEMENT_CLOSER = "};\n";
     private static String GLOBAL_GAMESTATE_TEMPLATE = "struct GameState %s;";
@@ -37,6 +39,7 @@ public class GameStateRenderer implements ComponentRenderer {
                 .append(this.renderGameStateContents())
                 .append(STRUCT_STATEMENT_CLOSER)
                 .append(this.renderGameStateSingleton())
+                .append(DEFINITION_FOOTER)
                 .toString();
     }
 
