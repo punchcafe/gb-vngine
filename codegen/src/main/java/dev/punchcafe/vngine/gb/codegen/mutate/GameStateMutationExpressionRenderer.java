@@ -1,6 +1,6 @@
-package dev.punchcafe.vngine.gb.codegen.gsmutate;
+package dev.punchcafe.vngine.gb.codegen.mutate;
 
-import dev.punchcafe.vngine.gb.codegen.csan.CVariableNameSanitiser;
+import dev.punchcafe.vngine.gb.codegen.csan.CNameSanitiser;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import dev.punchcafe.vngine.pom.model.vngml.*;
 
@@ -14,7 +14,7 @@ public class GameStateMutationExpressionRenderer implements GameStateMutationExp
 
         final var targetVariable = setBooleanMutation.getVariableToMutate();
         // assume all variable are GLOBAL
-        final var variableName = CVariableNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
+        final var variableName = CNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
                 VariableTypes.BOOL,
                 targetVariable.getGameVariableLevel());
         final var targetValue = setBooleanMutation.getChangeValue().isValue() ? 1 : 0;
@@ -29,7 +29,7 @@ public class GameStateMutationExpressionRenderer implements GameStateMutationExp
 
         final var targetVariable = setStringMutation.getVariableToMutate();
         // assume all variable are GLOBAL
-        final var variableName = CVariableNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
+        final var variableName = CNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
                 VariableTypes.STR,
                 targetVariable.getGameVariableLevel());
         final var targetValue = setStringMutation.getChangeValue().getValue();
@@ -44,7 +44,7 @@ public class GameStateMutationExpressionRenderer implements GameStateMutationExp
 
         final var targetVariable = increaseIntegerMutation.getVariableToModify();
         // assume all variable are GLOBAL
-        final var variableName = CVariableNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
+        final var variableName = CNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
                 VariableTypes.INT,
                 targetVariable.getGameVariableLevel());
         final var targetValue = increaseIntegerMutation.getIncreaseBy().getValue();
@@ -59,7 +59,7 @@ public class GameStateMutationExpressionRenderer implements GameStateMutationExp
 
         final var targetVariable = decreaseIntegerMutation.getVariableToModify();
         // assume all variable are GLOBAL
-        final var variableName = CVariableNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
+        final var variableName = CNameSanitiser.sanitiseVariableName(targetVariable.getVariableName(),
                 VariableTypes.INT,
                 targetVariable.getGameVariableLevel());
         final var targetValue = decreaseIntegerMutation.getDecreaseBy().getValue();

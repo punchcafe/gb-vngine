@@ -2,7 +2,7 @@ package dev.punchcafe.vngine.gb.codegen.gs;
 
 import dev.punchcafe.vngine.gb.codegen.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.RenderUtils;
-import dev.punchcafe.vngine.gb.codegen.csan.CVariableNameSanitiser;
+import dev.punchcafe.vngine.gb.codegen.csan.CNameSanitiser;
 import dev.punchcafe.vngine.pom.model.GameStateVariableConfig;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import dev.punchcafe.vngine.pom.model.vngpl.variable.GameVariableLevel;
@@ -65,7 +65,7 @@ public class GameStateRenderer implements ComponentRenderer {
     }
 
     private String renderVariableOfType(final Map.Entry<String, VariableTypes> variableEntry) {
-        final var variableName = CVariableNameSanitiser.sanitiseVariableName(variableEntry.getKey(),
+        final var variableName = CNameSanitiser.sanitiseVariableName(variableEntry.getKey(),
                 variableEntry.getValue(),
                 GameVariableLevel.GAME);
         switch (variableEntry.getValue()) {

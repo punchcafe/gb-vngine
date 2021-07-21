@@ -4,7 +4,9 @@
 package dev.punchcafe.vngine.gb.codegen;
 
 import dev.punchcafe.vngine.gb.codegen.gs.GameStateRenderer;
-import dev.punchcafe.vngine.gb.codegen.gsmutate.GameStateMutationRenderer;
+import dev.punchcafe.vngine.gb.codegen.mutate.GameStateMutationRenderer;
+import dev.punchcafe.vngine.gb.codegen.predicate.PredicateMethodRenderer;
+import dev.punchcafe.vngine.gb.codegen.predicate.PredicatesRenderer;
 import dev.punchcafe.vngine.pom.NarrativeAdaptor;
 import dev.punchcafe.vngine.pom.PomLoader;
 
@@ -41,6 +43,10 @@ public class App {
                 .gameModel(gameConfig)
                 .build();
 
+        final var predicatesRenderer = PredicatesRenderer.builder()
+                .gameConfig(gameConfig)
+                .build();
+
         final var mainMethod = FixtureRender.builder()
                 .componentName("main_method")
                 .fixture("\nint main()\n{\n}")
@@ -51,6 +57,7 @@ public class App {
         components.add(mainMethod);
         components.add(gameStateRenderer);
         components.add(gameStateMutationRenderer);
+        components.add(predicatesRenderer);
 
         final var scriptRenderer = ScriptRenderer.builder()
                 .componentRenderers(components)

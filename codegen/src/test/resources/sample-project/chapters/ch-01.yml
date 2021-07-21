@@ -50,6 +50,8 @@ nodes:
         node-id: 3-1
       - predicate-expression: "$bool.gs-bool-var-1 is true"
         node-id: 3-2
+      - predicate-expression: "$bool.gs-bool-var-1 is true AND ($str.gs-str-var-1 is 'str-1-is-set' OR $int.gs-int-var-1 more_than 0)"
+        node-id: 3-2
     # TODO: need default branch
   - id: 3-0
     type: AUTOMATIC

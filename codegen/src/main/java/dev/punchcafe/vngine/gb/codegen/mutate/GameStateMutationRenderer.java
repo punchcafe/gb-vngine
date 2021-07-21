@@ -1,10 +1,9 @@
-package dev.punchcafe.vngine.gb.codegen.gsmutate;
+package dev.punchcafe.vngine.gb.codegen.mutate;
 
 import dev.punchcafe.vngine.gb.codegen.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.gs.GameStateRenderer;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
-import dev.punchcafe.vngine.pom.model.vngml.GameStateMutationExpression;
 import dev.punchcafe.vngine.pom.parse.vngml.GameStateMutationExpressionParser;
 import lombok.Builder;
 
