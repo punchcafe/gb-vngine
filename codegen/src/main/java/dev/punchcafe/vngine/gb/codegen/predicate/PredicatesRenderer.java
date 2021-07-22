@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static dev.punchcafe.vngine.gb.codegen.ComponentRendererName.UTILITY_METHOD_RENDERER_NAME;
 import static dev.punchcafe.vngine.gb.codegen.gs.GameStateRenderer.GAME_STATE_RENDERER_NAME;
 
 @Builder
@@ -35,7 +36,7 @@ public class PredicatesRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(GAME_STATE_RENDERER_NAME);
+        return List.of(GAME_STATE_RENDERER_NAME, UTILITY_METHOD_RENDERER_NAME);
     }
 
     @Override

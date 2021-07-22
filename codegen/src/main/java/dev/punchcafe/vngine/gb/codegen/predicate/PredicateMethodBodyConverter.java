@@ -45,10 +45,9 @@ public class PredicateMethodBodyConverter implements PredicateVisitor<String> {
         final var rhs = stringBiFunction.getRhs().acceptVisitor(this.operandConverter);
         switch (stringBiFunction.getOperation()) {
             case ISNT:
-                //TODO: this is currently not going to work, just place holder!
-                return String.format("%s != %s", lhs, rhs);
+                return String.format("!is_string_equal(%s,%s)", lhs, rhs);
             case IS:
-                return String.format("%s == %s", lhs, rhs);
+                return String.format("is_string_equal(%s,%s)", lhs, rhs);
             default:
                 throw new UnsupportedOperationException();
         }

@@ -10,7 +10,7 @@ import java.io.Writer;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RenderedComponentWriter {
 
-    public static RenderedComponentWriter from(final ComponentRenderer componentRenderer){
+    public static RenderedComponentWriter from(final ComponentRenderer componentRenderer) {
         return new RenderedComponentWriter(false, componentRenderer);
     }
 
@@ -19,8 +19,9 @@ public class RenderedComponentWriter {
     private ComponentRenderer renderer;
 
     public void write(final StringBuilder builder) {
-        if(!hasWritten){
-            builder.append(renderer.render());
+        if (!hasWritten) {
+            builder.append("\n")
+                    .append(renderer.render());
             this.hasWritten = true;
         }
     }

@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dev.punchcafe.vngine.gb.codegen.ComponentRendererName.UTILITY_METHOD_RENDERER_NAME;
+
 public class App {
 
 
@@ -32,6 +34,11 @@ public class App {
     public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
         final NarrativeAdaptor<Object> narrativeReader = (file) -> List.of();
         final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
+
+        final var utils = FixtureRender.fromFile("src/main/resources/string_comparator.c")
+                .componentName(UTILITY_METHOD_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
 
         final var gameStateRenderer = GameStateRenderer.builder()
                 .gameStateVariableConfig(gameConfig.getGameStateVariableConfig())
@@ -58,6 +65,7 @@ public class App {
         components.add(gameStateRenderer);
         components.add(gameStateMutationRenderer);
         components.add(predicatesRenderer);
+        components.add(utils);
 
         final var scriptRenderer = ScriptRenderer.builder()
                 .componentRenderers(components)
