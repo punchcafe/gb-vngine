@@ -5,6 +5,7 @@ import dev.punchcafe.vngine.gb.codegen.render.FixtureRender;
 import dev.punchcafe.vngine.gb.codegen.render.SetupMethodComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.mutate.NodeMutationsRenderers;
 import dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
@@ -58,6 +59,12 @@ public class RendererFactory {
                         GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER,
                         PREDICATES_RENDERER_NAME,
                         SETUP_METHOD_RENDERER_NAME))
+                .build();
+    }
+
+    public ComponentRenderer nodeMutationsRenderer() {
+        return NodeMutationsRenderers.builder()
+                .gameConfig(this.gameConfig)
                 .build();
     }
 }

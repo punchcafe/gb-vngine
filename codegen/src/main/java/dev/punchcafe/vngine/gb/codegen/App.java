@@ -33,6 +33,7 @@ public class App {
                 .add(rendererFactory.predicatesRenderer())
                 .add(rendererFactory.setupMethodRenderer())
                 .add(rendererFactory.mainMethodRender())
+                .add(rendererFactory.nodeMutationsRenderer())
                 .build()
                 .collect(toList());
 
