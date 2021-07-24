@@ -17,7 +17,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.punchcafe.vngine.gb.codegen.ComponentRendererName.UTILITY_METHOD_RENDERER_NAME;
+import static dev.punchcafe.vngine.gb.codegen.ComponentRendererName.*;
+import static dev.punchcafe.vngine.gb.codegen.predicate.PredicatesRenderer.PREDICATES_RENDERER_NAME;
 
 public class App {
 
@@ -54,10 +55,14 @@ public class App {
                 .gameConfig(gameConfig)
                 .build();
 
-        final var mainMethod = FixtureRender.builder()
-                .componentName("main_method")
-                .fixture("\nint main()\n{\n}")
-                .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME, GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER))
+        final var setupMethod = new SetupMethodComponentRenderer();
+
+        final var mainMethod = FixtureRender.fromFile("src/main/resources/main.c")
+                .componentName(MAIN_METHOD_RENDERER_NAME)
+                .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME,
+                        GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER,
+                        PREDICATES_RENDERER_NAME,
+                        SETUP_METHOD_RENDERER_NAME))
                 .build();
 
         final var components = new ArrayList<ComponentRenderer>();
@@ -66,6 +71,7 @@ public class App {
         components.add(gameStateMutationRenderer);
         components.add(predicatesRenderer);
         components.add(utils);
+        components.add(setupMethod);
 
         final var scriptRenderer = ScriptRenderer.builder()
                 .componentRenderers(components)
