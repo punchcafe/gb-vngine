@@ -13,6 +13,7 @@ struct Node {
     enum NodeTransitionType node_transition_type;
     void * node_transition_object;
     struct Narrative * narrative;
-    void (*game_state_modification)(struct GameState * game_state);
+    void (**game_state_modification)(struct GameState * game_state);
+    short number_of_gsm;
 };
 #endif

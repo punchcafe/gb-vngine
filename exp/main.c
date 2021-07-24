@@ -13,7 +13,7 @@ int main()
     set_up_variables();
     while(current_node != NULL_NODE_POINTER)
     {
-        current_node->game_state_modification(&GLOBAL_GAME_STATE);
+        current_node->game_state_modification[0](&GLOBAL_GAME_STATE);
         play_narrative(current_node);
         current_node = get_next_node(current_node, &GLOBAL_GAME_STATE);
     }
