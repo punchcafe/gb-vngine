@@ -1,11 +1,9 @@
 package dev.punchcafe.vngine.gb.codegen;
 
+import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.io.IOException;
-import java.io.Writer;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class RenderedComponentWriter {

@@ -1,7 +1,7 @@
-package dev.punchcafe.vngine.gb.codegen.gs;
+package dev.punchcafe.vngine.gb.codegen.render.gs;
 
-import dev.punchcafe.vngine.gb.codegen.ComponentRenderer;
-import dev.punchcafe.vngine.gb.codegen.RenderUtils;
+import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.RenderUtils;
 import dev.punchcafe.vngine.gb.codegen.csan.CNameSanitiser;
 import dev.punchcafe.vngine.pom.model.GameStateVariableConfig;
 import dev.punchcafe.vngine.pom.model.VariableTypes;

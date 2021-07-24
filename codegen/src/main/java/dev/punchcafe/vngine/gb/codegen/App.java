@@ -3,10 +3,7 @@
  */
 package dev.punchcafe.vngine.gb.codegen;
 
-import dev.punchcafe.vngine.gb.codegen.gs.GameStateRenderer;
-import dev.punchcafe.vngine.gb.codegen.mutate.GameStateMutationRenderer;
-import dev.punchcafe.vngine.gb.codegen.predicate.PredicateMethodRenderer;
-import dev.punchcafe.vngine.gb.codegen.predicate.PredicatesRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.NarrativeAdaptor;
 import dev.punchcafe.vngine.pom.PomLoader;
 
@@ -14,67 +11,33 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static dev.punchcafe.vngine.gb.codegen.ComponentRendererName.*;
-import static dev.punchcafe.vngine.gb.codegen.predicate.PredicatesRenderer.PREDICATES_RENDERER_NAME;
+import static java.util.stream.Collectors.toList;
 
 public class App {
 
-
-
-    public String getGreeting() {
-        return "Hello world.";
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-    }
+    public static void main(String[] args) {}
 
     public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
         final NarrativeAdaptor<Object> narrativeReader = (file) -> List.of();
         final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
+        final var rendererFactory = new RendererFactory(gameConfig);
 
-        final var utils = FixtureRender.fromFile("src/main/resources/string_comparator.c")
-                .componentName(UTILITY_METHOD_RENDERER_NAME)
-                .dependencies(List.of())
-                .build();
 
-        final var gameStateRenderer = GameStateRenderer.builder()
-                .gameStateVariableConfig(gameConfig.getGameStateVariableConfig())
-                .globalGameStateVariableName("GAME_STATE")
-                .maxStringVariableLength(30)
-                .build();
-
-        final var gameStateMutationRenderer = GameStateMutationRenderer.builder()
-                .gameModel(gameConfig)
-                .build();
-
-        final var predicatesRenderer = PredicatesRenderer.builder()
-                .gameConfig(gameConfig)
-                .build();
-
-        final var setupMethod = new SetupMethodComponentRenderer();
-
-        final var mainMethod = FixtureRender.fromFile("src/main/resources/main.c")
-                .componentName(MAIN_METHOD_RENDERER_NAME)
-                .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME,
-                        GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER,
-                        PREDICATES_RENDERER_NAME,
-                        SETUP_METHOD_RENDERER_NAME))
-                .build();
-
-        final var components = new ArrayList<ComponentRenderer>();
-        components.add(mainMethod);
-        components.add(gameStateRenderer);
-        components.add(gameStateMutationRenderer);
-        components.add(predicatesRenderer);
-        components.add(utils);
-        components.add(setupMethod);
+        final var allComponents = Stream.<ComponentRenderer>builder()
+                .add(rendererFactory.utilsRender())
+                .add(rendererFactory.gameStateRenderer())
+                .add(rendererFactory.gameStateMutationRenderer())
+                .add(rendererFactory.predicatesRenderer())
+                .add(rendererFactory.setupMethodRenderer())
+                .add(rendererFactory.mainMethodRender())
+                .build()
+                .collect(toList());
 
         final var scriptRenderer = ScriptRenderer.builder()
-                .componentRenderers(components)
+                .componentRenderers(allComponents)
                 .build();
 
         final var renderedScript = scriptRenderer.render();

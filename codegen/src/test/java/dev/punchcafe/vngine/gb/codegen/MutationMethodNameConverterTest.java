@@ -1,7 +1,7 @@
 package dev.punchcafe.vngine.gb.codegen;
 
 
-import dev.punchcafe.vngine.gb.codegen.mutate.MutationMethodNameConverter;
+import dev.punchcafe.vngine.gb.codegen.render.mutate.MutationMethodNameConverter;
 import dev.punchcafe.vngine.pom.model.vngml.DecreaseIntegerMutation;
 import dev.punchcafe.vngine.pom.model.vngml.IncreaseIntegerMutation;
 import dev.punchcafe.vngine.pom.model.vngml.SetBooleanMutation;

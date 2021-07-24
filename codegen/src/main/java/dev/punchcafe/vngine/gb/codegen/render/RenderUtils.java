@@ -1,4 +1,4 @@
-package dev.punchcafe.vngine.gb.codegen;
+package dev.punchcafe.vngine.gb.codegen.render;
 
 public class RenderUtils {
 

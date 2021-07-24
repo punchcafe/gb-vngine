@@ -1,4 +1,4 @@
-package dev.punchcafe.vngine.gb.codegen.predicate;
+package dev.punchcafe.vngine.gb.codegen.render.predicate;
 
 import dev.punchcafe.vngine.pom.model.vngpl.PredicateExpression;
 

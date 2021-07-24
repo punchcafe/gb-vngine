@@ -1,4 +1,4 @@
-package dev.punchcafe.vngine.gb.codegen.mutate;
+package dev.punchcafe.vngine.gb.codegen.render.mutate;
 
 import dev.punchcafe.vngine.gb.codegen.csan.CNameSanitiser;
 import dev.punchcafe.vngine.pom.model.VariableTypes;

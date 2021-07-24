@@ -1,6 +1,6 @@
-package dev.punchcafe.vngine.gb.codegen.predicate;
+package dev.punchcafe.vngine.gb.codegen.render.predicate;
 
-import dev.punchcafe.vngine.gb.codegen.ComponentRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.*;
 import dev.punchcafe.vngine.pom.parse.vngpl.PredicateParser;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static dev.punchcafe.vngine.gb.codegen.ComponentRendererName.UTILITY_METHOD_RENDERER_NAME;
-import static dev.punchcafe.vngine.gb.codegen.gs.GameStateRenderer.GAME_STATE_RENDERER_NAME;
+import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.UTILITY_METHOD_RENDERER_NAME;
+import static dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer.GAME_STATE_RENDERER_NAME;
 
 @Builder
 public class PredicatesRenderer implements ComponentRenderer {

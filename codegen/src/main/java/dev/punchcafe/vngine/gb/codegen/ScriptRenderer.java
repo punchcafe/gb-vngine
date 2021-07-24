@@ -1,5 +1,6 @@
 package dev.punchcafe.vngine.gb.codegen;
 
+import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import lombok.Builder;
 import lombok.Singular;
 

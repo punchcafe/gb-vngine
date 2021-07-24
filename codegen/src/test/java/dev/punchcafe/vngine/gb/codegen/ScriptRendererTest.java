@@ -1,5 +1,6 @@
 package dev.punchcafe.vngine.gb.codegen;
 
+import dev.punchcafe.vngine.gb.codegen.render.FixtureRender;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
