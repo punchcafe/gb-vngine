@@ -35,7 +35,8 @@ public class ScriptRenderer {
             // Ensure all dependencies are already written
             Optional.of(dependency)
                     .map(this.componentNameToWrite::get)
-                    .ifPresent(dependencyWriter -> writeOut(dependencyWriter, builder));
+                    .ifPresentOrElse(dependencyWriter -> writeOut(dependencyWriter, builder),
+                            () -> {throw new RuntimeException("Missing dependency");});
         }
         writer.write(builder);
     }

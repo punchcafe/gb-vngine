@@ -34,6 +34,11 @@ public class App {
                 .add(rendererFactory.setupMethodRenderer())
                 .add(rendererFactory.mainMethodRender())
                 .add(rendererFactory.nodeMutationsRenderer())
+                .add(rendererFactory.playerBasedTransitionDefinitionRenderer())
+                .add(rendererFactory.predicateBasedTransitionDefinitionRenderer())
+                .add(rendererFactory.transitionDeclarationRenderer())
+                .add(rendererFactory.narrativeDefinitionRenderer())
+                .add(rendererFactory.nodeDefinitionRenderer())
                 .build()
                 .collect(toList());
 
