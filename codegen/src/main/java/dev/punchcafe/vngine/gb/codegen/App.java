@@ -3,6 +3,7 @@
  */
 package dev.punchcafe.vngine.gb.codegen;
 
+import dev.punchcafe.vngine.gb.codegen.narrative.NarrativeReader;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.NarrativeAdaptor;
 import dev.punchcafe.vngine.pom.PomLoader;
@@ -21,7 +22,7 @@ public class App {
     public static void main(String[] args) {}
 
     public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
-        final NarrativeAdaptor<Object> narrativeReader = (file) -> List.of();
+        final var narrativeReader = new NarrativeReader();
         final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
         final var rendererFactory = new RendererFactory(gameConfig);
 
@@ -39,6 +40,7 @@ public class App {
                 .add(rendererFactory.transitionDeclarationRenderer())
                 .add(rendererFactory.narrativeDefinitionRenderer())
                 .add(rendererFactory.nodeDefinitionRenderer())
+                .add(rendererFactory.narrativeRenderer())
                 .build()
                 .collect(toList());
 

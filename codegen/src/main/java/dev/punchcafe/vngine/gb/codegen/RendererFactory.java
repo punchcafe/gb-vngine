@@ -1,5 +1,6 @@
 package dev.punchcafe.vngine.gb.codegen;
 
+import dev.punchcafe.vngine.gb.codegen.narrative.SimpleNarrative;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.FixtureRender;
 import dev.punchcafe.vngine.gb.codegen.render.SetupMethodComponentRenderer;
@@ -7,6 +8,7 @@ import dev.punchcafe.vngine.gb.codegen.render.branch.TransitionDeclarer;
 import dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.NodeMutationsRenderers;
+import dev.punchcafe.vngine.gb.codegen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
@@ -21,7 +23,7 @@ import static dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRendere
 @Builder
 public class RendererFactory {
 
-    private final ProjectObjectModel<?> gameConfig;
+    private final ProjectObjectModel<SimpleNarrative> gameConfig;
 
     public ComponentRenderer utilsRender() throws IOException {
         return FixtureRender.fromFile("src/main/resources/string_comparator.c")
@@ -94,6 +96,12 @@ public class RendererFactory {
                 .build();
     }
 
+    public ComponentRenderer narrativeRenderer() {
+        return NarrativeRenderer.builder()
+                .gameConfig(this.gameConfig)
+                .build();
+    }
+
     public ComponentRenderer mainMethodRender() throws IOException {
         return FixtureRender.fromFile("src/main/resources/main.c")
                 .componentName(MAIN_METHOD_RENDERER_NAME)
@@ -106,7 +114,8 @@ public class RendererFactory {
                         PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME,
                         NARRATIVE_DEFINITION_RENDERER_NAME,
                         NODE_DEFINITION_RENDERER_NAME,
-                        NODE_MUTATION_RENDERER_NAME))
+                        NODE_MUTATION_RENDERER_NAME,
+                        NARRATIVE_RENDERER_NAME))
                 .build();
     }
 }
