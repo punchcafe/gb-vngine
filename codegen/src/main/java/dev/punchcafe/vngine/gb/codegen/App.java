@@ -5,14 +5,12 @@ package dev.punchcafe.vngine.gb.codegen;
 
 import dev.punchcafe.vngine.gb.codegen.narrative.NarrativeReader;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
-import dev.punchcafe.vngine.pom.NarrativeAdaptor;
 import dev.punchcafe.vngine.pom.PomLoader;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -43,6 +41,9 @@ public class App {
                 .add(rendererFactory.narrativeRenderer())
                 .add(rendererFactory.nodeRenderer())
                 .add(rendererFactory.noMutationArray())
+                .add(rendererFactory.branchRenderer())
+                .add(rendererFactory.gameOverNodeIdConstant())
+                .add(rendererFactory.alwaysTruePredicate())
                 .build()
                 .collect(toList());
 

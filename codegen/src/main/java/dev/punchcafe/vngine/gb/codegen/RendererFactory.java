@@ -4,6 +4,7 @@ import dev.punchcafe.vngine.gb.codegen.narrative.SimpleNarrative;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.FixtureRender;
 import dev.punchcafe.vngine.gb.codegen.render.SetupMethodComponentRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.branch.BranchRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.branch.TransitionDeclarer;
 import dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer;
@@ -41,7 +42,7 @@ public class RendererFactory {
                 .build();
     }
 
-    public ComponentRenderer transitionDeclarationRenderer() throws IOException {
+    public ComponentRenderer transitionDeclarationRenderer() {
         return TransitionDeclarer.builder()
                 .gameConfig(this.gameConfig)
                 .build();
@@ -110,8 +111,28 @@ public class RendererFactory {
                 .build();
     }
 
+    public ComponentRenderer alwaysTruePredicate() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/always_true_predicate.c")
+                .componentName(ALWAYS_TRUE_PREDICATE_RENDERER_NAME)
+                .dependencies(List.of(GAME_STATE_RENDERER_NAME))
+                .build();
+    }
+
+    public ComponentRenderer gameOverNodeIdConstant() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/game_over_node_id_constant.c")
+                .componentName(GAME_OVER_NODE_ID_CONSTANT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
     public ComponentRenderer nodeRenderer() {
         return NodeRenderer.builder()
+                .gameConfig(this.gameConfig)
+                .build();
+    }
+
+    public ComponentRenderer branchRenderer() {
+        return BranchRenderer.builder()
                 .gameConfig(this.gameConfig)
                 .build();
     }

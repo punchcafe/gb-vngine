@@ -1,5 +1,6 @@
 package dev.punchcafe.vngine.gb.codegen.render.predicate;
 
+import dev.punchcafe.vngine.pom.VngPLParser;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import dev.punchcafe.vngine.pom.model.vngpl.PredicateExpression;
 import dev.punchcafe.vngine.pom.model.vngpl.PredicateVisitor;
@@ -17,6 +18,7 @@ import dev.punchcafe.vngine.pom.model.vngpl.variable.integer.IntegerVariable;
 import dev.punchcafe.vngine.pom.model.vngpl.variable.string.StringGameVariable;
 import dev.punchcafe.vngine.pom.model.vngpl.variable.string.StringLiteral;
 import dev.punchcafe.vngine.pom.model.vngpl.variable.string.StringVariable;
+import dev.punchcafe.vngine.pom.parse.vngpl.PredicateParser;
 
 import static dev.punchcafe.vngine.gb.codegen.csan.CNameSanitiser.sanitiseStringLiteral;
 import static dev.punchcafe.vngine.gb.codegen.csan.CNameSanitiser.sanitiseVariableName;
@@ -26,6 +28,10 @@ public class PredicateMethodNameConverter implements PredicateVisitor<String> {
 
 
     private static PredicateMethodNameConverter SINGLETON = new PredicateMethodNameConverter();
+
+    public static String convertPredicateExpression(String expression) {
+        return convertPredicateExpression(PredicateParser.defaultParser().parse(expression));
+    }
 
     public static String convertPredicateExpression(PredicateExpression expression) {
         return expression.acceptPredicateVisitor(SINGLETON);
