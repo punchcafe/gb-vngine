@@ -11,6 +11,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -19,32 +22,15 @@ public class App {
 
     public static void main(String[] args) {}
 
-    public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
+    public void run(final File vngProjectRoot, final String scriptDestination) throws IOException, IllegalAccessException, InvocationTargetException {
         final var narrativeReader = new NarrativeReader();
         final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
         final var rendererFactory = new RendererFactory(gameConfig);
 
 
-        final var allComponents = Stream.<ComponentRenderer>builder()
-                .add(rendererFactory.utilsRender())
-                .add(rendererFactory.gameStateRenderer())
-                .add(rendererFactory.gameStateMutationRenderer())
-                .add(rendererFactory.predicatesRenderer())
-                .add(rendererFactory.setupMethodRenderer())
-                .add(rendererFactory.mainMethodRender())
-                .add(rendererFactory.nodeMutationsRenderer())
-                .add(rendererFactory.playerBasedTransitionDefinitionRenderer())
-                .add(rendererFactory.predicateBasedTransitionDefinitionRenderer())
-                .add(rendererFactory.transitionDeclarationRenderer())
-                .add(rendererFactory.narrativeDefinitionRenderer())
-                .add(rendererFactory.nodeDefinitionRenderer())
-                .add(rendererFactory.narrativeRenderer())
-                .add(rendererFactory.nodeRenderer())
-                .add(rendererFactory.noMutationArray())
-                .add(rendererFactory.branchRenderer())
-                .add(rendererFactory.gameOverNodeIdConstant())
-                .add(rendererFactory.alwaysTruePredicate())
-                .build()
+        final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(RendererSupplier.class))
+                .map(supplierMethod -> getFromMethod(supplierMethod, rendererFactory))
                 .collect(toList());
 
         final var scriptRenderer = ScriptRenderer.builder()
@@ -55,5 +41,13 @@ public class App {
         final var out = new BufferedWriter(new FileWriter(scriptDestination));
         out.write(renderedScript);
         out.close();
+    }
+
+    private ComponentRenderer getFromMethod(final Method method, final RendererFactory factory){
+        try {
+            return (ComponentRenderer) method.invoke(factory);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 }

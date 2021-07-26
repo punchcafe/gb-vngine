@@ -27,6 +27,7 @@ public class RendererFactory {
 
     private final ProjectObjectModel<SimpleNarrative> gameConfig;
 
+    @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {
         return FixtureRender.fromFile("src/main/resources/string_comparator.c")
                 .componentName(UTILITY_METHOD_RENDERER_NAME)
@@ -34,6 +35,7 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer gameStateRenderer() {
         return GameStateRenderer.builder()
                 .gameStateVariableConfig(gameConfig.getGameStateVariableConfig())
@@ -42,12 +44,14 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer transitionDeclarationRenderer() {
         return TransitionDeclarer.builder()
                 .gameConfig(this.gameConfig)
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer playerBasedTransitionDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/player_based_transition.c")
                 .componentName(PLAYER_TRANSITION_DEFINITION_RENDERER_NAME)
@@ -55,6 +59,7 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer predicateBasedTransitionDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/predicate_based_transition.c")
                 .componentName(PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME)
@@ -62,6 +67,7 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer narrativeDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/simple_narrative.c")
                 .componentName(NARRATIVE_DEFINITION_RENDERER_NAME)
@@ -69,6 +75,7 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer nodeDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/node.c")
                 .componentName(NODE_DEFINITION_RENDERER_NAME)
@@ -76,34 +83,40 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer gameStateMutationRenderer() {
         return GameStateMutationRenderer.builder()
                 .gameModel(gameConfig)
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer predicatesRenderer() {
         return PredicatesRenderer.builder()
                 .gameConfig(gameConfig)
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer setupMethodRenderer() {
         return new SetupMethodComponentRenderer();
     }
 
+    @RendererSupplier
     public ComponentRenderer nodeMutationsRenderer() {
         return NodeMutationsRenderers.builder()
                 .gameConfig(this.gameConfig)
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer narrativeRenderer() {
         return NarrativeRenderer.builder()
                 .gameConfig(this.gameConfig)
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer noMutationArray() throws IOException {
         return FixtureRender.fromFile("src/main/resources/do_nothing_mutation.c")
                 .componentName(DO_NOTHING_MUTATION_ARRAY_RENDERER_NAME)
@@ -111,6 +124,7 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer alwaysTruePredicate() throws IOException {
         return FixtureRender.fromFile("src/main/resources/always_true_predicate.c")
                 .componentName(ALWAYS_TRUE_PREDICATE_RENDERER_NAME)
@@ -118,6 +132,7 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer gameOverNodeIdConstant() throws IOException {
         return FixtureRender.fromFile("src/main/resources/game_over_node_id_constant.c")
                 .componentName(GAME_OVER_NODE_ID_CONSTANT_RENDERER_NAME)
@@ -125,18 +140,21 @@ public class RendererFactory {
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer nodeRenderer() {
         return NodeRenderer.builder()
                 .gameConfig(this.gameConfig)
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer branchRenderer() {
         return BranchRenderer.builder()
                 .gameConfig(this.gameConfig)
                 .build();
     }
 
+    @RendererSupplier
     public ComponentRenderer mainMethodRender() throws IOException {
         return FixtureRender.fromFile("src/main/resources/main.c")
                 .componentName(MAIN_METHOD_RENDERER_NAME)
