@@ -3,7 +3,7 @@ chapter-variables:
 nodes:
   - id: 0
     type: PLAYER
-    narrative-id: 0
+    narrative-id: nar_1
     game-state-modifiers:
     branches:
       - prompt: "1-0"
@@ -14,7 +14,7 @@ nodes:
         node-id: 1-2
   - id: 1-0
     type: AUTOMATIC
-    narrative-id: 1-0
+    narrative-id: nar_1
     game-state-modifiers:
       - "increase $int.gs-int-var-1 by 1"
     branches:
@@ -23,7 +23,7 @@ nodes:
     # TODO: need default branch
   - id: 1-1
     type: AUTOMATIC
-    narrative-id: 1-1
+    narrative-id: nar_1
     game-state-modifiers:
 # TODO: consider whether to ignore case?
       - "set $str.gs-str-var-1 to 'str-1-is-set'"
@@ -33,7 +33,7 @@ nodes:
     # TODO: need default branch
   - id: 1-2
     type: AUTOMATIC
-    narrative-id: 1-2
+    narrative-id: nar_1
     game-state-modifiers:
       - "set $bool.gs-bool-var-1 to true"
     branches:
@@ -42,7 +42,7 @@ nodes:
     # TODO: need default branch
   - id: 2
     type: AUTOMATIC
-    narrative-id: 2
+    narrative-id: nar_1
     branches:
       - predicate-expression: "$int.gs-int-var-1 more_than 0"
         node-id: 3-0
@@ -55,16 +55,16 @@ nodes:
     # TODO: need default branch
   - id: 3-0
     type: AUTOMATIC
-    narrative-id: 3-0
+    narrative-id: nar_1
     game-state-modifiers:
     branches:
   - id: 3-1
     type: AUTOMATIC
-    narrative-id: 3-1
+    narrative-id: nar_1
     game-state-modifiers:
     branches:
   - id: 3-2
     type: AUTOMATIC
-    narrative-id: 3-2
+    narrative-id: nar_1
     game-state-modifiers:
     branches:

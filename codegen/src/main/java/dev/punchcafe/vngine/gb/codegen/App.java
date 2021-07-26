@@ -41,6 +41,8 @@ public class App {
                 .add(rendererFactory.narrativeDefinitionRenderer())
                 .add(rendererFactory.nodeDefinitionRenderer())
                 .add(rendererFactory.narrativeRenderer())
+                .add(rendererFactory.nodeRenderer())
+                .add(rendererFactory.noMutationArray())
                 .build()
                 .collect(toList());
 

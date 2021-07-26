@@ -24,7 +24,7 @@ public class NarrativeRenderer implements ComponentRenderer {
     }
 
     private String renderSingleNarrative(final SimpleNarrative narrative){
-        return String.format("struct Narrative %s {\"%s\"};", narrative.getId(), narrative.getMessages());
+        return String.format("struct Narrative %s = {\"%s\"};", narrative.getId(), narrative.getMessages());
     }
 
     @Override

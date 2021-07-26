@@ -9,6 +9,7 @@ import dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.NodeMutationsRenderers;
 import dev.punchcafe.vngine.gb.codegen.render.narrative.NarrativeRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.node.NodeRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
@@ -102,6 +103,19 @@ public class RendererFactory {
                 .build();
     }
 
+    public ComponentRenderer noMutationArray() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/do_nothing_mutation.c")
+                .componentName(DO_NOTHING_MUTATION_ARRAY_RENDERER_NAME)
+                .dependencies(List.of(GAME_STATE_RENDERER_NAME))
+                .build();
+    }
+
+    public ComponentRenderer nodeRenderer() {
+        return NodeRenderer.builder()
+                .gameConfig(this.gameConfig)
+                .build();
+    }
+
     public ComponentRenderer mainMethodRender() throws IOException {
         return FixtureRender.fromFile("src/main/resources/main.c")
                 .componentName(MAIN_METHOD_RENDERER_NAME)
@@ -115,7 +129,8 @@ public class RendererFactory {
                         NARRATIVE_DEFINITION_RENDERER_NAME,
                         NODE_DEFINITION_RENDERER_NAME,
                         NODE_MUTATION_RENDERER_NAME,
-                        NARRATIVE_RENDERER_NAME))
+                        NARRATIVE_RENDERER_NAME,
+                        NODE_RENDERER_NAME))
                 .build();
     }
 }
