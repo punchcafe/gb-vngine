@@ -99,7 +99,9 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer setupMethodRenderer() {
-        return new SetupMethodComponentRenderer();
+        return SetupMethodComponentRenderer.builder()
+                .gameConfig(this.gameConfig)
+                .build();
     }
 
     @RendererSupplier

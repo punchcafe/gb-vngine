@@ -28,7 +28,7 @@ public class TransitionDeclarer implements ComponentRenderer {
     private String renderNodeTransition(final Node node) {
         final var transitionTypeName = getTransitionTypeName(node.getType());
         final var variableName = NodeTransitionName.getTransitionNameForNode(node);
-        return String.format("struct %s * %s;", transitionTypeName, variableName);
+        return String.format("struct %s %s;", transitionTypeName, variableName);
     }
 
     private String getTransitionTypeName(final NodeType type) {
