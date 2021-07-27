@@ -10,8 +10,7 @@ import lombok.Builder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.BRANCH_RENDERER_NAME;
-import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.SETUP_METHOD_RENDERER_NAME;
+import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.*;
 import static dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER;
 import static dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer.PREDICATES_RENDERER_NAME;
 
@@ -51,7 +50,10 @@ public class SetupMethodComponentRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(PREDICATES_RENDERER_NAME, GAME_STATE_MUTATION_RENDERER, BRANCH_RENDERER_NAME);
+        return List.of(PREDICATES_RENDERER_NAME,
+                GAME_STATE_MUTATION_RENDERER,
+                BRANCH_RENDERER_NAME,
+                PROMPTS_RENDERER_NAME);
     }
 
     @Override

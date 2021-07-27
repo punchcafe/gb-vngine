@@ -4,8 +4,9 @@ import dev.punchcafe.vngine.gb.codegen.narrative.SimpleNarrative;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.FixtureRender;
 import dev.punchcafe.vngine.gb.codegen.render.SetupMethodComponentRenderer;
-import dev.punchcafe.vngine.gb.codegen.render.branch.BranchRenderer;
-import dev.punchcafe.vngine.gb.codegen.render.branch.TransitionDeclarer;
+import dev.punchcafe.vngine.gb.codegen.render.transition.BranchRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.transition.PromptsRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.transition.TransitionDeclarer;
 import dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.NodeMutationsRenderers;
@@ -114,6 +115,13 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer narrativeRenderer() {
         return NarrativeRenderer.builder()
+                .gameConfig(this.gameConfig)
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer promptRenderer() {
+        return PromptsRenderer.builder()
                 .gameConfig(this.gameConfig)
                 .build();
     }

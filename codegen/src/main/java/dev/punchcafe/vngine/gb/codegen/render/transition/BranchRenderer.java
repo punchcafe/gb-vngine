@@ -1,4 +1,4 @@
-package dev.punchcafe.vngine.gb.codegen.render.branch;
+package dev.punchcafe.vngine.gb.codegen.render.transition;
 
 import dev.punchcafe.vngine.gb.codegen.csan.BranchName;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeIdSanitiser;
@@ -12,7 +12,6 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.*;

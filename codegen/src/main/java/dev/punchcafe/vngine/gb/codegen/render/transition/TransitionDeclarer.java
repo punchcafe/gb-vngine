@@ -1,4 +1,4 @@
-package dev.punchcafe.vngine.gb.codegen.render.branch;
+package dev.punchcafe.vngine.gb.codegen.render.transition;
 
 import dev.punchcafe.vngine.gb.codegen.csan.NodeTransitionName;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
