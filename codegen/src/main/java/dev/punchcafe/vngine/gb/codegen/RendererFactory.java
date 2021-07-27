@@ -127,6 +127,22 @@ public class RendererFactory {
     }
 
     @RendererSupplier
+    public ComponentRenderer getNextNodeFunctionRenderer() throws IOException{
+        return FixtureRender.fromFile("src/main/resources/functions/get_next_node.c")
+                .componentName(GET_NEXT_NODE_FUNCTION_RENDERER_NAME)
+                .dependencies(List.of(NODE_RENDERER_NAME, GAME_STATE_RENDERER_NAME, PREDICATES_RENDERER_NAME))
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer playNarrativeFunctionRenderer() throws IOException{
+        return FixtureRender.fromFile("src/main/resources/functions/play_narrative.c")
+                .componentName(PLAY_NARRATIVE_RENDERER_NAME)
+                .dependencies(List.of(NODE_DEFINITION_RENDERER_NAME))
+                .build();
+    }
+
+    @RendererSupplier
     public ComponentRenderer noMutationArray() throws IOException {
         return FixtureRender.fromFile("src/main/resources/do_nothing_mutation.c")
                 .componentName(DO_NOTHING_MUTATION_ARRAY_RENDERER_NAME)
@@ -165,6 +181,13 @@ public class RendererFactory {
     }
 
     @RendererSupplier
+    public ComponentRenderer currentNodeRenderer() {
+        return CurrentNodeRenderer.builder()
+                .gameConfig(this.gameConfig)
+                .build();
+    }
+
+    @RendererSupplier
     public ComponentRenderer mainMethodRender() throws IOException {
         return FixtureRender.fromFile("src/main/resources/main.c")
                 .componentName(MAIN_METHOD_RENDERER_NAME)
@@ -179,7 +202,10 @@ public class RendererFactory {
                         NODE_DEFINITION_RENDERER_NAME,
                         NODE_MUTATION_RENDERER_NAME,
                         NARRATIVE_RENDERER_NAME,
-                        NODE_RENDERER_NAME))
+                        NODE_RENDERER_NAME,
+                        GET_NEXT_NODE_FUNCTION_RENDERER_NAME,
+                        PLAY_NARRATIVE_RENDERER_NAME,
+                        CURRENT_NODE_RENDERER_NAME))
                 .build();
     }
 }
