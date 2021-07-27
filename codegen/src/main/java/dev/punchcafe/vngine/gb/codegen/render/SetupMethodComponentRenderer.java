@@ -1,7 +1,9 @@
 package dev.punchcafe.vngine.gb.codegen.render;
 
 import dev.punchcafe.vngine.gb.codegen.csan.BranchName;
+import dev.punchcafe.vngine.gb.codegen.csan.NodeIdSanitiser;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeTransitionName;
+import dev.punchcafe.vngine.gb.codegen.csan.PromptName;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
@@ -22,8 +24,26 @@ public class SetupMethodComponentRenderer implements ComponentRenderer {
     @Override
     public String render() {
         return "\nvoid setup(){\n" +
-                renderBranchSetUpStatements() +
+                renderBranchSetUpStatements() + "\n" +
+                renderPromptSetupStatements() +
                 "\n}";
+    }
+
+    private String renderPromptSetupStatements(){
+        return gameConfig.getChapterConfigs().get(0).getNodes().stream()
+                .filter(node -> node.getType() == NodeType.PLAYER)
+                .map(this::renderIndividualPromptSetup)
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String renderIndividualPromptSetup(final Node node){
+        final var transitionVariableName = NodeTransitionName.getTransitionNameForNode(node);
+        final var targetsNames = PromptName.getPromptTargetsArrayName(node);
+        final var promptsNames = PromptName.getPromptArrayName(node);
+        final var numberOfPrompts = node.getBranches().size();
+        return String.format("    %s.node_choices = %s;\n", transitionVariableName, targetsNames)
+                + String.format("    %s.prompts = %s;\n", transitionVariableName, promptsNames)
+                + String.format("    %s.number_of_prompts = %d;", transitionVariableName, numberOfPrompts);
     }
 
     private String renderBranchSetUpStatements(){
