@@ -205,18 +205,7 @@ void render_whole_text(char * text)
     clear_text_box();
     int rendered_offset = text_box_print(text);
     while(rendered_offset > 0){
-        unsigned int blinking_a_button = 2;
-        int loops = 0;
-        while(!a_button_is_pressed()){
-            if(loops % 6 == 0){
-                // every 300 ms
-                int blinking_a_ref [] = {blinking_a_button - 1};
-                set_bkg_tiles(19,17, 1,1,blinking_a_ref);
-                blinking_a_button = ((blinking_a_button + 1) % 2) + 2;
-            }
-            delay(50);
-            loops++;
-        }
+        await_a_button_press();
         clear_text_box();
         text += rendered_offset;
         rendered_offset = text_box_print(text);
@@ -228,6 +217,22 @@ int a_button_is_pressed()
     return joypad() & J_A;
 }
 
+void await_a_button_press()
+{
+    unsigned int blinking_a_button = 2;
+    int loops = 0;
+    while(!a_button_is_pressed()){
+        if(loops % 6 == 0){
+            // every 300 ms
+            int blinking_a_ref [] = {blinking_a_button - 1};
+            set_bkg_tiles(19,17, 1,1,blinking_a_ref);
+            blinking_a_button = ((blinking_a_button + 1) % 2) + 2;
+        }
+        delay(50);
+        loops++;
+    }
+}
+
 int main()
 {
     set_bkg_data(0x01, 27, alphabet);
@@ -235,6 +240,7 @@ int main()
     set_bkg_tiles(0, 12, 20, 6, black_tiles);
     SHOW_BKG;
     text_box_print("hello world hello world hello world");
-    delay(2000);
+    await_a_button_press();
     render_whole_text("hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world");
+    await_a_button_press();
 }
