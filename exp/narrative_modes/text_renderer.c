@@ -177,6 +177,12 @@ int text_box_print(char * str_char)
     int offset = 0;
     while(*str_char != '\0' && cursor < CURSOR_MAX_EXCLUSIVE)
     {
+        if(*str_char == '\n')
+        {
+            new_line();
+            offset++;
+            str_char++;
+        }
         short x = (cursor % TEXT_WIDTH) + TEXT_COLUMN_OFFSET;
         short y = (cursor / TEXT_WIDTH) + 12;
         char tile_number = get_char_position(*str_char) + 1;
@@ -217,6 +223,23 @@ int a_button_is_pressed()
     return joypad() & J_A;
 }
 
+void new_line()
+{
+    if(cursor == (CURSOR_MAX_EXCLUSIVE - 1))
+    {
+        await_a_button_press();
+        clear_text_box();
+        return;
+    }
+    int row = cursor / TEXT_WIDTH;
+    if(row >= (NUMBER_OF_ROWS - 1))
+    {
+        cursor = CURSOR_MAX_EXCLUSIVE - 1;
+        return;
+    }
+    cursor = (row + 1) * TEXT_WIDTH - 1;
+}
+
 void await_a_button_press()
 {
     unsigned int blinking_a_button = 2;
@@ -241,6 +264,18 @@ int main()
     SHOW_BKG;
     text_box_print("hello world hello world hello world");
     await_a_button_press();
-    render_whole_text("hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world");
+    render_whole_text("hello world\n hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world");
     await_a_button_press();
+    new_line();
+    render_whole_text("no");
+    new_line();
+    new_line();
+    new_line();
+    render_whole_text("yes");
+    new_line();
+    new_line();
+    new_line();
+    new_line();
+    new_line();
+    new_line();
 }
