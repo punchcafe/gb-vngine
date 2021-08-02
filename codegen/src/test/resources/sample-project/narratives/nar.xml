@@ -1,0 +1,8 @@
+<narrative id="nar_01">
+    <text>hello world</text>
+    <newline/>
+    <clear_text/>
+    <set_fg align="left" src="char_1_happy"/>
+    <clear_fg />
+    <clear_text />
+</narrative>

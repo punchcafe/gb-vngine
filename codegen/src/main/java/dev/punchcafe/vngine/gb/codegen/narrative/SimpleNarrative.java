@@ -7,7 +7,7 @@ import java.util.List;
 
 @Builder
 @Getter
-public class SimpleNarrative {
+public class SimpleNarrative implements NarrativeElement {
     private String id;
     private List<String> messages;
 }

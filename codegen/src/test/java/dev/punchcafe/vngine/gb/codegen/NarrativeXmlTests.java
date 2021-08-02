@@ -1,0 +1,18 @@
+package dev.punchcafe.vngine.gb.codegen;
+
+import dev.punchcafe.vngine.gb.codegen.narrative.Narrative;
+import org.junit.jupiter.api.Test;
+import org.simpleframework.xml.core.Persister;
+
+import java.io.File;
+
+public class NarrativeXmlTests {
+
+    @Test
+    void narrativeXmlTestHarness() throws Exception {
+        final var serializer = new Persister();
+        File source = new File("src/test/resources/sample-project/narratives/nar.xml");
+        Narrative narrative = serializer.read(Narrative.class, source);
+        System.out.println("stop");
+    }
+}

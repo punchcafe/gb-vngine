@@ -26,6 +26,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testImplementation 'org.projectlombok:lombok:1.18.12'
 
+    compile 'org.simpleframework:simple-xml:2.7.1'
     implementation 'dev.punchcafe.vngine:pom:0.1'
     // Use JUnit Jupiter API for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
