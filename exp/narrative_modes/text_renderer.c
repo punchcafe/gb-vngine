@@ -1,4 +1,5 @@
 #include <gb/gb.h>
+#ifndef TEXT_RENDER_DEFINITION
 
 unsigned char alphabet[] = {
     // Blank
@@ -256,26 +257,10 @@ void await_a_button_press()
     }
 }
 
-int main()
-{
+void initialise_font(){
     set_bkg_data(0x01, 27, alphabet);
     set_bkg_tiles(0, 0, 20, 12, empty_tiles);
     set_bkg_tiles(0, 12, 20, 6, black_tiles);
-    SHOW_BKG;
-    text_box_print("hello world hello world hello world");
-    await_a_button_press();
-    render_whole_text("hello world\n hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world hello world");
-    await_a_button_press();
-    new_line();
-    render_whole_text("no");
-    new_line();
-    new_line();
-    new_line();
-    render_whole_text("yes");
-    new_line();
-    new_line();
-    new_line();
-    new_line();
-    new_line();
-    new_line();
 }
+
+#endif
