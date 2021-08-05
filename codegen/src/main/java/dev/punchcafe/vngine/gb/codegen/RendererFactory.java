@@ -72,18 +72,10 @@ public class RendererFactory {
     }
 
     @RendererSupplier
-    public ComponentRenderer narrativeDefinitionRenderer() throws IOException {
-        return FixtureRender.fromFile("src/main/resources/simple_narrative.c")
-                .componentName(NARRATIVE_DEFINITION_RENDERER_NAME)
-                .dependencies(List.of())
-                .build();
-    }
-
-    @RendererSupplier
     public ComponentRenderer nodeDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/node.c")
                 .componentName(NODE_DEFINITION_RENDERER_NAME)
-                .dependencies(List.of(NARRATIVE_DEFINITION_RENDERER_NAME, GAME_STATE_RENDERER_NAME))
+                .dependencies(List.of(NARRATIVE_STRUCT_RENDERER_NAME, GAME_STATE_RENDERER_NAME))
                 .build();
     }
 
@@ -133,7 +125,10 @@ public class RendererFactory {
     public ComponentRenderer getNextNodeFunctionRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/functions/get_next_node.c")
                 .componentName(GET_NEXT_NODE_FUNCTION_RENDERER_NAME)
-                .dependencies(List.of(NODE_RENDERER_NAME, GAME_STATE_RENDERER_NAME, PREDICATES_RENDERER_NAME))
+                .dependencies(List.of(TEXT_RENDERER_RENDERER_NAME,
+                        NODE_RENDERER_NAME,
+                        GAME_STATE_RENDERER_NAME,
+                        PREDICATES_RENDERER_NAME))
                 .build();
     }
 
@@ -271,7 +266,6 @@ public class RendererFactory {
                         TRANSITION_INITIALIZER_RENDERER_NAME,
                         PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
                         PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME,
-                        NARRATIVE_DEFINITION_RENDERER_NAME,
                         NODE_DEFINITION_RENDERER_NAME,
                         NODE_MUTATION_RENDERER_NAME,
                         NARRATIVE_RENDERER_NAME,

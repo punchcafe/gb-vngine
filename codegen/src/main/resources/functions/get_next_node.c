@@ -1,21 +1,19 @@
 #ifndef GET_NEXT_NODE_FUNCTION_DEFINITION
 #define GET_NEXT_NODE_FUNCTION_DEFINITION
-#include <stdio.h>
-#include <gb/gb.h>
 
 #define UP_BUTTON_CHOICE_INDEX 0
 #define RIGHT_BUTTON_CHOICE_INDEX 1
 #define DOWN_BUTTON_CHOICE_INDEX 2
 #define LEFT_BUTTON_CHOICE_INDEX 3
 
-const char* prefix_array []  = {"up: ", "rt: ", "dn: ", "lt: "};
+const char* prefix_array []  = {"up ", "rt ", "dn ", "lt "};
 
 void print_choices(char ** prompts, short number_of_prompts){
+    clear_text_box();
     for(int i = 0; i < number_of_prompts; i++)
     {
-        printf("\n");
-        printf(prefix_array[i]);
-        printf(prompts[i]);
+        text_box_print(prefix_array[i]);
+        text_box_print(prompts[i]);
     }
 }
 

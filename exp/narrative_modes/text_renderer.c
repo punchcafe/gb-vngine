@@ -219,6 +219,17 @@ void render_whole_text(char * text)
     }
 }
 
+void continue_text_render(char * text)
+{
+    int rendered_offset = text_box_print(text);
+    while(rendered_offset > 0){
+        await_a_button_press();
+        clear_text_box();
+        text += rendered_offset;
+        rendered_offset = text_box_print(text);
+    }
+}
+
 int a_button_is_pressed()
 {
     return joypad() & J_A;

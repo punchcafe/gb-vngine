@@ -13,6 +13,8 @@ import static java.util.stream.Collectors.toMap;
 
 public class ScriptRenderer {
 
+    private static String HEADERS = "#include <stdio.h>\n" +
+            "#include <gb/gb.h>\n";
     private final Map<String,RenderedComponentWriter> componentNameToWrite;
 
     @Builder
@@ -27,7 +29,7 @@ public class ScriptRenderer {
                 .stream()
                 .sorted(Comparator.comparing(writer -> writer.getRenderer().componentName()))
                 .forEach(writer -> this.writeOut(writer, stringBuilder));
-        return stringBuilder.toString();
+        return HEADERS + stringBuilder.toString();
     }
 
     private void writeOut(final RenderedComponentWriter writer, final StringBuilder builder){

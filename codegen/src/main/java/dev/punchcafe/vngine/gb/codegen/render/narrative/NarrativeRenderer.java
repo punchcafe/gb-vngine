@@ -45,7 +45,7 @@ public class NarrativeRenderer implements ComponentRenderer {
                 NarrativeName.elementArrayName(narrative.getNarrativeId()),
                 numberOfElements,
                 narrativeElementsArrayBody);
-        final var narrativeStruct = String.format("struct Narrative %s = {%d, %s}",
+        final var narrativeStruct = String.format("struct Narrative %s = {%d, %s};",
                 NarrativeName.narrativeName(narrative.getNarrativeId()),
                 numberOfElements,
                 NarrativeName.elementArrayName(narrative.getNarrativeId()));

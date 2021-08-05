@@ -4,4 +4,4 @@
 struct Text {
     char * text;
 };
-#endif NARRATIVE_TEXT_TYPE
+#endif
