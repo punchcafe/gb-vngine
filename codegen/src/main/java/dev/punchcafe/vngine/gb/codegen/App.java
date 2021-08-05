@@ -7,10 +7,7 @@ import dev.punchcafe.vngine.gb.codegen.narrative.NarrativeReader;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.PomLoader;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -24,8 +21,11 @@ public class App {
 
     public void run(final File vngProjectRoot, final String scriptDestination) throws IOException, IllegalAccessException, InvocationTargetException {
         final var narrativeReader = new NarrativeReader();
+
+        final var assetsDirectory = vngProjectRoot.listFiles((root, fileName) -> fileName.equals("assets"))[0];
+
         final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
-        final var rendererFactory = new RendererFactory(gameConfig);
+        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory);
 
 
         final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())

@@ -7,6 +7,7 @@ import dev.punchcafe.vngine.gb.codegen.render.SetupMethodComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.NodeMutationsRenderers;
+import dev.punchcafe.vngine.gb.codegen.render.narrative.AssetRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.node.NodeRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer;
@@ -16,6 +17,7 @@ import dev.punchcafe.vngine.gb.codegen.render.transition.TransitionDeclarer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,6 +29,7 @@ import static dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRendere
 public class RendererFactory {
 
     private final ProjectObjectModel<Narrative> gameConfig;
+    private final File assetDirectory;
 
     @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {
@@ -182,6 +185,11 @@ public class RendererFactory {
     /*
     NARRATIVE RENDERERS
      */
+
+    @RendererSupplier
+    public ComponentRenderer assetRenderer() throws IOException {
+        return AssetRenderer.rendererFor(assetDirectory);
+    }
 
     @RendererSupplier
     public ComponentRenderer playNarrativeFunctionRenderer() throws IOException {
