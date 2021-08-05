@@ -1,5 +1,6 @@
 #include "./narrative.c"
 #include "./narrative_elements/text.c"
+#include "./narrative_elements/pause.c"
 #include "./text_renderer.c"
 #include "./foreground.c"
 #include "./narrative_elements/foreground_element.c"
@@ -25,9 +26,15 @@ void handle_foreground(struct ForegroundElement* foreground)
     }
 }
 
-void handle_text(struct Text* text){
+void handle_text(struct Text* text)
+{
     render_whole_text(text->text);
     await_a_button_press();
+}
+
+void handle_pause(struct Pause* pause)
+{
+    delay(pause->seconds_duration * 1000);
 }
 
 void play_narrative_element(struct NarrativeElement *element)
@@ -39,6 +46,13 @@ void play_narrative_element(struct NarrativeElement *element)
         break;
     case FOREGROUND:
         handle_foreground((struct ForegroundElement*)element->content);
+        break;
+    case CLEAR_TEXT:
+        clear_text_box();
+        break;
+    case PAUSE:
+        handle_pause((struct Pause*)element->content);
+        break;
     default:
         break;
     }

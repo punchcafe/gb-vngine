@@ -1,6 +1,7 @@
 #include <gb/gb.h>
 #include "./narrative_elements/text.c"
 #include "./narrative_elements/foreground_element.c"
+#include "./narrative_elements/pause.c"
 #include "./narrative.c"
 #include "./play_narrative.c"
 
@@ -540,16 +541,20 @@ struct ForegroundElement fg1 = {LEFT, RHSLabel};
 struct ForegroundElement fg2 = {RIGHT, TileLabel};
 struct ForegroundElement fg3 = {CENTER, TileLabel};
 
+struct Pause pause1 = {5};
+
 struct NarrativeElement elem_1 = {&fg1, FOREGROUND};
 struct NarrativeElement elem_2 = {&text_to_play_1, TEXT};
 struct NarrativeElement elem_3 = {&fg2, FOREGROUND};
 struct NarrativeElement elem_4 = {&text_to_play_2, TEXT};
 struct NarrativeElement elem_5 = {&fg3, FOREGROUND};
-struct NarrativeElement elem_6 = {&text_to_play_3, TEXT};
+struct NarrativeElement elem_6 = {0x00, CLEAR_TEXT};
+struct NarrativeElement elem_7 = {&pause1, PAUSE};
+struct NarrativeElement elem_8 = {&text_to_play_3, TEXT};
 
-struct NarrativeElement * narratives [6] = {&elem_1, &elem_2, &elem_3, &elem_4, &elem_5, &elem_6};
+struct NarrativeElement * narratives [8] = {&elem_1, &elem_2, &elem_3, &elem_4, &elem_5, &elem_6, &elem_7, &elem_8};
 
-struct Narrative narrative = {6, narratives};
+struct Narrative narrative = {8, narratives};
 
 int main()
 {

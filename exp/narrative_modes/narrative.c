@@ -1,7 +1,7 @@
 #ifndef NARRATIVE_TYPE_DEFINITION
 #define NARRATIVE_TYPE_DEFINITION
 enum NarrativeElementTypes {
-    TEXT, FOREGROUND
+    TEXT, FOREGROUND, PAUSE, CLEAR_TEXT
 };
 
 struct NarrativeElement {
