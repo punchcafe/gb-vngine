@@ -127,18 +127,10 @@ public class RendererFactory {
     }
 
     @RendererSupplier
-    public ComponentRenderer getNextNodeFunctionRenderer() throws IOException{
+    public ComponentRenderer getNextNodeFunctionRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/functions/get_next_node.c")
                 .componentName(GET_NEXT_NODE_FUNCTION_RENDERER_NAME)
                 .dependencies(List.of(NODE_RENDERER_NAME, GAME_STATE_RENDERER_NAME, PREDICATES_RENDERER_NAME))
-                .build();
-    }
-
-    @RendererSupplier
-    public ComponentRenderer playNarrativeFunctionRenderer() throws IOException{
-        return FixtureRender.fromFile("src/main/resources/functions/play_narrative.c")
-                .componentName(PLAY_NARRATIVE_RENDERER_NAME)
-                .dependencies(List.of(NODE_DEFINITION_RENDERER_NAME))
                 .build();
     }
 
@@ -187,6 +179,79 @@ public class RendererFactory {
                 .build();
     }
 
+    /*
+    NARRATIVE RENDERERS
+     */
+
+    @RendererSupplier
+    public ComponentRenderer playNarrativeFunctionRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/play_narrative.c")
+                .componentName(PLAY_NARRATIVE_RENDERER_NAME)
+                .dependencies(List.of(
+                        TEXT_RENDERER_RENDERER_NAME,
+                        FOREGROUND_ELEM_STRUCT_RENDERER_NAME,
+                        TEXT_ELEM_STRUCT_RENDERER_NAME,
+                        PAUSE_ELEM_STRUCT_RENDERER_NAME,
+                        NARRATIVE_STRUCT_RENDERER_NAME,
+                        FOREGROUND_RENDERER_RENDERER_NAME,
+                        TEXT_RENDERER_RENDERER_NAME))
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer foregroundRendererRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/render_foreground.c")
+                .componentName(FOREGROUND_RENDERER_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer textRendererRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/text_renderer.c")
+                .componentName(TEXT_RENDERER_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer narrativeStructRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/structs/narrative.c")
+                .componentName(NARRATIVE_STRUCT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer foregroundElemRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/structs/foreground_elem.c")
+                .componentName(FOREGROUND_ELEM_STRUCT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer pauseElemRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/structs/pause_elem.c")
+                .componentName(PAUSE_ELEM_STRUCT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer textElemRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/structs/text_elem.c")
+                .componentName(TEXT_ELEM_STRUCT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+
+
+    /*
+    MAIN METHOD RENDERER
+     */
+
     @RendererSupplier
     public ComponentRenderer mainMethodRender() throws IOException {
         return FixtureRender.fromFile("src/main/resources/main.c")
@@ -205,7 +270,8 @@ public class RendererFactory {
                         NODE_RENDERER_NAME,
                         GET_NEXT_NODE_FUNCTION_RENDERER_NAME,
                         PLAY_NARRATIVE_RENDERER_NAME,
-                        CURRENT_NODE_RENDERER_NAME))
+                        CURRENT_NODE_RENDERER_NAME,
+                        NARRATIVE_STRUCT_RENDERER_NAME))
                 .build();
     }
 }
