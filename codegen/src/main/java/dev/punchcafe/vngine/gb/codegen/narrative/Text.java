@@ -8,6 +8,7 @@ import org.simpleframework.xml.Element;
 @NoArgsConstructor
 @Element
 public class Text implements NarrativeElement {
+    @org.simpleframework.xml.Text
     private String text;
 
     @Override
