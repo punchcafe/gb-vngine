@@ -1,18 +1,18 @@
 package dev.punchcafe.vngine.gb.codegen;
 
-import dev.punchcafe.vngine.gb.codegen.narrative.SimpleNarrative;
+import dev.punchcafe.vngine.gb.codegen.narrative.Narrative;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.FixtureRender;
 import dev.punchcafe.vngine.gb.codegen.render.SetupMethodComponentRenderer;
-import dev.punchcafe.vngine.gb.codegen.render.transition.BranchRenderer;
-import dev.punchcafe.vngine.gb.codegen.render.transition.PromptsRenderer;
-import dev.punchcafe.vngine.gb.codegen.render.transition.TransitionDeclarer;
 import dev.punchcafe.vngine.gb.codegen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.mutate.NodeMutationsRenderers;
 import dev.punchcafe.vngine.gb.codegen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.node.NodeRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.transition.BranchRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.transition.PromptsRenderer;
+import dev.punchcafe.vngine.gb.codegen.render.transition.TransitionDeclarer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
 
@@ -26,7 +26,7 @@ import static dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRendere
 @Builder
 public class RendererFactory {
 
-    private final ProjectObjectModel<SimpleNarrative> gameConfig;
+    private final ProjectObjectModel<Narrative> gameConfig;
 
     @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {

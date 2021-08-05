@@ -1,6 +1,6 @@
 package dev.punchcafe.vngine.gb.codegen.render.narrative;
 
-import dev.punchcafe.vngine.gb.codegen.narrative.SimpleNarrative;
+import dev.punchcafe.vngine.gb.codegen.narrative.Narrative;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.NARRA
 @Builder
 public class NarrativeRenderer implements ComponentRenderer {
 
-    private final ProjectObjectModel<SimpleNarrative> gameConfig;
+    private final ProjectObjectModel<Narrative> gameConfig;
 
     @Override
     public String render() {
@@ -23,8 +23,8 @@ public class NarrativeRenderer implements ComponentRenderer {
                 .collect(Collectors.joining("\n"));
     }
 
-    private String renderSingleNarrative(final SimpleNarrative narrative){
-        return String.format("struct Narrative %s = {\"%s\"};", narrative.getId(), narrative.getMessages());
+    private String renderSingleNarrative(final Narrative narrative){
+        return "";
     }
 
     @Override

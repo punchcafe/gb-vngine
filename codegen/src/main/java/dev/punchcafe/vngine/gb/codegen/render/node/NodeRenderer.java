@@ -3,7 +3,7 @@ package dev.punchcafe.vngine.gb.codegen.render.node;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeIdSanitiser;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeMutationsArrayName;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeTransitionName;
-import dev.punchcafe.vngine.gb.codegen.narrative.SimpleNarrative;
+import dev.punchcafe.vngine.gb.codegen.narrative.Narrative;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
@@ -20,7 +20,7 @@ import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.*;
 @Getter
 public class NodeRenderer implements ComponentRenderer {
 
-    private final ProjectObjectModel<SimpleNarrative> gameConfig;
+    private final ProjectObjectModel<Narrative> gameConfig;
 
     @Override
     public String render() {
