@@ -3,7 +3,7 @@ chapter-variables:
 nodes:
   - id: 0
     type: PLAYER
-    narrative-id: nar_2
+    narrative-id: nar_01
     game-state-modifiers:
     branches:
       - prompt: "yes"
@@ -12,7 +12,7 @@ nodes:
         node-id: 1-1
   - id: 1-0
     type: AUTOMATIC
-    narrative-id: empty_nar
+    narrative-id: nar_02
     game-state-modifiers:
       - "set $bool.like-aliens to true"
     branches:
@@ -20,7 +20,7 @@ nodes:
         node-id: 2
   - id: 1-1
     type: AUTOMATIC
-    narrative-id: empty_nar
+    narrative-id: nar_03
     game-state-modifiers:
       - "set $bool.like-aliens to false"
     branches:
@@ -28,7 +28,7 @@ nodes:
         node-id: 2
   - id: 2
     type: AUTOMATIC
-    narrative-id: nar_3
+    narrative-id: nar_04
     branches:
       - predicate-expression: "$bool.like-aliens is true"
         node-id: 3-0
@@ -36,11 +36,11 @@ nodes:
         node-id: 3-1
   - id: 3-0
     type: AUTOMATIC
-    narrative-id: nar_4
+    narrative-id: nar_05
     game-state-modifiers:
     branches:
   - id: 3-1
     type: AUTOMATIC
-    narrative-id: nar_5
+    narrative-id: nar_06
     game-state-modifiers:
     branches:

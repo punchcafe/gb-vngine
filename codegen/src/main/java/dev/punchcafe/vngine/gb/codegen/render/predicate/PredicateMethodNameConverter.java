@@ -1,6 +1,5 @@
 package dev.punchcafe.vngine.gb.codegen.render.predicate;
 
-import dev.punchcafe.vngine.pom.VngPLParser;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import dev.punchcafe.vngine.pom.model.vngpl.PredicateExpression;
 import dev.punchcafe.vngine.pom.model.vngpl.PredicateVisitor;

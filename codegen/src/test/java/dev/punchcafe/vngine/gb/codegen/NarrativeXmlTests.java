@@ -11,7 +11,7 @@ public class NarrativeXmlTests {
     @Test
     void narrativeXmlTestHarness() throws Exception {
         final var serializer = new Persister();
-        File source = new File("src/test/resources/sample-project/narratives/nar.xml");
+        File source = new File("src/test/resources/sample-project/narratives/nar_01.vnx");
         Narrative narrative = serializer.read(Narrative.class, source);
         System.out.println("stop");
     }

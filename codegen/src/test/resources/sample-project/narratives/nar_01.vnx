@@ -1,0 +1,6 @@
+<narrative id="nar_01">
+    <text>do you like aliens?</text>
+    <clear_text/>
+    <set_fg align="left" src="left_portrait"/>
+    <clear_text />
+</narrative>
