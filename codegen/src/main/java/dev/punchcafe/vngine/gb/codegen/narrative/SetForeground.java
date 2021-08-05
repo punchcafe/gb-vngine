@@ -11,4 +11,9 @@ public class SetForeground implements NarrativeElement {
     private String alignment;
     @Attribute(name = "src")
     private String src;
+
+    @Override
+    public <T> T acceptVisitor(NarrativeElementVisitor<T> visitor) {
+        return visitor.visitSetForeground(this);
+    }
 }

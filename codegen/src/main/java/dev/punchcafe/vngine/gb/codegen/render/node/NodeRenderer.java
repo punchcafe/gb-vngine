@@ -1,5 +1,6 @@
 package dev.punchcafe.vngine.gb.codegen.render.node;
 
+import dev.punchcafe.vngine.gb.codegen.csan.NarrativeName;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeIdSanitiser;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeMutationsArrayName;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeTransitionName;
@@ -39,7 +40,12 @@ public class NodeRenderer implements ComponentRenderer {
         final int gameStateMutationArraySize = isEmpty(node.getGameStateModifiers()) ?
                 1 : node.getGameStateModifiers().size();
         return String.format("struct Node %s = {%s, &%s, &%s, %s, %d};",
-                nodeId, nodeType, transitionName, nodeNarrativeId, gameStateMutationArray, gameStateMutationArraySize);
+                nodeId,
+                nodeType,
+                transitionName,
+                NarrativeName.narrativeName(nodeNarrativeId),
+                gameStateMutationArray,
+                gameStateMutationArraySize);
     }
 
     private boolean isEmpty(final List<String> list){

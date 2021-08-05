@@ -19,7 +19,8 @@ public class Narrative {
             @ElementList(entry = "newline", inline = true, type = NewLine.class, required = false),
             @ElementList(entry = "clear_text", inline = true, type = ClearText.class, required = false),
             @ElementList(entry = "set_fg", inline = true, type = SetForeground.class, required = false),
-            @ElementList(entry = "clear_fg", inline = true, type = ClearForeground.class, required = false)
+            @ElementList(entry = "clear_fg", inline = true, type = ClearForeground.class, required = false),
+            @ElementList(entry = "delay", inline = true, type = ClearForeground.class, required = false)
     })
     private List<NarrativeElement> elements;
 
