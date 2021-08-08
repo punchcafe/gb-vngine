@@ -35,7 +35,7 @@ void set_character_tile(unsigned short left_offset, unsigned char * patterns)
       move_sprite(i_0, x_0, y_0);
 
     }
-    for(unsigned short i = 7; i < 43; i++)
+    for(unsigned short i = 7; i < 42; i++)
     {
         // accomodate for missing two tiles in first row, also adjusts sprite num
         unsigned int sprite_number = i - 2;
