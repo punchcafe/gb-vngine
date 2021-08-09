@@ -12,7 +12,7 @@
 void set_focus_tile(unsigned char * patterns)
 {
   HIDE_SPRITES;
-  set_sprite_data(0, (2 * 2)*80, patterns);
+  set_sprite_data(0, 80, patterns);
   for(int i = 0; i < 40; i++)
   {
     set_sprite_tile(i, i*2);
