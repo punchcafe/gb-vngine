@@ -182,6 +182,7 @@ int text_box_print(char * str_char)
             new_line();
             offset++;
             str_char++;
+            continue;
         }
         short x = (cursor % TEXT_WIDTH) + TEXT_COLUMN_OFFSET;
         short y = (cursor / TEXT_WIDTH) + 12;

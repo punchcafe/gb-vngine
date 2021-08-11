@@ -6,7 +6,7 @@
 #define DOWN_BUTTON_CHOICE_INDEX 2
 #define LEFT_BUTTON_CHOICE_INDEX 3
 
-const char* prefix_array []  = {"up ", "rt ", "dn ", "lt "};
+const char* prefix_array []  = {"\n\nup ", "\nrt ", "\ndn ", "\nlt "};
 
 void print_choices(char ** prompts, short number_of_prompts){
     clear_text_box();
