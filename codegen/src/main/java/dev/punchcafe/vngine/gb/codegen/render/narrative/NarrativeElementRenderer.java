@@ -33,15 +33,19 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     private String renderSetForegroundBody(SetForeground setForeground){
         switch (setForeground.getAlignment().toLowerCase()){
             case "left":
-                return String.format("struct ForegroundElement %s = {LEFT, %s};",
+                return String.format("struct ForegroundElement %s = {LEFT_PORTRAIT, %s};",
                         NarrativeName.elementBodyName(narrativeId, index),
                         setForeground.getSrc());
             case "right":
-                return String.format("struct ForegroundElement %s = {RIGHT, %s};",
+                return String.format("struct ForegroundElement %s = {RIGHT_PORTRAIT, %s};",
                         NarrativeName.elementBodyName(narrativeId, index),
                         setForeground.getSrc());
             case "center":
-                return String.format("struct ForegroundElement %s = {CENTER, %s};",
+                return String.format("struct ForegroundElement %s = {CENTER_PORTRAIT, %s};",
+                        NarrativeName.elementBodyName(narrativeId, index),
+                        setForeground.getSrc());
+            case "center_focus":
+                return String.format("struct ForegroundElement %s = {CENTER_FOCUS, %s};",
                         NarrativeName.elementBodyName(narrativeId, index),
                         setForeground.getSrc());
             default:

@@ -6,6 +6,7 @@
 #define FOCUS_MODE_Y_OFFSET 40
 
 #define LEFT_PORTRAIT_MODE_X_OFFSET 16
+#define CENTER_PORTRAIT_MODE_X_OFFSET 52
 #define RIGHT_PORTRAIT_MODE_X_OFFSET 88
 #define PORTRAIT_MODE_Y_OFFSET 16
 
@@ -56,6 +57,11 @@ void set_character_tile_left(unsigned char * patterns)
 void set_character_tile_right(unsigned char * patterns)
 {
   set_character_tile(RIGHT_PORTRAIT_MODE_X_OFFSET, patterns);
+}
+
+void set_character_tile_center(unsigned char * patterns)
+{
+  set_character_tile(CENTER_PORTRAIT_MODE_X_OFFSET, patterns);
 }
 
 #endif
