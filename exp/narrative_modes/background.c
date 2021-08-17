@@ -14,26 +14,14 @@
 
 void render_background(struct BackgroundElement * element)
 {
-    unsigned short updated_sign_off [BACKGROUND_TILE_AREA];
+    unsigned char updated_sign_off [BACKGROUND_TILE_AREA];
     for(int i = 0; i < BACKGROUND_TILE_AREA; i++)
     {
         unsigned char shifted_index = element->tile_assignements[i] + TEXT_PATTERNS_END_INDEX + 1;
         updated_sign_off[i] = shifted_index;
     }
     set_bkg_data(TEXT_PATTERNS_END_INDEX + 1, element->number_of_tiles, element->background_tiles);
-    for(int x = 0; x < BACKGROUND_WIDTH; x++)
-    {
-        for(int y = 0; y <BACKGROUND_HEIGHT; y++)
-        {
-            unsigned char symbol [1]= {updated_sign_off[x + y*BACKGROUND_WIDTH]};
-            set_bkg_tiles(x,
-                    y,
-                    1,
-                    1,
-                    symbol);
-        }
-    }
-    
+    set_bkg_tiles(0x00, 0x00, BACKGROUND_WIDTH, BACKGROUND_HEIGHT, updated_sign_off);
 }
 
 #endif
