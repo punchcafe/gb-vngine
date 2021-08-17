@@ -80,6 +80,22 @@ public class RendererFactory {
     }
 
     @RendererSupplier
+    public ComponentRenderer backgroundRendererRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/render_background.c")
+                .componentName(BACKGROUND_RENDERER_RENDERER_NAME)
+                .dependencies(List.of(BACKGROUND_ELEM_STRUCT_RENDERER_NAME, TEXT_RENDERER_RENDERER_NAME))
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer backgroundElementRenderer() throws IOException {
+        return FixtureRender.fromFile("src/main/resources/narrative/structs/background_elem.c")
+                .componentName(BACKGROUND_ELEM_STRUCT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
     public ComponentRenderer gameStateMutationRenderer() {
         return GameStateMutationRenderer.builder()
                 .gameModel(gameConfig)

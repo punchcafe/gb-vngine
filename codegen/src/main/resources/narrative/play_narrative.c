@@ -35,6 +35,10 @@ void handle_pause(struct Pause* pause)
     delay(pause->seconds_duration * 1000);
 }
 
+void handle_background(struct BackgroundElement * element){
+    render_background(element);
+}
+
 void play_narrative_element(struct NarrativeElement *element)
 {
     switch (element->type)
@@ -50,6 +54,9 @@ void play_narrative_element(struct NarrativeElement *element)
         break;
     case PAUSE:
         handle_pause((struct Pause*)element->content);
+        break;
+    case BACKGROUND:
+        handle_background((struct BackgroundElement*)element->content);
         break;
     default:
         break;
