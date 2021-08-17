@@ -3,7 +3,9 @@
 #include "./narrative_elements/pause.c"
 #include "./text_renderer.c"
 #include "./foreground.c"
+#include "./background.c"
 #include "./narrative_elements/foreground_element.c"
+#include "./narrative_elements/background_element.c"
 
 #ifndef PLAY_NARRATIVE_DEFINITION
 #define PLAY_NARRATIVE_DEFINITION
@@ -26,6 +28,10 @@ void handle_foreground(struct ForegroundElement* foreground)
     }
 }
 
+void handle_background(struct BackgroundElement * element){
+    render_background(element);
+}
+
 void handle_text(struct Text* text)
 {
     render_whole_text(text->text);
@@ -46,6 +52,9 @@ void play_narrative_element(struct NarrativeElement *element)
         break;
     case FOREGROUND:
         handle_foreground((struct ForegroundElement*)element->content);
+        break;
+    case BACKGROUND:
+        handle_background((struct BackgroundElement*)element->content);
         break;
     case CLEAR_TEXT:
         clear_text_box();

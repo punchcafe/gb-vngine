@@ -1,5 +1,6 @@
 #include <gb/gb.h>
 #ifndef TEXT_RENDER_DEFINITION
+#define TEXT_RENDER_DEFINITION
 
 unsigned char alphabet[] = {
     // Blank
@@ -167,6 +168,7 @@ char get_char_position(unsigned char character)
 #define TEXT_COLUMN_OFFSET 1
 #define CURSOR_MAX_EXCLUSIVE TEXT_WIDTH * NUMBER_OF_ROWS
 #define TEXT_DELAY 50
+#define TEXT_PATTERNS_END_INDEX 27
 
 int cursor = 0;
 
