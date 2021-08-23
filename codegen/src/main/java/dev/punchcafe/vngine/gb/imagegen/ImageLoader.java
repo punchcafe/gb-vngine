@@ -91,7 +91,7 @@ public class ImageLoader {
     }
 
     public static void main(String[] args) throws IOException {
-        File input = new File("src/main/resources/image-res/sample-png.png");
+        File input = new File("src/main/resources/image-res/ghost.png");
         BufferedImage image = ImageIO.read(input);
         final var rgb = image.getRGB(0,0);
         String [][] rgbs = new String[image.getWidth()][image.getHeight()];
