@@ -1,4 +1,4 @@
 <narrative id="nar_04">
     <text>oh look here comes an alien</text>
-    <set_fg align="center" src="center_portrait"/>
+    <set_fg align="center" src="demon_portrait"/>
 </narrative>
