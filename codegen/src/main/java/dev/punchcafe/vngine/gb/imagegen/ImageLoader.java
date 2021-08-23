@@ -25,11 +25,11 @@ public class ImageLoader {
         VAL_0,VAL_1,VAL_2,VAL_3;
     }
 
-    public static class Tile {
+    public static class TallTile {
 
         private static char ZERO_HEX = 0x0;
         private static char ONE_HEX = 0x1;
-        private PixelValue[][] internalArray = new PixelValue[8][8];
+        private PixelValue[][] internalArray = new PixelValue[16][8];
 
         //TODO: have builder which blows up if null
         public void setPixel(@NonNull final PixelValue value, int x, int y){
@@ -95,9 +95,9 @@ public class ImageLoader {
         BufferedImage image = ImageIO.read(input);
         final var rgb = image.getRGB(0,0);
         String [][] rgbs = new String[image.getWidth()][image.getHeight()];
-        Tile[] tiles = new Tile[80];
-        for(int i = 0; i < 80; i++){
-            tiles[i] = new Tile();
+        TallTile[] tiles = new TallTile[40];
+        for(int i = 0; i < 40; i++){
+            tiles[i] = new TallTile();
         }
         if(image.getWidth() != 56 || image.getHeight() != 96){
             throw new IllegalArgumentException();
@@ -106,26 +106,26 @@ public class ImageLoader {
         for(int i = 8; i < image.getWidth() - 8; i++){
             // first rows
             for(int j = 0; j < 16; j++) {
-                final var tileIndex = (j / 8)*5  + ((i - 8) / 8);
+                final var tileIndex = ((i - 8) / 8);
                 final var thisTile = tiles[tileIndex];
 
                 rgbs[i][j] = Integer.toHexString(image.getRGB(i, j)).substring(2,8);
                 final var tileValue = getPixelValue(Integer.toHexString(image.getRGB(i, j)).substring(2,8));
-                thisTile.setPixel(tileValue, i % 8, j%8);
+                thisTile.setPixel(tileValue, i % 8, j%16);
             }
         }
         for(int i = 0; i < image.getWidth(); i++){
             for(int j = 16; j < image.getHeight(); j++){
-                final var tileIndex = (((j / 8) * 7) + (i / 8)) - 4; //tile offset
+                final var tileIndex = (((j / 16) * 7) + (i / 8)) - 2; //tile offset
                 final var thisTile = tiles[tileIndex];
 
                 rgbs[i][j] = Integer.toHexString(image.getRGB(i, j)).substring(2,8);
                 final var tileValue = getPixelValue(Integer.toHexString(image.getRGB(i, j)).substring(2,8));
-                thisTile.setPixel(tileValue, i % 8, j%8);
+                thisTile.setPixel(tileValue, i % 8, j%16);
             }
         }
 
-        final var code = Arrays.stream(tiles).map(Tile::toGBDKCode)
+        final var code = Arrays.stream(tiles).map(TallTile::toGBDKCode)
                 .collect(Collectors.joining(",", "{", "}"));
 
         final var distinctCodes = Arrays.stream(rgbs)
