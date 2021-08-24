@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public interface ImageAssetConverter {
 
-    String convert(final BufferedImage file);
+    String convert(final BufferedImage image, final String assetName);
 
     String supportedAssetExtension();
 }

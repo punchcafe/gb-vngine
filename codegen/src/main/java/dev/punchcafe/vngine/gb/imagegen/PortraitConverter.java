@@ -11,16 +11,8 @@ public class PortraitConverter implements ImageAssetConverter {
 
     private HexValueConfig hexValueConfig = new HexValueConfig();
 
-    public static void main(String[] args) throws IOException {
-        File input = new File("src/main/resources/image-res/demon.png");
-        BufferedImage image = ImageIO.read(input);
-        final var prtConverter = new PortraitConverter();
-        final var result = prtConverter.convert(image);
-        System.out.println("checkpoint");
-    }
-
     @Override
-    public String convert(BufferedImage image) {
+    public String convert(final BufferedImage image, final String assetName) {
         String [][] rgbs = new String[image.getWidth()][image.getHeight()];
         TallTile[] tiles = new TallTile[40];
         for(int i = 0; i < 40; i++){
@@ -54,9 +46,10 @@ public class PortraitConverter implements ImageAssetConverter {
             }
         }
 
-        return Arrays.stream(tiles)
+        final var arrayBody = Arrays.stream(tiles)
                 .map(TallTile::toGBDKCode)
                 .collect(Collectors.joining(",", "{", "}"));
+        return String.format("const unsigned char %s [] = %s;", assetName, arrayBody);
     }
 
     @Override

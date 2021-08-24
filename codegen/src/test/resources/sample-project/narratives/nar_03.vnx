@@ -1,6 +1,6 @@
 <narrative id="nar_03">
     <text>nah those weirdos</text>
     <clear_text/>
-    <set_fg align="right" src="right_portrait"/>
+    <set_fg align="right" src="ghost"/>
     <clear_text />
 </narrative>

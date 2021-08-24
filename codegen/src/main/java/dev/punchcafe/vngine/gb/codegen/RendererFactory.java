@@ -14,6 +14,9 @@ import dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.transition.BranchRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.transition.PromptsRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.transition.TransitionDeclarer;
+import dev.punchcafe.vngine.gb.imagegen.FocusConverter;
+import dev.punchcafe.vngine.gb.imagegen.ImageAssetsGenerator;
+import dev.punchcafe.vngine.gb.imagegen.PortraitConverter;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
 
@@ -198,6 +201,12 @@ public class RendererFactory {
      */
 
     @RendererSupplier
+    public ComponentRenderer imageAssetRenderer() throws IOException {
+        final var converters = List.of(new FocusConverter(), new PortraitConverter());
+        return new ImageAssetsGenerator(converters, this.assetDirectory);
+    }
+
+    @RendererSupplier
     public ComponentRenderer assetRenderer() throws IOException {
         return AssetRenderer.rendererFor(assetDirectory);
     }
@@ -285,6 +294,7 @@ public class RendererFactory {
                         NODE_DEFINITION_RENDERER_NAME,
                         NODE_MUTATION_RENDERER_NAME,
                         NARRATIVE_RENDERER_NAME,
+                        IMAGE_ASSET_RENDERER_NAME,
                         NODE_RENDERER_NAME,
                         GET_NEXT_NODE_FUNCTION_RENDERER_NAME,
                         PLAY_NARRATIVE_RENDERER_NAME,
