@@ -239,7 +239,7 @@ void new_line()
         cursor = CURSOR_MAX_EXCLUSIVE - 1;
         return;
     }
-    cursor = (row + 1) * TEXT_WIDTH - 1;
+    cursor = (row + 1) * TEXT_WIDTH;
 }
 
 void await_a_button_press()
