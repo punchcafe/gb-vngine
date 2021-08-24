@@ -1,12 +1,10 @@
 package dev.punchcafe.vngine.gb.imagegen;
 
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
-import lombok.Builder;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +19,7 @@ import static java.util.stream.Collectors.toMap;
 
 public class ImageAssetsGenerator implements ComponentRenderer {
 
-    private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(prt|fcs)\\.asset\\..+$");
+    private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(prt|fcs|bkg)\\.asset\\..+$");
 
     private final File assetDirectory;
     private final Map<String, ImageAssetConverter> strategies;

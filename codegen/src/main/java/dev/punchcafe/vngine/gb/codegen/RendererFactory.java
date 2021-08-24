@@ -14,6 +14,7 @@ import dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.transition.BranchRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.transition.PromptsRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.transition.TransitionDeclarer;
+import dev.punchcafe.vngine.gb.imagegen.BackgroundConverter;
 import dev.punchcafe.vngine.gb.imagegen.FocusConverter;
 import dev.punchcafe.vngine.gb.imagegen.ImageAssetsGenerator;
 import dev.punchcafe.vngine.gb.imagegen.PortraitConverter;
@@ -202,7 +203,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer imageAssetRenderer() throws IOException {
-        final var converters = List.of(new FocusConverter(), new PortraitConverter());
+        final var converters = List.of(new FocusConverter(), new PortraitConverter(), new BackgroundConverter());
         return new ImageAssetsGenerator(converters, this.assetDirectory);
     }
 
