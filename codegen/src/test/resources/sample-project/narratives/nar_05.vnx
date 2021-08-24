@@ -1,6 +1,6 @@
 <narrative id="nar_05">
     <text>oh boy cant wait to meet em thisll be fun</text>
     <clear_text/>
-    <set_fg align="center_focus" src="left_portrait"/>
+    <set_fg align="center_focus" src="center_portrait"/>
     <clear_text />
 </narrative>
