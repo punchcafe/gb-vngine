@@ -6,9 +6,9 @@ package dev.punchcafe.vngine.gb.newgame;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppTest {
+class NewProjectGeneratorTest {
     @Test void appHasAGreeting() {
-        App classUnderTest = new App();
+        NewProjectGenerator classUnderTest = new NewProjectGenerator();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
     }
 }

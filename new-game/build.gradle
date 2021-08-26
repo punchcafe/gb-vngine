@@ -14,6 +14,16 @@ plugins {
     id 'application'
 }
 
+jar {
+    manifest {
+        attributes["Main-Class"] = "dev.punchcafe.vngine.gb.newgame.NewProjectGenerator"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
@@ -21,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    compile 'commons-io:commons-io:2.8.0'
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.1-jre'
 

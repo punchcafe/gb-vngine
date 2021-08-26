@@ -1,0 +1,6 @@
+<narrative id="nar_02">
+    <text>yeah kinda</text>
+    <clear_text/>
+    <set_fg align="right" src="ghost"/>
+    <clear_text />
+</narrative>
