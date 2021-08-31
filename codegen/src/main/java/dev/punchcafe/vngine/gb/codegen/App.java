@@ -19,9 +19,10 @@ import static java.util.stream.Collectors.toList;
 
 public class App {
 
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+    }
 
-    public void run(final File vngProjectRoot, final String scriptDestination) throws IOException, IllegalAccessException, InvocationTargetException {
+    public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
         final var narrativeReader = new NarrativeReader();
 
         final var assetsDirectory = vngProjectRoot.listFiles((root, fileName) -> fileName.equals("assets"))[0];
@@ -45,7 +46,7 @@ public class App {
         out.close();
     }
 
-    private ComponentRenderer getFromMethod(final Method method, final RendererFactory factory){
+    private ComponentRenderer getFromMethod(final Method method, final RendererFactory factory) {
         try {
             return (ComponentRenderer) method.invoke(factory);
         } catch (Exception e) {

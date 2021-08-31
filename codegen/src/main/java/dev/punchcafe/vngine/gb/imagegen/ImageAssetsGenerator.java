@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toMap;
 
 public class ImageAssetsGenerator implements ComponentRenderer {
 
-    private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(prt|fcs|bkg)\\.asset\\..+$");
+    private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(prt|fcs|fnt|bkg)\\.asset\\..+$");
 
     private final File assetDirectory;
     private final Map<String, ImageAssetConverter> strategies;

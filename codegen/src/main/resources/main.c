@@ -1,5 +1,5 @@
 int main(){
-    initialise_font();
+    initialise_font(gothic);
     setup();
     SPRITES_8x16;
     SHOW_SPRITES;

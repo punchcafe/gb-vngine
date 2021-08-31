@@ -6,13 +6,17 @@
 #define DOWN_BUTTON_CHOICE_INDEX 2
 #define LEFT_BUTTON_CHOICE_INDEX 3
 
-const char* prefix_array []  = {"\nup ", "\nrt ", "\ndn ", "\nlt "};
+const void (*special_char_renderers[4])()  = {&text_box_print_special_char_up,
+&text_box_print_special_char_right,
+&text_box_print_special_char_down,
+&text_box_print_special_char_left};
 
 void print_choices(char ** prompts, short number_of_prompts){
     clear_text_box();
     for(int i = 0; i < number_of_prompts; i++)
     {
-        text_box_print(prefix_array[i]);
+        text_box_print("\n");
+        special_char_renderers[i]();
         text_box_print(prompts[i]);
     }
 }

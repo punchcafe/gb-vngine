@@ -6,9 +6,9 @@ nodes:
     narrative-id: nar_01
     game-state-modifiers:
     branches:
-      - prompt: "yes"
+      - prompt: "Yes!"
         node-id: 1-0
-      - prompt: "no"
+      - prompt: "No!"
         node-id: 1-1
   - id: 1-0
     type: AUTOMATIC
