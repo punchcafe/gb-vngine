@@ -12,7 +12,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static dev.punchcafe.vngine.gb.codegen.render.ComponentRendererName.BUTTON_TILESET_RENDERER_NAME;
+
 public class ButtonTilesetGenerator implements ComponentRenderer {
+
+    //todo: set character position header macros here
+
+    public static String BUTTON_TILESET_SIZE_MACRO = "BUTTON_SET_SIZE";
+    public static int BUTTON_TILESET_SIZE = 7;
 
     private static final String DARK_BUTTON_SET_PATH = "src/main/resources/assets/button-tileset/dark_tileset.btn.asset.png";
     private final FontConfig fontConfig;
@@ -30,7 +37,7 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
 
     @Override
     public String render() {
-        return Stream.of(this.fontConfig.getTheme())
+        final var data = Stream.of(this.fontConfig.getTheme())
                 .map(themeToTilesetPath::get)
                 .map(File::new)
                 .map(this::openImage)
@@ -39,6 +46,8 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
                 .map(Tile::toGBDKCode)
                 .collect(CArrayCollector.forArrayName("button_tile_set_data"));
 
+        return String.format("#define %s %d\n", BUTTON_TILESET_SIZE_MACRO, BUTTON_TILESET_SIZE) +
+                data;
     }
 
     private BufferedImage openImage(final File file){
@@ -56,6 +65,6 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
 
     @Override
     public String componentName() {
-        return null;
+        return BUTTON_TILESET_RENDERER_NAME;
     }
 }

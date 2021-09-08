@@ -25,12 +25,12 @@ public class CArrayCollector implements Collector<CharSequence, StringBuilder, S
 
     @Override
     public BiConsumer<StringBuilder, CharSequence> accumulator() {
-        return (sb, charSequence) -> sb.append(",\n").append(charSequence);
+        return (sb, charSequence) -> sb.append(charSequence).append(",");
     }
 
     @Override
     public BinaryOperator<StringBuilder> combiner() {
-        return (sb1, sb2) -> sb1.append(",\n").append(sb2.toString());
+        return (sb1, sb2) -> sb1.append(",").append(sb2.toString());
     }
 
     @Override
@@ -40,6 +40,6 @@ public class CArrayCollector implements Collector<CharSequence, StringBuilder, S
 
     @Override
     public Set<Characteristics> characteristics() {
-        return null;
+        return Set.of();
     }
 }

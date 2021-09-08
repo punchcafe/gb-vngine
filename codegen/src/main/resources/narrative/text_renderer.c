@@ -355,8 +355,9 @@ void await_a_button_press()
     }
 }
 
-void initialise_font(char * font_set){
-    set_bkg_data(0x00, 80, font_set);
+void initialise_font(char * font_set_data, unsigned int font_set_data_size){
+    set_bkg_data(0x00, BUTTON_SET_SIZE - 1, button_tile_set_data);
+    set_bkg_data(BUTTON_SET_SIZE, font_set_data_size, font_set_data);
     set_bkg_tiles(0, 0, 20, 12, empty_tiles);
     set_bkg_tiles(0, 12, 20, 6, black_tiles);
 }

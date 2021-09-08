@@ -22,7 +22,7 @@ public class FontSetConverter implements ImageAssetConverter {
 
     @Override
     public String convert(final BufferedImage image, final String assetName) {
-        final var tileData = extractTilesFromImage(image, config.getCharacterSet().length(), hexValueConfig)
+        final var tileData = extractTilesFromImage(image, config.getSanitisedCharacterSet().length, hexValueConfig)
                 .stream()
                 .map(Tile::toGBDKCode)
                 .collect(joining(",\n", "\n", "\n"));

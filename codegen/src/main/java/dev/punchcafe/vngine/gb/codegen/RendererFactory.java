@@ -116,6 +116,7 @@ public class RendererFactory {
     public ComponentRenderer setupMethodRenderer() {
         return SetupMethodComponentRenderer.builder()
                 .gameConfig(this.gameConfig)
+                .fontConfig(this.narrativeConfig.getFontConfig())
                 .build();
     }
 
@@ -248,7 +249,7 @@ public class RendererFactory {
     public ComponentRenderer textRendererRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/narrative/text_renderer.c")
                 .componentName(TEXT_RENDERER_RENDERER_NAME)
-                .dependencies(List.of())
+                .dependencies(List.of(BUTTON_TILESET_RENDERER_NAME))
                 .build();
     }
 

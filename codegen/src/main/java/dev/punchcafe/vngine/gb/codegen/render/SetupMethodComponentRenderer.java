@@ -4,6 +4,8 @@ import dev.punchcafe.vngine.gb.codegen.csan.BranchName;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeIdSanitiser;
 import dev.punchcafe.vngine.gb.codegen.csan.NodeTransitionName;
 import dev.punchcafe.vngine.gb.codegen.csan.PromptName;
+import dev.punchcafe.vngine.gb.codegen.narrative.config.FontConfig;
+import dev.punchcafe.vngine.gb.codegen.narrative.config.NarrativeConfig;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
@@ -20,12 +22,16 @@ import static dev.punchcafe.vngine.gb.codegen.render.predicate.PredicatesRendere
 public class SetupMethodComponentRenderer implements ComponentRenderer {
 
     private ProjectObjectModel<?> gameConfig;
+    private FontConfig fontConfig;
 
     @Override
     public String render() {
         return "\nvoid setup(){\n" +
                 renderBranchSetUpStatements() + "\n" +
-                renderPromptSetupStatements() +
+                renderPromptSetupStatements() + "\n" +
+                String.format("    initialise_font(%s, %d);",
+                        fontConfig.getDefaultFont(),
+                        fontConfig.getSanitisedCharacterSet().length) +
                 "\n}";
     }
 
@@ -73,7 +79,8 @@ public class SetupMethodComponentRenderer implements ComponentRenderer {
         return List.of(PREDICATES_RENDERER_NAME,
                 GAME_STATE_MUTATION_RENDERER,
                 BRANCH_RENDERER_NAME,
-                PROMPTS_RENDERER_NAME);
+                PROMPTS_RENDERER_NAME,
+                TEXT_RENDERER_RENDERER_NAME);
     }
 
     @Override
