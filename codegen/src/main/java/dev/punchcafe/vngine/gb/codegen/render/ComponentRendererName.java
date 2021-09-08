@@ -38,5 +38,6 @@ public interface ComponentRendererName {
 
     // ASSET RENDERERS
     String IMAGE_ASSET_RENDERER_NAME = "IMAGE_ASSET_RENDERER";
+    String BUTTON_TILESET_RENDERER_NAME = "BUTTON_TILESET_RENDERER";
 
 }

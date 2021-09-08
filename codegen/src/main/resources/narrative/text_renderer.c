@@ -251,11 +251,11 @@ void write_position_and_increment_cursor(unsigned char tile_number)
     if(cursor < CURSOR_MAX_EXCLUSIVE)
     {
         short x = (cursor % TEXT_WIDTH) + TEXT_COLUMN_OFFSET;
-            short y = (cursor / TEXT_WIDTH) + 12;
-            unsigned char tile_number_array [1]= {tile_number};
-            set_bkg_tiles(x, y, 1, 1, tile_number_array);
-            delay(20);
-            cursor++;
+        short y = (cursor / TEXT_WIDTH) + 12;
+        unsigned char tile_number_array [1]= {tile_number};
+        set_bkg_tiles(x, y, 1, 1, tile_number_array);
+        delay(20);
+        cursor++;
     }
 }
 

@@ -205,13 +205,20 @@ public class RendererFactory {
         final var converters = List.of(new FocusConverter(),
                 new PortraitConverter(),
                 new BackgroundConverter(),
-                FontSetConverter.builder().fontSetSize(80).build());
+                FontSetConverter.builder()
+                        .config(this.narrativeConfig.getFontConfig())
+                        .build());
         return new ImageAssetsGenerator(converters, this.assetDirectory);
     }
 
     @RendererSupplier
     public ComponentRenderer assetRenderer() throws IOException {
         return AssetRenderer.rendererFor(assetDirectory);
+    }
+
+    @RendererSupplier
+    public ComponentRenderer buttonTilesetRenderer() throws IOException {
+        return ButtonTilesetGenerator.fromConfig(narrativeConfig.getFontConfig());
     }
 
     @RendererSupplier
