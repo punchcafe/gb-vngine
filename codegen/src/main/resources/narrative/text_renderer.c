@@ -1,12 +1,5 @@
 #ifndef TEXT_RENDER_DEFINITION
 
-#define BLANK_SPACE_CHAR_POSITION 0
-#define PRESS_A_BUTTON_NON_PRESSED_POSITION 1
-#define PRESS_A_BUTTON_PRESSED_POSITION 2
-#define PRESS_UP_BUTTON_PRESSED_POSITION 3
-#define PRESS_DOWN_BUTTON_PRESSED_POSITION 4
-#define PRESS_LEFT_BUTTON_PRESSED_POSITION 5
-#define PRESS_RIGHT_BUTTON_PRESSED_POSITION 6
 #define ALPHABET_START_OFFSET 6
 
 unsigned char alphabet[] = {
@@ -356,7 +349,7 @@ void await_a_button_press()
 }
 
 void initialise_font(char * font_set_data, unsigned int font_set_data_size){
-    set_bkg_data(0x00, BUTTON_SET_SIZE - 1, button_tile_set_data);
+    set_bkg_data(0x00, BUTTON_SET_SIZE, button_tile_set_data);
     set_bkg_data(BUTTON_SET_SIZE, font_set_data_size, font_set_data);
     set_bkg_tiles(0, 0, 20, 12, empty_tiles);
     set_bkg_tiles(0, 12, 20, 6, black_tiles);
