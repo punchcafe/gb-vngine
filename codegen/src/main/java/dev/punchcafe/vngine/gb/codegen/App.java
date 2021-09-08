@@ -4,8 +4,10 @@
 package dev.punchcafe.vngine.gb.codegen;
 
 import dev.punchcafe.vngine.gb.codegen.narrative.NarrativeReader;
+import dev.punchcafe.vngine.gb.codegen.narrative.config.NarrativeConfig;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.PomLoader;
+import org.simpleframework.xml.core.Persister;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -22,13 +26,22 @@ public class App {
     public static void main(String[] args) {
     }
 
+    private final Persister serializer = new Persister();
+
+
     public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
         final var narrativeReader = new NarrativeReader();
 
         final var assetsDirectory = vngProjectRoot.listFiles((root, fileName) -> fileName.equals("assets"))[0];
+        final var narrativeConfig = Optional.ofNullable(assetsDirectory.listFiles((file, name) -> name.equals("config.vnx")))
+                .stream()
+                .flatMap(Arrays::stream)
+                .map(this::parseNarrativeConfigFile)
+                .findAny()
+                .orElseThrow();
 
         final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
-        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory);
+        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory, narrativeConfig);
 
 
         final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
@@ -44,6 +57,14 @@ public class App {
         final var out = new BufferedWriter(new FileWriter(scriptDestination));
         out.write(renderedScript);
         out.close();
+    }
+
+    private NarrativeConfig parseNarrativeConfigFile(final File file){
+        try {
+            return serializer.read(NarrativeConfig.class, file);
+        } catch (Exception e) {
+            throw new RuntimeException();
+        }
     }
 
     private ComponentRenderer getFromMethod(final Method method, final RendererFactory factory) {

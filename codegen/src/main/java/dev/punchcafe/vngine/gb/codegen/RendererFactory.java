@@ -1,6 +1,7 @@
 package dev.punchcafe.vngine.gb.codegen;
 
 import dev.punchcafe.vngine.gb.codegen.narrative.Narrative;
+import dev.punchcafe.vngine.gb.codegen.narrative.config.NarrativeConfig;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.gb.codegen.render.FixtureRender;
 import dev.punchcafe.vngine.gb.codegen.render.SetupMethodComponentRenderer;
@@ -31,6 +32,7 @@ public class RendererFactory {
 
     private final ProjectObjectModel<Narrative> gameConfig;
     private final File assetDirectory;
+    private final NarrativeConfig narrativeConfig;
 
     @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {
