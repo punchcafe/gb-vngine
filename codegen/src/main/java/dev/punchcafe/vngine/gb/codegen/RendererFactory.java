@@ -249,8 +249,13 @@ public class RendererFactory {
     public ComponentRenderer textRendererRenderer() throws IOException {
         return FixtureRender.fromFile("src/main/resources/narrative/text_renderer.c")
                 .componentName(TEXT_RENDERER_RENDERER_NAME)
-                .dependencies(List.of(BUTTON_TILESET_RENDERER_NAME))
+                .dependencies(List.of(BUTTON_TILESET_RENDERER_NAME, GET_CHAR_POSITION_RENDERER_NAME))
                 .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer getCharPositionFunctionRenderer() throws IOException {
+        return GetCharPositionRenderer.builder().fontConfig(this.narrativeConfig.getFontConfig()).build();
     }
 
     @RendererSupplier
