@@ -7,6 +7,7 @@ import dev.punchcafe.vngine.gb.codegen.narrative.NarrativeReader;
 import dev.punchcafe.vngine.gb.codegen.narrative.config.NarrativeConfig;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.PomLoader;
+import lombok.Getter;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.BufferedWriter;
@@ -14,18 +15,76 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
 public class App {
 
-    public static void main(String[] args) {
+    private static class AppArgs {
+
+        private String outputFile;
+        @Getter private String projectRootDirectory;
+
+        public Optional<String> getOutputFile(){
+            return Optional.ofNullable(this.outputFile);
+        }
+
+        public AppArgs mergeFlags(final Map<String, String> flags){
+            this.outputFile = flags.get("o");
+            return this;
+        }
+
+        public AppArgs mergeRootDirectory(final List<String> orderedArgs){
+            this.projectRootDirectory = orderedArgs.get(0);
+            return this;
+        }
+    }
+
+    private static Map<String, String> parseFlags(String[] args){
+        final Map<String,String> flags = new HashMap<>();
+        int i = 0;
+        while(i < args.length){
+            if(args[i].startsWith("-")){
+                flags.put(args[i], args[i+1]);
+                i += 2;
+            } else {
+                i++;
+            }
+        }
+        return flags;
+    }
+
+    private static List<String> parseOrderedArgs(String[] args){
+        final List<String> orderedArgs = new ArrayList<>();
+        int i = 0;
+        while(i < args.length){
+            if(args[i].startsWith("-")){
+                i += 2;
+            } else {
+                orderedArgs.add(args[i]);
+                i++;
+            }
+        }
+        return orderedArgs;
+    }
+
+    private static AppArgs convertArgs(String[] args){
+        final var argsModel = new AppArgs();
+        return argsModel.mergeFlags(parseFlags(args))
+                .mergeRootDirectory(parseOrderedArgs(args));
+    }
+
+    public static void main(String[] args) throws IOException {
+        final App app = new App();
+        app.run(App.convertArgs(args));
     }
 
     private final Persister serializer = new Persister();
 
+    public void run(final AppArgs appArgs) throws IOException {
+        run(new File(appArgs.projectRootDirectory), appArgs.outputFile);
+    }
 
     public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {
         final var narrativeReader = new NarrativeReader();

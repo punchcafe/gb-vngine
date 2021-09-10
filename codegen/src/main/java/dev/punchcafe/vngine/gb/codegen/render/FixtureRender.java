@@ -5,19 +5,33 @@ import lombok.Getter;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
+import static dev.punchcafe.commons.functional.ExceptionFnWrapper.wrapEx;
 import static java.util.stream.Collectors.joining;
 
 @Builder
 @Getter
 public class FixtureRender implements ComponentRenderer {
 
-    public static FixtureRender.FixtureRenderBuilder fromFile(final String filePath) throws IOException {
-        final var body = Files.lines(new File(filePath).toPath())
-                .collect(joining("\n"));
-        return FixtureRender.builder().fixture(body);
+    public static FixtureRender.FixtureRenderBuilder fromFile(final String filePath) {
+        final var res= Optional.of(filePath)
+                .map(ClassLoader.getSystemClassLoader()::getResource)
+                .map(wrapEx(URL::toURI))
+                .map(Path::of)
+                .stream()
+                .flatMap(wrapEx(Files::lines))
+                .reduce((str1, str2) -> str1 + "\n" + str2)
+                .map(FixtureRender.builder()::fixture);
+
+        return res.get();
     }
 
     private final String fixture;
