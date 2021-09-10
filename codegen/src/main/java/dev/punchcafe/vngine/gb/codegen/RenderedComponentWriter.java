@@ -19,7 +19,7 @@ public class RenderedComponentWriter {
     public void write(final StringBuilder builder) {
         if (!hasWritten) {
             builder.append("\n")
-                    .append(renderer.render());
+                    .append(renderer.renderWithHeader());
             this.hasWritten = true;
         }
     }
