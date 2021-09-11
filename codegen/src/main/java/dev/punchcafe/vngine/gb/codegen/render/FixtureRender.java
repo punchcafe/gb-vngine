@@ -1,10 +1,10 @@
 package dev.punchcafe.vngine.gb.codegen.render;
 
+import dev.punchcafe.vngine.gb.codegen.App;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -22,16 +22,13 @@ import static java.util.stream.Collectors.joining;
 public class FixtureRender implements ComponentRenderer {
 
     public static FixtureRender.FixtureRenderBuilder fromFile(final String filePath) {
-        final var res= Optional.of(filePath)
-                .map(ClassLoader.getSystemClassLoader()::getResource)
-                .map(wrapEx(URL::toURI))
-                .map(Path::of)
-                .stream()
-                .flatMap(wrapEx(Files::lines))
-                .reduce((str1, str2) -> str1 + "\n" + str2)
-                .map(FixtureRender.builder()::fixture);
 
-        return res.get();
+        InputStream in = App.class.getResourceAsStream(filePath);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        return reader.lines()
+                .reduce((str1, str2) -> str1 + "\n" + str2)
+                .map(FixtureRender.builder()::fixture)
+                .get();
     }
 
     private final String fixture;

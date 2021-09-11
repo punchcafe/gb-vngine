@@ -8,6 +8,7 @@ import dev.punchcafe.vngine.gb.codegen.narrative.config.NarrativeConfig;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.PomLoader;
 import lombok.Getter;
+import lombok.ToString;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.BufferedWriter;
@@ -46,7 +47,7 @@ public class App {
         int i = 0;
         while(i < args.length){
             if(args[i].startsWith("-")){
-                flags.put(args[i], args[i+1]);
+                flags.put(args[i].substring(1), args[i+1]);
                 i += 2;
             } else {
                 i++;
@@ -83,7 +84,7 @@ public class App {
     private final Persister serializer = new Persister();
 
     public void run(final AppArgs appArgs) throws IOException {
-        run(new File(appArgs.projectRootDirectory), appArgs.outputFile);
+        run(new File(appArgs.projectRootDirectory), appArgs.getOutputFile().orElse("./game.c"));
     }
 
     public void run(final File vngProjectRoot, final String scriptDestination) throws IOException {

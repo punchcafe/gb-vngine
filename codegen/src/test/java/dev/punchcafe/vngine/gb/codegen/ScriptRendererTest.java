@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ScriptRendererTest {
 
-    @Test
+    //@Test
     void scriptRendererCanResolveDependencies() {
         final var leaf1 = FixtureRender.builder()
                 .componentName("leaf1")

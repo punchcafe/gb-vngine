@@ -36,7 +36,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {
-        return FixtureRender.fromFile("string_comparator.c")
+        return FixtureRender.fromFile("/string_comparator.c")
                 .componentName(UTILITY_METHOD_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -60,7 +60,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer playerBasedTransitionDefinitionRenderer() throws IOException {
-        return FixtureRender.fromFile("player_based_transition.c")
+        return FixtureRender.fromFile("/player_based_transition.c")
                 .componentName(PLAYER_TRANSITION_DEFINITION_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -68,7 +68,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer predicateBasedTransitionDefinitionRenderer() throws IOException {
-        return FixtureRender.fromFile("predicate_based_transition.c")
+        return FixtureRender.fromFile("/predicate_based_transition.c")
                 .componentName(PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -76,7 +76,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer nodeDefinitionRenderer() throws IOException {
-        return FixtureRender.fromFile("node.c")
+        return FixtureRender.fromFile("/node.c")
                 .componentName(NODE_DEFINITION_RENDERER_NAME)
                 .dependencies(List.of(NARRATIVE_STRUCT_RENDERER_NAME, GAME_STATE_RENDERER_NAME))
                 .build();
@@ -84,7 +84,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer backgroundRendererRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/render_background.c")
+        return FixtureRender.fromFile("/narrative/render_background.c")
                 .componentName(BACKGROUND_RENDERER_RENDERER_NAME)
                 .dependencies(List.of(BACKGROUND_ELEM_STRUCT_RENDERER_NAME, TEXT_RENDERER_RENDERER_NAME))
                 .build();
@@ -92,7 +92,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer backgroundElementRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/structs/background_elem.c")
+        return FixtureRender.fromFile("/narrative/structs/background_elem.c")
                 .componentName(BACKGROUND_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -143,7 +143,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer getNextNodeFunctionRenderer() throws IOException {
-        return FixtureRender.fromFile("functions/get_next_node.c")
+        return FixtureRender.fromFile("/functions/get_next_node.c")
                 .componentName(GET_NEXT_NODE_FUNCTION_RENDERER_NAME)
                 .dependencies(List.of(TEXT_RENDERER_RENDERER_NAME,
                         NODE_RENDERER_NAME,
@@ -154,7 +154,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer noMutationArray() throws IOException {
-        return FixtureRender.fromFile("do_nothing_mutation.c")
+        return FixtureRender.fromFile("/do_nothing_mutation.c")
                 .componentName(DO_NOTHING_MUTATION_ARRAY_RENDERER_NAME)
                 .dependencies(List.of(GAME_STATE_RENDERER_NAME))
                 .build();
@@ -162,7 +162,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer alwaysTruePredicate() throws IOException {
-        return FixtureRender.fromFile("always_true_predicate.c")
+        return FixtureRender.fromFile("/always_true_predicate.c")
                 .componentName(ALWAYS_TRUE_PREDICATE_RENDERER_NAME)
                 .dependencies(List.of(GAME_STATE_RENDERER_NAME))
                 .build();
@@ -170,7 +170,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer gameOverNodeIdConstant() throws IOException {
-        return FixtureRender.fromFile("game_over_node_id_constant.c")
+        return FixtureRender.fromFile("/game_over_node_id_constant.c")
                 .componentName(GAME_OVER_NODE_ID_CONSTANT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -224,7 +224,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer playNarrativeFunctionRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/play_narrative.c")
+        return FixtureRender.fromFile("/narrative/play_narrative.c")
                 .componentName(PLAY_NARRATIVE_RENDERER_NAME)
                 .dependencies(List.of(
                         TEXT_RENDERER_RENDERER_NAME,
@@ -239,7 +239,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer foregroundRendererRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/render_foreground.c")
+        return FixtureRender.fromFile("/narrative/render_foreground.c")
                 .componentName(FOREGROUND_RENDERER_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -247,7 +247,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer textRendererRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/text_renderer.c")
+        return FixtureRender.fromFile("/narrative/text_renderer.c")
                 .componentName(TEXT_RENDERER_RENDERER_NAME)
                 .dependencies(List.of(BUTTON_TILESET_RENDERER_NAME, GET_CHAR_POSITION_RENDERER_NAME))
                 .build();
@@ -260,7 +260,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer narrativeStructRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/structs/narrative.c")
+        return FixtureRender.fromFile("/narrative/structs/narrative.c")
                 .componentName(NARRATIVE_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -268,7 +268,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer foregroundElemRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/structs/foreground_elem.c")
+        return FixtureRender.fromFile("/narrative/structs/foreground_elem.c")
                 .componentName(FOREGROUND_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -276,7 +276,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer pauseElemRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/structs/pause_elem.c")
+        return FixtureRender.fromFile("/narrative/structs/pause_elem.c")
                 .componentName(PAUSE_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -284,7 +284,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer textElemRenderer() throws IOException {
-        return FixtureRender.fromFile("narrative/structs/text_elem.c")
+        return FixtureRender.fromFile("/narrative/structs/text_elem.c")
                 .componentName(TEXT_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
@@ -298,7 +298,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer mainMethodRender() throws IOException {
-        return FixtureRender.fromFile("main.c")
+        return FixtureRender.fromFile("/main.c")
                 .componentName(MAIN_METHOD_RENDERER_NAME)
                 .dependencies(List.of(GAME_STATE_RENDERER_NAME,
                         GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER,
