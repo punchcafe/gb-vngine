@@ -7,4 +7,7 @@ import org.simpleframework.xml.Element;
 public class NarrativeConfig {
     @Element(name = "font")
     private FontConfig fontConfig;
+
+    @Element(name = "image")
+    private ImageConfig imageConfig;
 }

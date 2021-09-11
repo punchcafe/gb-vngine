@@ -1,17 +1,18 @@
 package dev.punchcafe.vngine.gb.imagegen;
 
+import lombok.Builder;
+
 import java.util.Map;
 import java.util.Optional;
 
+
+@Builder
 public class HexValueConfig {
-    private static Map<String, PixelValue> HEX_CONVERTER = Map.of("ffffff", PixelValue.VAL_0,
-            "c0c0c0", PixelValue.VAL_2,
-            "808080", PixelValue.VAL_1,
-            "000000", PixelValue.VAL_3);
+    private final Map<String, PixelValue> hexConversions;
 
     public PixelValue getPixelValue(final String strValue){
         return Optional.of(strValue)
-                .map(HEX_CONVERTER::get)
+                .map(this.hexConversions::get)
                 .orElseThrow(IllegalStateException::new);
     }
 }

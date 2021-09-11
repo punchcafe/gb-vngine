@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 public class FontSetConverter implements ImageAssetConverter {
 
     private final FontConfig config;
-    private final HexValueConfig hexValueConfig = new HexValueConfig();
+    private final HexValueConfig hexValueConfig;
 
     @Override
     public String convert(final BufferedImage image, final String assetName) {

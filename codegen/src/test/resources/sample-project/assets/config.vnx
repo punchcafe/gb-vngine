@@ -6,4 +6,14 @@
             ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.!,:;?"
         </character_set>
     </font>
+    <image>
+        <palette>
+            <colors>
+                <color value="1" hex="ffffff"/>
+                <color value="1" hex="808080"/>
+                <color value="2" hex="c0c0c0"/>
+                <color value="3" hex="000000"/>
+            </colors>
+        </palette>
+    </image>
 </narrative_config>

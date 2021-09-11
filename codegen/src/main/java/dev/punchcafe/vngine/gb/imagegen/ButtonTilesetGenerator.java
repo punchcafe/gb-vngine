@@ -33,13 +33,13 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
     private final HexValueConfig hexValueConfig;
     private final Map<TextTheme, String> themeToTilesetPath = Map.of(TextTheme.dark, DARK_BUTTON_SET_PATH);
 
-    public static ButtonTilesetGenerator fromConfig(final FontConfig config){
-        return new ButtonTilesetGenerator(config);
+    public static ButtonTilesetGenerator fromConfig(final FontConfig config,final HexValueConfig hexValueConfig ){
+        return new ButtonTilesetGenerator(config, hexValueConfig);
     }
 
-    private ButtonTilesetGenerator(final FontConfig fontConfig) {
+    private ButtonTilesetGenerator(final FontConfig fontConfig, final HexValueConfig hexValueConfig) {
         this.fontConfig = fontConfig;
-        this.hexValueConfig = new HexValueConfig();
+        this.hexValueConfig = hexValueConfig;
     }
 
     @Override

@@ -4,8 +4,12 @@
 package dev.punchcafe.vngine.gb.codegen;
 
 import dev.punchcafe.vngine.gb.codegen.narrative.NarrativeReader;
+import dev.punchcafe.vngine.gb.codegen.narrative.config.ColorConfig;
+import dev.punchcafe.vngine.gb.codegen.narrative.config.ImageConfig;
 import dev.punchcafe.vngine.gb.codegen.narrative.config.NarrativeConfig;
 import dev.punchcafe.vngine.gb.codegen.render.ComponentRenderer;
+import dev.punchcafe.vngine.gb.imagegen.HexValueConfig;
+import dev.punchcafe.vngine.gb.imagegen.PixelValue;
 import dev.punchcafe.vngine.pom.PomLoader;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class App {
 
@@ -98,8 +103,10 @@ public class App {
                 .findAny()
                 .orElseThrow();
 
+        final HexValueConfig hexConfig = extractHexConfig(narrativeConfig.getImageConfig());
+
         final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
-        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory, narrativeConfig);
+        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory, narrativeConfig, hexConfig);
 
 
         final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
@@ -115,6 +122,35 @@ public class App {
         final var out = new BufferedWriter(new FileWriter(scriptDestination));
         out.write(renderedScript);
         out.close();
+    }
+
+    private HexValueConfig extractHexConfig(ImageConfig imageConfig) {
+        final var hexMap = imageConfig.getPaletteConfig().getColors().stream()
+                .map(this::convertColorToEntry)
+                .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+        return HexValueConfig.builder()
+                .hexConversions(hexMap)
+                .build();
+    }
+
+    private Map.Entry<String, PixelValue> convertColorToEntry(final ColorConfig color){
+        // TODO: make this a model which does checks for us.
+        return Map.entry(color.getHex(), pixelValueFromString(color.getValue()));
+    }
+
+    private PixelValue pixelValueFromString(final String val){
+        switch (val){
+            case "0":
+                return PixelValue.VAL_0;
+            case "1":
+                return PixelValue.VAL_1;
+            case "2":
+                return PixelValue.VAL_2;
+            case "3":
+                return PixelValue.VAL_3;
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 
     private NarrativeConfig parseNarrativeConfigFile(final File file){

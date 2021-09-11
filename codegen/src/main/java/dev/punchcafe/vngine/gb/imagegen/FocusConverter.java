@@ -1,12 +1,15 @@
 package dev.punchcafe.vngine.gb.imagegen;
 
+import lombok.AllArgsConstructor;
+
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class FocusConverter implements ImageAssetConverter {
 
-    private HexValueConfig hexValueConfig = new HexValueConfig();
+    private HexValueConfig hexValueConfig;
 
     @Override
     public String convert(final BufferedImage image, final String assetName) {

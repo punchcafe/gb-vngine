@@ -1,15 +1,16 @@
 package dev.punchcafe.vngine.gb.imagegen;
 
-import javax.imageio.ImageIO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@AllArgsConstructor
 public class PortraitConverter implements ImageAssetConverter {
 
-    private HexValueConfig hexValueConfig = new HexValueConfig();
+    private HexValueConfig hexValueConfig;
 
     @Override
     public String convert(final BufferedImage image, final String assetName) {

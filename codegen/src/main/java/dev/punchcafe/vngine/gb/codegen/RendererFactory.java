@@ -33,6 +33,7 @@ public class RendererFactory {
     private final ProjectObjectModel<Narrative> gameConfig;
     private final File assetDirectory;
     private final NarrativeConfig narrativeConfig;
+    private final HexValueConfig hexValueConfig;
 
     @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {
@@ -203,11 +204,12 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer imageAssetRenderer() throws IOException {
-        final var converters = List.of(new FocusConverter(),
-                new PortraitConverter(),
-                new BackgroundConverter(),
+        final var converters = List.of(new FocusConverter(this.hexValueConfig),
+                new PortraitConverter(this.hexValueConfig),
+                new BackgroundConverter(this.hexValueConfig),
                 FontSetConverter.builder()
                         .config(this.narrativeConfig.getFontConfig())
+                        .hexValueConfig(this.hexValueConfig)
                         .build());
         return new ImageAssetsGenerator(converters, this.assetDirectory);
     }
@@ -219,7 +221,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer buttonTilesetRenderer() throws IOException {
-        return ButtonTilesetGenerator.fromConfig(narrativeConfig.getFontConfig());
+        return ButtonTilesetGenerator.fromConfig(narrativeConfig.getFontConfig(), this.hexValueConfig);
     }
 
     @RendererSupplier
