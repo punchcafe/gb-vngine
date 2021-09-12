@@ -1,4 +1,4 @@
-rootProject.name = 'dungeon-deamon'
+rootProject.name = 'gb-vngine'
 include 'cli'
 include 'codegen'
 include 'new-game'
