@@ -1,0 +1,13 @@
+assets/bkgsample.bkg.asset.png
+assets/samplefocus.fcs.asset.png
+assets/samplepng.prt.asset.png
+chapters/sample-chapter.yml
+narratives/empty_nar.vnx
+narratives/nar_01.vnx
+narratives/nar_02.vnx
+narratives/nar_03.vnx
+narratives/nar_04.vnx
+narratives/nar_05.vnx
+narratives/nar_06.vnx
+game_state_variables.yml
+spec.yml

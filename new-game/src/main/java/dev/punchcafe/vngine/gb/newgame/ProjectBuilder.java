@@ -1,9 +1,14 @@
 package dev.punchcafe.vngine.gb.newgame;
 
-import org.apache.commons.io.FileUtils;
+import dev.punchcafe.commons.functional.ExceptionFnWrapper;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static dev.punchcafe.commons.functional.ExceptionFnWrapper.wrapEx;
 
 public class ProjectBuilder {
 
@@ -13,36 +18,42 @@ public class ProjectBuilder {
         this.root = root;
     }
 
-    public void generate() throws IOException {
-        this.createRootFiles();
-        this.createAssetsDir();
-        this.createNarrativeDir();
-        this.createChapterDir();
+    public void generate() {
+        Stream.of(ProjectBuilder.class.getResourceAsStream("/copy_files"))
+                .map(InputStreamReader::new)
+                .map(BufferedReader::new)
+                .flatMap(BufferedReader::lines)
+                .filter(str -> !str.isBlank())
+                .forEach(wrapEx(this::copyFileToCorrespondingDirectory));
     }
 
-    private File createAssetsDir() throws IOException {
-        final var assetsDir = createFileWithSubPath("assets");
-        FileUtils.copyURLToFile(ClassLoader.getSystemClassLoader().getResource("assets/bkgsample.bkg.asset.png"),
-                new File(assetsDir.getPath() + "/bkgsample.bkg.asset.png"));
-        return assetsDir;
+    private void copyFileToCorrespondingDirectory(final String copyDirLocation) throws IOException {
+        final var file = ProjectBuilder.class.getResourceAsStream("/copy-dir/" + copyDirLocation);
+        final var newFileLocation = root.getPath() + "/" + copyDirLocation;
+        createParentDirectories(newFileLocation);
+
+        Optional.of(newFileLocation)
+                .map(File::new)
+                .filter(wrapEx(File::createNewFile))
+                .map(ExceptionFnWrapper.<File,FileOutputStream>wrapEx(FileOutputStream::new))
+                .ifPresent(wrapEx((FileOutputStream fileOutputStream) -> this.transferFiles(file, fileOutputStream)));
     }
 
-    private File createNarrativeDir() {
-        return createFileWithSubPath("narratives");
+    private void transferFiles(final InputStream fileToCopy, final FileOutputStream fileOutputStream) throws IOException {
+        fileToCopy.transferTo(fileOutputStream);
     }
 
-    private void createRootFiles() throws IOException {
-        FileUtils.copyURLToFile(ClassLoader.getSystemClassLoader().getResource("spec.yml"),
-                new File(root.getPath() + "/spec.yml"));
-        FileUtils.copyURLToFile(ClassLoader.getSystemClassLoader().getResource("game_state_variables.yml"),
-                new File(root.getPath() + "/game_state_variables.yml"));
-    }
-
-    private File createChapterDir() {
-        return createFileWithSubPath("chapters");
-    }
-
-    private File createFileWithSubPath(final String subPath) {
-        return new File(root.toString() + "/" + subPath);
+    private void createParentDirectories(final String copyLocation) throws IOException {
+        final var pathParts = copyLocation.split("/");
+        if (pathParts.length <= 1) {
+            return;
+        }
+        final var sb = new StringBuilder();
+        // skip last
+        for (int i = 0; i < pathParts.length - 1; i++) {
+            sb.append(pathParts[i]);
+            sb.append("/");
+        }
+        Files.createDirectories(Paths.get(sb.toString()));
     }
 }

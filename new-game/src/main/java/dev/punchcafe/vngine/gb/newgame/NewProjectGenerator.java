@@ -4,14 +4,10 @@
 package dev.punchcafe.vngine.gb.newgame;
 
 import java.io.File;
-import java.io.IOException;
 
 public class NewProjectGenerator {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
-    public static void main(String[] args) throws IOException {
+    public void run(String[] args){
         if(args.length != 1){
             throw new IllegalArgumentException();
         }
@@ -23,5 +19,9 @@ public class NewProjectGenerator {
         rootDirectory.mkdir();
         final var builder = new ProjectBuilder(rootDirectory);
         builder.generate();
+    }
+
+    public static void main(String[] args) {
+        new NewProjectGenerator().run(args);
     }
 }
