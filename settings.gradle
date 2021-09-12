@@ -1,0 +1,4 @@
+rootProject.name = 'dungeon-deamon'
+include 'cli'
+include 'codegen'
+include 'new-game'

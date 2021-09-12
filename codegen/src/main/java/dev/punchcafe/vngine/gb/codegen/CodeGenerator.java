@@ -12,7 +12,6 @@ import dev.punchcafe.vngine.gb.imagegen.HexValueConfig;
 import dev.punchcafe.vngine.gb.imagegen.PixelValue;
 import dev.punchcafe.vngine.pom.PomLoader;
 import lombok.Getter;
-import lombok.ToString;
 import org.simpleframework.xml.core.Persister;
 
 import java.io.BufferedWriter;
@@ -25,7 +24,7 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
-public class App {
+public class CodeGenerator {
 
     private static class AppArgs {
 
@@ -82,11 +81,15 @@ public class App {
     }
 
     public static void main(String[] args) throws IOException {
-        final App app = new App();
-        app.run(App.convertArgs(args));
+         new CodeGenerator().run(args);
     }
 
     private final Persister serializer = new Persister();
+
+    public void run(final String[] args) throws IOException {
+        final CodeGenerator codeGenerator = new CodeGenerator();
+        codeGenerator.run(CodeGenerator.convertArgs(args));
+    }
 
     public void run(final AppArgs appArgs) throws IOException {
         run(new File(appArgs.projectRootDirectory), appArgs.getOutputFile().orElse("./game.c"));
