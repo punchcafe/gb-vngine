@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.cli;
 
-import dev.punchcafe.vngine.gb.codegen.CodeGenerator;
+import dev.punchcafe.gbvng.gen.CodeGenerator;
 
 import java.io.IOException;
 

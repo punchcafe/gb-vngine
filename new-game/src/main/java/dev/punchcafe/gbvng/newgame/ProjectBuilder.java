@@ -1,4 +1,4 @@
-package dev.punchcafe.vngine.gb.newgame;
+package dev.punchcafe.gbvng.newgame;
 
 import dev.punchcafe.commons.functional.ExceptionFnWrapper;
 

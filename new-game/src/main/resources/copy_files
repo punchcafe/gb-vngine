@@ -1,6 +1,10 @@
 assets/bkgsample.bkg.asset.png
+assets/demon.prt.asset.png
+assets/ghost.prt.asset.png
+assets/gothic.fnt.asset.png
 assets/samplefocus.fcs.asset.png
 assets/samplepng.prt.asset.png
+assets/config.vnx
 chapters/sample-chapter.yml
 narratives/empty_nar.vnx
 narratives/nar_01.vnx

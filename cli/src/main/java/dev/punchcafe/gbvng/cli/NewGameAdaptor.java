@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.cli;
 
-import dev.punchcafe.vngine.gb.newgame.NewProjectGenerator;
+import dev.punchcafe.gbvng.newgame.NewProjectGenerator;
 
 public class NewGameAdaptor implements CliProcess {
 
