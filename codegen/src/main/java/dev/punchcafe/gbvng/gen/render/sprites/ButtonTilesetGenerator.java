@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.sprites;
 
+import dev.punchcafe.gbvng.gen.CodeGenerator;
 import dev.punchcafe.gbvng.gen.config.FontConfig;
 import dev.punchcafe.gbvng.gen.config.TextTheme;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
@@ -9,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -27,10 +29,10 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
             "#define PRESS_LEFT_BUTTON_PRESSED_POSITION 5\n" +
             "#define PRESS_RIGHT_BUTTON_PRESSED_POSITION 6\n";
 
-    private static final String DARK_BUTTON_SET_PATH = "src/main/resources/assets/button-tileset/dark_tileset.btn.asset.png";
+    private static final String DARK_BUTTON_SET_PATH = "/assets/button-tileset/dark_tileset.btn.asset.png";
     private final FontConfig fontConfig;
     private final HexValueConfig hexValueConfig;
-    private final Map<TextTheme, String> themeToTilesetPath = Map.of(TextTheme.dark, DARK_BUTTON_SET_PATH);
+    private final Map<TextTheme, String> themeToResourcePath = Map.of(TextTheme.dark, DARK_BUTTON_SET_PATH);
 
     public static ButtonTilesetGenerator fromConfig(final FontConfig config,final HexValueConfig hexValueConfig ){
         return new ButtonTilesetGenerator(config, hexValueConfig);
@@ -44,8 +46,8 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
     @Override
     public String render() {
         final var data = Stream.of(this.fontConfig.getTheme())
-                .map(themeToTilesetPath::get)
-                .map(File::new)
+                .map(themeToResourcePath::get)
+                .map(CodeGenerator.class::getResourceAsStream)
                 .map(this::openImage)
                 .map(image -> TileConverters.extractTilesFromImage(image, this.hexValueConfig))
                 .flatMap(List::stream)
@@ -57,11 +59,11 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
                 data;
     }
 
-    private BufferedImage openImage(final File file){
+    private BufferedImage openImage(final InputStream file){
         try{
             return ImageIO.read(file);
         } catch (IOException ex){
-            throw new RuntimeException();
+            throw new RuntimeException(ex);
         }
     }
 
