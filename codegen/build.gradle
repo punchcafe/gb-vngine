@@ -23,7 +23,7 @@ repositories {
 
 jar {
     manifest {
-        attributes["Main-Class"] = "dev.punchcafe.vngine.gb.codegen.App"
+        attributes["Main-Class"] = "dev.punchcafe.gbvng.gen.CodeGenerator"
     }
 
     from {

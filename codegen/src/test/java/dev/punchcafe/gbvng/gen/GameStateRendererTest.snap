@@ -1,0 +1,8 @@
+GameStateRendererTest.shouldRenderSimpleGameState=[
+  "#ifndef GAMESTATE_TYPE_DEFINITION\n#define GAMESTATE_TYPE_DEFINITION\nstruct GameState {\n    char * game_var_str_str_property_1;\n    char * game_var_str_str_property_2;\n    int game_var_int_int_property_1;\n    int game_var_int_int_property_2;\n    short game_var_bool_bool_property_1;\n    short game_var_bool_bool_property_2;\n};\nstruct GameState GAME_STATE_VARIABLE;\n#endif"
+]
+
+
+dev.punchcafe.gbvng.gen.GameStateRendererTest.shouldRenderSimpleGameState=[
+  "#ifndef GAMESTATE_TYPE_DEFINITION\n#define GAMESTATE_TYPE_DEFINITION\nstruct GameState {\n    char * game_var_str_str_property_1;\n    char * game_var_str_str_property_2;\n    int game_var_int_int_property_1;\n    int game_var_int_int_property_2;\n    short game_var_bool_bool_property_1;\n    short game_var_bool_bool_property_2;\n};\nstruct GameState GAME_STATE_VARIABLE;\n#endif"
+]
