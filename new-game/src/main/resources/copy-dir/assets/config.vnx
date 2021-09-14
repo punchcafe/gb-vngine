@@ -9,10 +9,10 @@
     <image>
         <palette>
             <colors>
-                <color value="1" hex="ffffff"/>
-                <color value="1" hex="808080"/>
-                <color value="2" hex="c0c0c0"/>
-                <color value="3" hex="000000"/>
+                <color value="0" hex="e0f8d0"/>
+                <color value="2" hex="88c070"/>
+                <color value="1" hex="346856"/>
+                <color value="3" hex="081820"/>
             </colors>
         </palette>
     </image>

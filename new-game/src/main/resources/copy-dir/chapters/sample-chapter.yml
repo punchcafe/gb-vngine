@@ -2,45 +2,9 @@ chapter-id: ch-01
 chapter-variables:
 nodes:
   - id: 0
-    type: PLAYER
+    type: AUTOMATIC
     narrative-id: nar_01
     game-state-modifiers:
     branches:
-      - prompt: "yes"
-        node-id: 1-0
-      - prompt: "no"
-        node-id: 1-1
-  - id: 1-0
-    type: AUTOMATIC
-    narrative-id: nar_02
-    game-state-modifiers:
-      - "set $bool.like-aliens to true"
-    branches:
       - predicate-expression: "1 equals 1"
-        node-id: 2
-  - id: 1-1
-    type: AUTOMATIC
-    narrative-id: nar_03
-    game-state-modifiers:
-      - "set $bool.like-aliens to false"
-    branches:
-      - predicate-expression: "1 equals 1"
-        node-id: 2
-  - id: 2
-    type: AUTOMATIC
-    narrative-id: nar_04
-    branches:
-      - predicate-expression: "$bool.like-aliens is true"
-        node-id: 3-0
-      - predicate-expression: "$bool.like-aliens is false"
-        node-id: 3-1
-  - id: 3-0
-    type: AUTOMATIC
-    narrative-id: nar_05
-    game-state-modifiers:
-    branches:
-  - id: 3-1
-    type: AUTOMATIC
-    narrative-id: nar_06
-    game-state-modifiers:
-    branches:
+        node-id: 0
