@@ -3,14 +3,17 @@
  */
 package dev.punchcafe.gbvng.gen;
 
+import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.model.narrative.NarrativeReader;
 import dev.punchcafe.gbvng.gen.config.ColorConfig;
 import dev.punchcafe.gbvng.gen.config.ImageConfig;
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
+import dev.punchcafe.gbvng.gen.model.narrative.PlayMusic;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.render.sprites.PixelValue;
 import dev.punchcafe.vngine.pom.PomLoader;
+import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Getter;
 import org.simpleframework.xml.core.Persister;
 
@@ -108,9 +111,15 @@ public class CodeGenerator {
 
         final HexValueConfig hexConfig = extractHexConfig(narrativeConfig.getImageConfig());
 
-        final var gameConfig = PomLoader.forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
-        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory, narrativeConfig, hexConfig);
+        final ProjectObjectModel<Narrative> gameConfig = PomLoader.<Narrative>forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
 
+        final var hasMusic = gameConfig.getNarrativeConfigs().stream()
+                .map(Narrative::getElements)
+                .filter(Objects::nonNull)
+                .flatMap(List::stream)
+                .anyMatch(elem -> elem.getClass().equals(PlayMusic.class));
+
+        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory, narrativeConfig, hexConfig, hasMusic);
 
         final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(RendererSupplier.class))

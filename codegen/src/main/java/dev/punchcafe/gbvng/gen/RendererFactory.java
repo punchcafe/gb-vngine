@@ -3,6 +3,8 @@ package dev.punchcafe.gbvng.gen;
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.render.*;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;
+import dev.punchcafe.gbvng.gen.render.music.DelayWithMusicRenderer;
+import dev.punchcafe.gbvng.gen.render.music.GBTHeaderRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.NodeMutationsRenderers;
 import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
@@ -28,6 +30,7 @@ public class RendererFactory {
     private final File assetDirectory;
     private final NarrativeConfig narrativeConfig;
     private final HexValueConfig hexValueConfig;
+    private final boolean hasMusic;
 
     @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {
@@ -286,6 +289,18 @@ public class RendererFactory {
                 .build();
     }
 
+    /*
+    MUSIC RENDERERS
+     */
+    @RendererSupplier
+    public ComponentRenderer gbtHeaderRenderer() {
+        return GBTHeaderRenderer.builder().hasMusic(this.hasMusic).build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer delayWithMusicRenderer() {
+        return DelayWithMusicRenderer.builder().hasMusic(this.hasMusic).build();
+    }
 
 
     /*

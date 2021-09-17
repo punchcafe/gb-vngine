@@ -87,7 +87,7 @@ void write_position_and_increment_cursor(unsigned char tile_number)
         short y = (cursor / TEXT_WIDTH) + 12;
         unsigned char tile_number_array [1]= {tile_number};
         set_bkg_tiles(x, y, 1, 1, tile_number_array);
-        delay(20);
+        delay_with_music(2);
         cursor++;
     }
 }
@@ -183,7 +183,7 @@ void await_a_button_press()
             set_bkg_tiles(19,17, 1,1,blinking_a_ref);
             blinking_a_button = ((blinking_a_button + 1) % 2) + 2;
         }
-        delay(50);
+        delay_with_music(4);
         loops++;
     }
 }

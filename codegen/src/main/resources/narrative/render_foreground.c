@@ -19,7 +19,7 @@ void set_focus_tile(unsigned char * patterns)
     set_sprite_tile(i, i*2);
     move_sprite(i,(i%10)*8 + FOCUS_MODE_X_OFFSET, (i/10)*16 + FOCUS_MODE_Y_OFFSET);
   }
-  delay(50);
+  delay_with_music(4);
   SHOW_SPRITES;
 }
 
@@ -45,7 +45,7 @@ void set_character_tile(unsigned short left_offset, unsigned char * patterns)
         set_sprite_tile(sprite_number, sprite_number * 2);
         move_sprite(sprite_number, x, y);
     }
-    delay(50);
+    delay_with_music(4);
     SHOW_SPRITES;
 }
 

@@ -2,3 +2,6 @@
 /**/*.out
 /**/*.sav
 /**/*.ihx
+/**/*.gradle
+/**/*.idea
+/**/.DS_Store

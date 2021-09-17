@@ -32,7 +32,7 @@ void handle_text(struct Text* text)
 
 void handle_pause(struct Pause* pause)
 {
-    delay(pause->seconds_duration * 1000);
+    delay_with_music(pause->seconds_duration * 60);
 }
 
 void handle_background(struct BackgroundElement * element){
