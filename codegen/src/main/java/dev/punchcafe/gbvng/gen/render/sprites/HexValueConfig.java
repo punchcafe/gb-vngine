@@ -13,6 +13,6 @@ public class HexValueConfig {
     public PixelValue getPixelValue(final String strValue){
         return Optional.of(strValue)
                 .map(this.hexConversions::get)
-                .orElseThrow(IllegalStateException::new);
+                .orElse(PixelValue.VAL_3);
     }
 }

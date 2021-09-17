@@ -34,13 +34,19 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
     private final HexValueConfig hexValueConfig;
     private final Map<TextTheme, String> themeToResourcePath = Map.of(TextTheme.dark, DARK_BUTTON_SET_PATH);
 
-    public static ButtonTilesetGenerator fromConfig(final FontConfig config,final HexValueConfig hexValueConfig ){
-        return new ButtonTilesetGenerator(config, hexValueConfig);
+    public static ButtonTilesetGenerator fromConfig(final FontConfig config, final HexValueConfig hexValueConfig) {
+        return new ButtonTilesetGenerator(config);
     }
 
-    private ButtonTilesetGenerator(final FontConfig fontConfig, final HexValueConfig hexValueConfig) {
+    private ButtonTilesetGenerator(final FontConfig fontConfig) {
         this.fontConfig = fontConfig;
-        this.hexValueConfig = hexValueConfig;
+        this.hexValueConfig = HexValueConfig.builder()
+                .hexConversions(
+                        Map.of("ffffff", PixelValue.VAL_0,
+                        "808080", PixelValue.VAL_1,
+                        "c0c0c0", PixelValue.VAL_2,
+                        "000000", PixelValue.VAL_3)
+                ).build();
     }
 
     @Override
@@ -54,15 +60,15 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
                 .map(Tile::toGBDKCode)
                 .collect(CArrayCollector.forArrayName("button_tile_set_data"));
 
-        return  HEADERS +
+        return HEADERS +
                 String.format("#define %s %d\n", BUTTON_TILESET_SIZE_MACRO, BUTTON_TILESET_SIZE) +
                 data;
     }
 
-    private BufferedImage openImage(final InputStream file){
-        try{
+    private BufferedImage openImage(final InputStream file) {
+        try {
             return ImageIO.read(file);
-        } catch (IOException ex){
+        } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }

@@ -1,5 +1,0 @@
-<narrative id="nar_04">
-    <set_bg src="bkgsample"/>
-    <text>oh look here comes an alien</text>
-    <set_fg align="center" src="demon"/>
-</narrative>

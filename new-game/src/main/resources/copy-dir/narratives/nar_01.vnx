@@ -1,5 +1,5 @@
 <narrative id="nar_01">
-    <set_bg src="empty_space"/>
-    <set_fg align="left" src="samplepng"/>
-    <text>do you like aliens?</text>
+    <set_bg src="welcome_to_the_universe"/>
+    <text>Hello world! Scratch that, hello universe!</text>
+    <clear_text/>
 </narrative>
