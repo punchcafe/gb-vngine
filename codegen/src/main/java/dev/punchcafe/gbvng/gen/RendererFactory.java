@@ -5,6 +5,7 @@ import dev.punchcafe.gbvng.gen.render.*;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;
 import dev.punchcafe.gbvng.gen.render.music.DelayWithMusicRenderer;
 import dev.punchcafe.gbvng.gen.render.music.GBTHeaderRenderer;
+import dev.punchcafe.gbvng.gen.render.music.PlayMusicRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.NodeMutationsRenderers;
 import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
@@ -22,6 +23,8 @@ import lombok.Builder;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.*;
 
 @Builder
 public class RendererFactory {
@@ -92,6 +95,14 @@ public class RendererFactory {
     public ComponentRenderer backgroundElementRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/background_elem.c")
                 .componentName(ComponentRendererName.BACKGROUND_ELEM_STRUCT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer playMusicElementRenderer() throws IOException {
+        return FixtureRender.fromFile("/narrative/structs/play_music_elem.c")
+                .componentName(PLAY_MUSIC_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -232,7 +243,9 @@ public class RendererFactory {
                         ComponentRendererName.PAUSE_ELEM_STRUCT_RENDERER_NAME,
                         ComponentRendererName.NARRATIVE_STRUCT_RENDERER_NAME,
                         ComponentRendererName.FOREGROUND_RENDERER_RENDERER_NAME,
-                        ComponentRendererName.TEXT_RENDERER_RENDERER_NAME))
+                        ComponentRendererName.TEXT_RENDERER_RENDERER_NAME,
+                        PLAY_MUSIC_STRUCT_RENDERER_NAME,
+                        PLAY_MUSIC_RENDERER_NAME))
                 .build();
     }
 
@@ -240,7 +253,7 @@ public class RendererFactory {
     public ComponentRenderer foregroundRendererRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/render_foreground.c")
                 .componentName(ComponentRendererName.FOREGROUND_RENDERER_RENDERER_NAME)
-                .dependencies(List.of())
+                .dependencies(List.of(DELAY_WITH_MUSIC_RENDERER_NAME))
                 .build();
     }
 
@@ -248,7 +261,9 @@ public class RendererFactory {
     public ComponentRenderer textRendererRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/text_renderer.c")
                 .componentName(ComponentRendererName.TEXT_RENDERER_RENDERER_NAME)
-                .dependencies(List.of(ComponentRendererName.BUTTON_TILESET_RENDERER_NAME, ComponentRendererName.GET_CHAR_POSITION_RENDERER_NAME))
+                .dependencies(List.of(ComponentRendererName.BUTTON_TILESET_RENDERER_NAME,
+                        ComponentRendererName.GET_CHAR_POSITION_RENDERER_NAME,
+                        DELAY_WITH_MUSIC_RENDERER_NAME))
                 .build();
     }
 
@@ -300,6 +315,11 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer delayWithMusicRenderer() {
         return DelayWithMusicRenderer.builder().hasMusic(this.hasMusic).build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer playMusicRender() {
+        return PlayMusicRenderer.builder().hasMusic(this.hasMusic).build();
     }
 
 

@@ -7,4 +7,5 @@ public interface NarrativeElementVisitor<T> {
     T visitSetBackground(final SetBackground setBackground);
     T visitDelay(final Delay delay);
     T visitText(final Text text);
+    T visitPlayMusic(final PlayMusic playMusic);
 }

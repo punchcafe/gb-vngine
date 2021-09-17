@@ -39,6 +39,10 @@ void handle_background(struct BackgroundElement * element){
     render_background(element);
 }
 
+void handle_play_music(struct PlayMusicElement * element){
+    play_music(element->data, 1, 7);
+}
+
 void play_narrative_element(struct NarrativeElement *element)
 {
     switch (element->type)
@@ -57,6 +61,9 @@ void play_narrative_element(struct NarrativeElement *element)
         break;
     case BACKGROUND:
         handle_background((struct BackgroundElement*)element->content);
+        break;
+    case PLAY_MUSIC:
+        handle_play_music((struct PlayMusicElement*)element->content);
         break;
     default:
         break;

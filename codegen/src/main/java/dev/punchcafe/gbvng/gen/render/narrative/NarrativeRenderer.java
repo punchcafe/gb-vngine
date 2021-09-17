@@ -62,7 +62,8 @@ public class NarrativeRenderer implements ComponentRenderer {
                 NARRATIVE_STRUCT_RENDERER_NAME,
                 FOREGROUND_RENDERER_RENDERER_NAME,
                 IMAGE_ASSET_RENDERER_NAME,
-                TEXT_RENDERER_RENDERER_NAME);
+                TEXT_RENDERER_RENDERER_NAME,
+                DELAY_WITH_MUSIC_RENDERER_NAME);
     }
 
     @Override

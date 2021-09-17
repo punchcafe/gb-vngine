@@ -1,5 +1,6 @@
 <narrative id="nar_01">
     <set_bg src="empty_space"/>
+    <play_music src="alien_spooky_music"/>
     <set_fg align="left" src="samplepng"/>
     <text>DO YOU LIKE ALIENS, SIR?</text>
     <text>99 red; balloons!? zzz, 00123456789</text>
