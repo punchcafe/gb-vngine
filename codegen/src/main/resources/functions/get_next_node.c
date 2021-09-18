@@ -38,6 +38,7 @@ short get_choice_index(int number_of_prompts){
         if(choice < number_of_prompts){
             return choice;
         }
+        delay_with_music(1);
     }
 }
 

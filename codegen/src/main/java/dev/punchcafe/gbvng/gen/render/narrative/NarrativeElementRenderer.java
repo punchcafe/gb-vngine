@@ -98,11 +98,13 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     @Override
     public String visitPlayMusic(PlayMusic playMusic) {
         // Convention from GBT
+        final var contentsDeclaration = String.format("extern const unsigned char * %s_Data[];", playMusic.getSource());
         final var body = String.format("struct PlayMusicElement %s = {%s_Data};",
                 NarrativeName.elementBodyName(narrativeId, index),
                 playMusic.getSource());
+
         final String narrativeElement = narrativeElementForType("PLAY_MUSIC");
-        return body + "\n" + narrativeElement;
+        return contentsDeclaration + "\n" + body + "\n" + narrativeElement;
     }
 
     private String narrativeElementForType(final String cEnumType){
