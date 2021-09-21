@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.stream.Stream;
 
+import static dev.punchcafe.gbvng.gen.render.sprites.ConverterFunctions.hexStringFromInteger;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -17,7 +18,6 @@ public class BackgroundConverter implements ImageAssetConverter {
 
     @Override
     public String convert(final BufferedImage image, final String assetName) {
-        String[][] rgbs = new String[image.getWidth()][image.getHeight()];
         SquareTile[] tiles = new SquareTile[240];
         for (int i = 0; i < 240; i++) {
             tiles[i] = new SquareTile();
@@ -30,8 +30,7 @@ public class BackgroundConverter implements ImageAssetConverter {
             for (int j = 0; j < image.getHeight(); j++) {
                 final var tileIndex = (((j / 8) * 20) + (i / 8)); //tile offset
                 final var thisTile = tiles[tileIndex];
-                rgbs[i][j] = Integer.toHexString(image.getRGB(i, j)).substring(2, 8);
-                final var tileValue = hexValueConfig.getPixelValue(Integer.toHexString(image.getRGB(i, j)).substring(2, 8));
+                final var tileValue = hexValueConfig.getPixelValue(hexStringFromInteger(image.getRGB(i, j)));
                 thisTile.setPixel(tileValue, i % 8, j % 8);
             }
         }
@@ -48,7 +47,7 @@ public class BackgroundConverter implements ImageAssetConverter {
 
         final var mapReferences = Arrays.stream(tiles)
                 .map(tileToTablePosition::get)
-                .map(index -> Integer.toHexString(index))
+                .map(Integer::toHexString)
                 .map("0x"::concat)
                 .collect(joining(",", "{", "}"));
 

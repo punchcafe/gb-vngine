@@ -13,7 +13,6 @@ public class PortraitConverter implements ImageAssetConverter {
 
     @Override
     public String convert(final BufferedImage image, final String assetName) {
-        String [][] rgbs = new String[image.getWidth()][image.getHeight()];
         TallTile[] tiles = new TallTile[40];
         for(int i = 0; i < 40; i++){
             tiles[i] = new TallTile();
@@ -29,8 +28,7 @@ public class PortraitConverter implements ImageAssetConverter {
                 final var tileIndex = ((i - 8) / 8);
                 final var thisTile = tiles[tileIndex];
 
-                rgbs[i][j] = Integer.toHexString(image.getRGB(i, j)).substring(2,8);
-                final var tileValue = hexValueConfig.getPixelValue(Integer.toHexString(image.getRGB(i, j)).substring(2,8));
+                final var tileValue = hexValueConfig.getPixelValue(ConverterFunctions.hexStringFromInteger(image.getRGB(i, j)));
                 thisTile.setPixel(tileValue, i % 8, j%16);
             }
         }
@@ -40,8 +38,7 @@ public class PortraitConverter implements ImageAssetConverter {
                 final var tileIndex = (((j / 16) * 7) + (i / 8)) - 2; //tile offset
                 final var thisTile = tiles[tileIndex];
 
-                rgbs[i][j] = Integer.toHexString(image.getRGB(i, j)).substring(2,8);
-                final var tileValue = hexValueConfig.getPixelValue(Integer.toHexString(image.getRGB(i, j)).substring(2,8));
+                final var tileValue = hexValueConfig.getPixelValue(ConverterFunctions.hexStringFromInteger(image.getRGB(i, j)));
                 thisTile.setPixel(tileValue, i % 8, j%16);
             }
         }
