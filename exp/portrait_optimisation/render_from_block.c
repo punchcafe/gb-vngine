@@ -23,12 +23,11 @@ int main()
         set_sprite_tile(i, i*2);
         move_sprite(i,(i%10)*8 + 50, (i/10)*16 + 50);
     }
-    HIDE_SPRITES;
+    SHOW_SPRITES;
     for(int i = 0; i < 40; i++)
     {
         unsigned int data_tile_position = focus_pattern_positions[i];
         int data_index = data_tile_position * (BYTES_PER_TILE * 2); // *2 because it's two tiles per sprite, vertical
         set_sprite_data(i*2, (i*2)+1, &(all_pattern_data[data_index]));
     }
-    SHOW_SPRITES;
 }
