@@ -6,6 +6,9 @@ enum ForegroundElementPosition {LEFT_PORTRAIT, RIGHT_PORTRAIT, CENTER_PORTRAIT, 
 struct ForegroundElement
 {
     enum ForegroundElementPosition position;
-    unsigned char *pattern;
+    unsigned short pattern_block_number;
+    // TODO: implement
+    // unsigned short bank_number;
+    unsigned char * pattern_references;
 };
 #endif
