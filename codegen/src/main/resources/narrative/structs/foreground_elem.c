@@ -3,6 +3,9 @@
 
 enum ForegroundElementPosition {LEFT_PORTRAIT, RIGHT_PORTRAIT, CENTER_PORTRAIT, CENTER_FOCUS};
 
+//TODO: implement use_pattern_block(number)
+// checks if global pattern number is set already
+
 struct ForegroundElement
 {
     enum ForegroundElementPosition position;

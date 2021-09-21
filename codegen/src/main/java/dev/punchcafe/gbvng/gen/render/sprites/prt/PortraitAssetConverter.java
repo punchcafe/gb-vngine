@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
+import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 
@@ -10,14 +11,18 @@ public class PortraitAssetConverter implements ComponentRenderer {
 
 
     private final File assetDirectory;
+    private final NarrativeConfig narrativeConfig;
     private final HexValueConfig hexValueConfig;
     private final List<PortraitAsset> assets;
 
-    private PortraitAssetConverter(final File assetDirectory, final HexValueConfig hexValueConfig){
+    private PortraitAssetConverter(final File assetDirectory,
+                                   final HexValueConfig hexValueConfig,
+                                   final NarrativeConfig narrativeConfig){
         final var imageConverter = new PortraitImageConvert(hexValueConfig);
         this.assetDirectory = assetDirectory;
         this.hexValueConfig = hexValueConfig;
         this.assets = imageConverter.extractAllAssetsFromDirectory(assetDirectory);
+        this.narrativeConfig = narrativeConfig;
     }
 
     @Override

@@ -15,5 +15,10 @@
                 <color value="3" hex="000000"/>
             </colors>
         </palette>
+        <portrait_sets>
+            <portrait_set>
+                ghost.prt.asset.png
+            </portrait_set>
+        </portrait_sets>
     </image>
 </narrative_config>
