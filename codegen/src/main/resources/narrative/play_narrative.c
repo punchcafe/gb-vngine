@@ -3,27 +3,6 @@
 
 #include <gb/gb.h>
 
-void handle_foreground(struct ForegroundElement* foreground)
-{
-    switch (foreground->position)
-    {
-    case LEFT_PORTRAIT:
-        set_character_tile_left(foreground->pattern);
-        break;
-    case RIGHT_PORTRAIT:
-        set_character_tile_right(foreground->pattern);
-        break;
-    case CENTER_PORTRAIT:
-        set_character_tile_center(foreground->pattern);
-        break;
-    case CENTER_FOCUS:
-        set_focus_tile(foreground->pattern);
-        break;
-    default:
-        break;
-    }
-}
-
 void handle_text(struct Text* text)
 {
     render_whole_text(text->text);

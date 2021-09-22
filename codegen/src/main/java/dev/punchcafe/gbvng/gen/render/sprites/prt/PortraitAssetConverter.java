@@ -4,6 +4,7 @@ import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.config.PortraitSetConfig;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
+import dev.punchcafe.gbvng.gen.render.sprites.Tile;
 
 import java.io.File;
 import java.util.*;
@@ -11,6 +12,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser.getForegroundAssetName;
+import static dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser.getForegroundAssetPatternReferenceName;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.FOREGROUND_ASSET_RENDERER_NAME;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.partitioningBy;
 
 public class PortraitAssetConverter implements ComponentRenderer {
 
@@ -49,15 +56,58 @@ public class PortraitAssetConverter implements ComponentRenderer {
             patternBlocks.add(getPatternBlockForSet(this.foregroundAssetSets.get(i)));
         }
 
-        final List<PortraitAssetCModel> portraitAssetsInBlockCModels = allAssetsByName.values()
+        final Map<Boolean, List<PortraitAsset>> partitionedByHasBlock = allAssetsByName.values()
                 .stream()
-                .filter(asset -> assetNameToBlockNumber.get(asset.getName()) != null)
-                .map(asset -> PortraitAssetCModel.builder()
-                        .portraitAsset(asset)
-                        .patternDataBlockNumber(assetNameToBlockNumber.get(asset.getName()))
-                        .build())
-                .collect(Collectors.toList());
-        return renderPatterBlocksAndBlockIndex(patternBlocks);
+                .collect(partitioningBy(asset -> assetNameToBlockNumber.get(asset.getName()) != null));
+
+        final var setlessAssets = partitionedByHasBlock.get(false);
+
+
+        for(int i = 0; i < setlessAssets.size(); i++){
+            patternBlocks.add(PatternBlock.from(setlessAssets.get(i).uniqueTiles()));
+            assetNameToBlockNumber.put(setlessAssets.get(i).getName(), patternBlocks.size() - 1); // increments the numver
+        }
+
+        final List<PortraitAssetCModel> portraitAssetsInBlockCModels =
+                allAssetsByName.values()
+                        .stream()
+                        .map(asset -> PortraitAssetCModel.builder()
+                                .portraitAsset(asset)
+                                .patternDataBlockNumber(assetNameToBlockNumber.get(asset.getName()))
+                                .build())
+                        .collect(Collectors.toList());
+
+        return renderPatterBlocksAndBlockIndex(patternBlocks)
+                + "\n"
+                + renderForegroundAssets(portraitAssetsInBlockCModels, patternBlocks);
+    }
+
+
+    private String renderForegroundAssets(final List<PortraitAssetCModel> foregroundAssets, final List<PatternBlock> blocks) {
+        return foregroundAssets.stream()
+                .map(asset -> this.renderForegroundAsset(asset, blocks))
+                .collect(Collectors.joining("\n"));
+    }
+
+    private String renderForegroundAsset(final PortraitAssetCModel portraitAssetCModel, final List<PatternBlock> blocks) {
+        final var block = blocks.get(portraitAssetCModel.getPatternDataBlockNumber());
+        final var patternReferenceArray = portraitAssetCModel.getPortraitAsset().createReferencePatternBlock(block)
+                .stream()
+                //TODO: need to multiply by two to compensate tall tile size
+                .map(intVal -> intVal * 2)
+                .map(Integer::toHexString)
+                .map("0x"::concat)
+                .collect(joining(",", "{", "}"));
+        final var patternSet = String.format("unsigned char %s [] = %s;",
+                getForegroundAssetPatternReferenceName(portraitAssetCModel.getPortraitAsset()),
+                patternReferenceArray);
+
+        final var foregroundAsset = String.format("struct ForegroundAsset %s = {%d, %s};",
+                getForegroundAssetName(portraitAssetCModel.getPortraitAsset()),
+                portraitAssetCModel.getPatternDataBlockNumber(),
+                getForegroundAssetPatternReferenceName(portraitAssetCModel.getPortraitAsset()));
+
+        return patternSet + "\n" + foregroundAsset;
     }
 
     private String renderPatterBlocksAndBlockIndex(final List<PatternBlock> patternBlocks) {
@@ -74,10 +124,12 @@ public class PortraitAssetConverter implements ComponentRenderer {
         }
         return stringBuilder.toString()
                 + blockIndexBuilder.build()
-                .collect(Collectors.joining(",", "\nconst unsigned char * foreground_asset_pattern_block_index [] = {", "}"))
+                .collect(joining(",", "\nconst unsigned char * foreground_asset_pattern_block_index [] = {", "};"))
                 + blockSizeBuilder.build()
+                // since each tall tile is actually two tiles, we need to multiply this by two for the size
+                .map(intval -> intval * 2)
                 .mapToObj(Integer::toString)
-                .collect(Collectors.joining(",", "\nconst unsigned short foreground_asset_pattern_block_sizes [] = {", "}"));
+                .collect(joining(",", "\nconst unsigned short foreground_asset_pattern_block_sizes [] = {", "};"));
     }
 
     private String getPatternDataBlockVariableName(final int blockNumber) {
@@ -109,6 +161,6 @@ public class PortraitAssetConverter implements ComponentRenderer {
 
     @Override
     public String componentName() {
-        return "FOREGROUND_ASSET_RENDERER";
+        return FOREGROUND_ASSET_RENDERER_NAME;
     }
 }

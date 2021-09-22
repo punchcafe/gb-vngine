@@ -14,6 +14,9 @@ public class PortraitSetConfig {
     private String portraitSet;
 
     public List<String> allFilesInSet(){
+        if(portraitSet == null || portraitSet.isBlank()){
+            return List.of();
+        }
         return Stream.of(portraitSet.split("\n"))
                 .map(String::trim)
                 .filter(str -> !str.isBlank())

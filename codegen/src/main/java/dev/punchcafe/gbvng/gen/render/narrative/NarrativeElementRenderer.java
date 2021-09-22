@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
+import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
 import dev.punchcafe.gbvng.gen.model.narrative.*;
 import dev.punchcafe.gbvng.gen.csan.NarrativeName;
 import lombok.Builder;
@@ -56,21 +57,21 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     private String renderSetForegroundBody(final SetForeground setForeground){
         switch (setForeground.getAlignment().toLowerCase()){
             case "left":
-                return String.format("struct ForegroundElement %s = {LEFT_PORTRAIT, %s};",
+                return String.format("struct ForegroundElement %s = {LEFT_PORTRAIT, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             case "right":
-                return String.format("struct ForegroundElement %s = {RIGHT_PORTRAIT, %s};",
+                return String.format("struct ForegroundElement %s = {RIGHT_PORTRAIT, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             case "center":
-                return String.format("struct ForegroundElement %s = {CENTER_PORTRAIT, %s};",
+                return String.format("struct ForegroundElement %s = {CENTER_PORTRAIT, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             case "center_focus":
-                return String.format("struct ForegroundElement %s = {CENTER_FOCUS, %s};",
+                return String.format("struct ForegroundElement %s = {CENTER_FOCUS, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             default:
                 throw new UnsupportedOperationException();
         }

@@ -18,6 +18,7 @@
         <portrait_sets>
             <portrait_set>
                 ghost
+                ghost_dupe
             </portrait_set>
         </portrait_sets>
     </image>

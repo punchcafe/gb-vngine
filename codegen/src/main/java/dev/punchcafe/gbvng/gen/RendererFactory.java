@@ -218,8 +218,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer imageAssetRenderer() throws IOException {
-        final var converters = List.of(new FocusConverter(this.hexValueConfig),
-                new PortraitConverter(this.hexValueConfig),
+        final var converters = List.of(
                 new BackgroundConverter(this.hexValueConfig),
                 FontSetConverter.builder()
                         .config(this.narrativeConfig.getFontConfig())
@@ -290,7 +289,7 @@ public class RendererFactory {
     public ComponentRenderer foregroundElemRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/foreground_elem.c")
                 .componentName(ComponentRendererName.FOREGROUND_ELEM_STRUCT_RENDERER_NAME)
-                .dependencies(List.of())
+                .dependencies(List.of(FOREGROUND_ASSET_RENDERER_NAME))
                 .build();
     }
 
