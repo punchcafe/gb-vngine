@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toMap;
 public class PatternBlock {
 
     public static PatternBlock from(Collection<TallTile> tiles){
-        final List<TallTile> distinctList = new LinkedList<>(new TreeSet<>(tiles));
+        final List<TallTile> distinctList = new LinkedList<>(new HashSet<>(tiles));
         final var patternMap = IntStream.range(0, distinctList.size())
                 .mapToObj(index -> Map.entry(distinctList.get(index), index))
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -51,7 +51,8 @@ public class PatternBlock {
         return Optional.ofNullable(patternMap.get(tile));
     }
 
-    public String uniqueTiles(){
-        return String.format("NUMBER OF UNIQUE TILES:        %d", this.patternMap.size());
+    public int numberOfUniqueTiles(){
+        //return String.format("NUMBER OF UNIQUE TILES:        %d", this.patternMap.size());
+        return this.patternMap.size();
     }
 }

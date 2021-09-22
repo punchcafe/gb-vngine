@@ -3,6 +3,7 @@ package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
 import dev.punchcafe.gbvng.gen.render.sprites.TallTile;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -15,7 +16,7 @@ public class PortraitAsset {
 
     //TODO: validate is 40
     private final List<TallTile> imageData;
-    private final String name;
+    @Getter private final String name;
 
     public Set<TallTile> uniqueTiles(){
         return new HashSet<>(imageData);
@@ -29,6 +30,7 @@ public class PortraitAsset {
      * @return
      */
     public List<Integer> createReferencePatternBlock(final PatternBlock patternBlock){
+        // Can be used to render the reference array of the asset
         return imageData.stream()
                 .map(patternBlock::getTilePosition)
                 .map(Optional::get)

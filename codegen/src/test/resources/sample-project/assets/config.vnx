@@ -17,7 +17,7 @@
         </palette>
         <portrait_sets>
             <portrait_set>
-                ghost.prt.asset.png
+                ghost
             </portrait_set>
         </portrait_sets>
     </image>

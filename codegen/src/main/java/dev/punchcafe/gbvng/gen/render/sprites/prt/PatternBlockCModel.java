@@ -9,6 +9,9 @@ import lombok.Getter;
 @Builder
 @Getter
 public class PatternBlockCModel {
+    /*
+    Renders a pattern block, which is depended on by the assets
+     */
     private final PatternBlock block;
     private final int patternNumber;
 }

@@ -12,6 +12,7 @@ import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
 import dev.punchcafe.gbvng.gen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.gbvng.gen.render.node.NodeRenderer;
 import dev.punchcafe.gbvng.gen.render.predicate.PredicatesRenderer;
+import dev.punchcafe.gbvng.gen.render.sprites.prt.PortraitAssetConverter;
 import dev.punchcafe.gbvng.gen.render.transition.BranchRenderer;
 import dev.punchcafe.gbvng.gen.render.transition.PromptsRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.*;
@@ -209,6 +210,11 @@ public class RendererFactory {
     /*
     NARRATIVE RENDERERS
      */
+
+    @RendererSupplier
+    public ComponentRenderer foregroundAssetRenderer() throws IOException {
+        return new PortraitAssetConverter(this.assetDirectory, this.hexValueConfig, this.narrativeConfig);
+    }
 
     @RendererSupplier
     public ComponentRenderer imageAssetRenderer() throws IOException {
