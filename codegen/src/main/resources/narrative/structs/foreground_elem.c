@@ -86,6 +86,10 @@ void set_focus_tile(struct ForegroundAsset * asset)
   set_pattern_block(asset->pattern_block_number);
   for(int i = 0; i < 40; i++)
   {
+      if(i % 5 == 0)
+      {
+          delay_with_music(1);
+      }
     set_sprite_tile(i, asset->pattern_references[i]);
     move_sprite(i,(i%10)*8 + FOCUS_MODE_X_OFFSET, (i/10)*16 + FOCUS_MODE_Y_OFFSET);
   }
@@ -100,32 +104,39 @@ void set_character_tile(unsigned short left_offset, struct ForegroundAsset * ass
     HIDE_SPRITES;
     set_pattern_block(asset->pattern_block_number);
 
-    if(left_offset == current_foreground_offset){
-        return;
-    }
-
     for(unsigned short i_a = 0; i_a < 40; i_a++)
     {
         set_sprite_tile(i_a, asset->pattern_references[i_a]);
     }
 
-    for(unsigned short i_0 = 0; i_0 < 5; i_0++)
-    {
-      // render first row missing top left and right dual tiles
-      unsigned short x_0 = (i_0*8) + 8 + 8 + left_offset;
-      unsigned short y_0 = PORTRAIT_MODE_Y_OFFSET;
-      move_sprite(i_0, x_0, y_0);
+    delay_with_music(1);
+    if(left_offset != current_foreground_offset){
+        // ensure we don't move sprites unless needed
 
+        for(unsigned short i_0 = 0; i_0 < 5; i_0++)
+        {
+          // render first row missing top left and right dual tiles
+          unsigned short x_0 = (i_0*8) + 8 + 8 + left_offset;
+          unsigned short y_0 = PORTRAIT_MODE_Y_OFFSET;
+          move_sprite(i_0, x_0, y_0);
+
+        }
+
+        delay_with_music(1);
+        for(unsigned short i = 7; i < 42; i++)
+        {
+            // accomodate for missing two tiles in first row, also adjusts sprite num
+            if(i % 7 == 0)
+            {
+                delay_with_music(1);
+            }
+            unsigned int sprite_number = i - 2;
+            unsigned short x = (i%7) * 8 + 8 + left_offset;
+            unsigned short y = (i/7) * 16 + PORTRAIT_MODE_Y_OFFSET;
+            move_sprite(sprite_number, x, y);
+        }
+        current_foreground_offset = left_offset;
     }
-    for(unsigned short i = 7; i < 42; i++)
-    {
-        // accomodate for missing two tiles in first row, also adjusts sprite num
-        unsigned int sprite_number = i - 2;
-        unsigned short x = (i%7) * 8 + 8 + left_offset;
-        unsigned short y = (i/7) * 16 + PORTRAIT_MODE_Y_OFFSET;
-        move_sprite(sprite_number, x, y);
-    }
-    current_foreground_offset = left_offset;
     delay_with_music(4);
     SHOW_SPRITES;
 }

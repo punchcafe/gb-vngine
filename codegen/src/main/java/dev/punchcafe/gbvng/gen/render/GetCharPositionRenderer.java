@@ -22,7 +22,7 @@ public class GetCharPositionRenderer implements ComponentRenderer {
         for(int i = 0; i < charset.length; i++){
             final char character = charset[i];
             if(character == '\''){
-                sb.append(String.format("case '\"': return %d;\n", i));
+                sb.append(String.format("case '\\'': return %d;\n", i + 1));
             } else {
                 sb.append(String.format("case '%s': return %d;\n", charset[i], i + 1));
             }
