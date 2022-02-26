@@ -20,7 +20,7 @@ public class PlayMusicRenderer implements ComponentRenderer {
     @Override
     public String render() {
         return "void play_music(void *data, UINT8 bank, UINT8 speed){" +
-                (hasMusic ? "gbt_play(data, bank, speed);" : "") +
+                (hasMusic ? "gbt_play(data, bank, speed);\n gbt_loop(1);" : "") +
                 "}";
     }
 

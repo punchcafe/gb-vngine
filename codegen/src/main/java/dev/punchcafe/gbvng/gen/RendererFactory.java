@@ -12,6 +12,7 @@ import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
 import dev.punchcafe.gbvng.gen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.gbvng.gen.render.node.NodeRenderer;
 import dev.punchcafe.gbvng.gen.render.predicate.PredicatesRenderer;
+import dev.punchcafe.gbvng.gen.render.sprites.prt.PortraitAssetConverter;
 import dev.punchcafe.gbvng.gen.render.transition.BranchRenderer;
 import dev.punchcafe.gbvng.gen.render.transition.PromptsRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.*;
@@ -211,9 +212,13 @@ public class RendererFactory {
      */
 
     @RendererSupplier
+    public ComponentRenderer foregroundAssetRenderer() throws IOException {
+        return new PortraitAssetConverter(this.assetDirectory, this.hexValueConfig, this.narrativeConfig);
+    }
+
+    @RendererSupplier
     public ComponentRenderer imageAssetRenderer() throws IOException {
-        final var converters = List.of(new FocusConverter(this.hexValueConfig),
-                new PortraitConverter(this.hexValueConfig),
+        final var converters = List.of(
                 new BackgroundConverter(this.hexValueConfig),
                 FontSetConverter.builder()
                         .config(this.narrativeConfig.getFontConfig())
@@ -284,7 +289,7 @@ public class RendererFactory {
     public ComponentRenderer foregroundElemRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/foreground_elem.c")
                 .componentName(ComponentRendererName.FOREGROUND_ELEM_STRUCT_RENDERER_NAME)
-                .dependencies(List.of())
+                .dependencies(List.of(FOREGROUND_ASSET_RENDERER_NAME))
                 .build();
     }
 

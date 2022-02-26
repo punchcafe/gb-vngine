@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
+import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
 import dev.punchcafe.gbvng.gen.model.narrative.*;
 import dev.punchcafe.gbvng.gen.csan.NarrativeName;
 import lombok.Builder;
@@ -13,25 +14,25 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     private final String narrativeId;
 
     @Override
-    public String visitClearText(ClearText clearText) {
+    public String visitClearText(final ClearText clearText) {
         return String.format("struct NarrativeElement %s = {0x00, CLEAR_TEXT};",
                 NarrativeName.elementName(narrativeId, index));
     }
 
     @Override
-    public String visitClearForeground(ClearForeground clearText) {
+    public String visitClearForeground(final ClearForeground clearText) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String visitSetForeground(SetForeground setForeground) {
+    public String visitSetForeground(final SetForeground setForeground) {
         final var body = renderSetForegroundBody(setForeground);
         final String narrativeElement = narrativeElementForType("FOREGROUND");
         return body + "\n" + narrativeElement;
     }
 
     @Override
-    public String visitSetBackground(SetBackground setBackground) {
+    public String visitSetBackground(final SetBackground setBackground) {
         final var body = renderSetBackgroundBody(setBackground);
         final String narrativeElement = narrativeElementForType("BACKGROUND");
         return body + "\n" + narrativeElement;
@@ -41,7 +42,7 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     public static String TILE_DATA_SUFFIX = "_tile_data";
     public static String TILE_DATA_SIZE_DEFINITION_SUFFIX = "_TILE_DATA_SIZE";
 
-    private String renderSetBackgroundBody(SetBackground setBackground){
+    private String renderSetBackgroundBody(final SetBackground setBackground){
         final var elementBodyName = NarrativeName.elementBodyName(narrativeId, index);
         final var backgroundDataName = setBackground.getSrc().concat(TILE_DATA_SUFFIX);
         final var backgroundDataSizeName = setBackground.getSrc().toUpperCase().concat(TILE_DATA_SIZE_DEFINITION_SUFFIX);
@@ -53,31 +54,31 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
                 backgroundTileAssignmentName);
     }
 
-    private String renderSetForegroundBody(SetForeground setForeground){
+    private String renderSetForegroundBody(final SetForeground setForeground){
         switch (setForeground.getAlignment().toLowerCase()){
             case "left":
-                return String.format("struct ForegroundElement %s = {LEFT_PORTRAIT, %s};",
+                return String.format("struct ForegroundElement %s = {LEFT_PORTRAIT, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             case "right":
-                return String.format("struct ForegroundElement %s = {RIGHT_PORTRAIT, %s};",
+                return String.format("struct ForegroundElement %s = {RIGHT_PORTRAIT, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             case "center":
-                return String.format("struct ForegroundElement %s = {CENTER_PORTRAIT, %s};",
+                return String.format("struct ForegroundElement %s = {CENTER_PORTRAIT, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             case "center_focus":
-                return String.format("struct ForegroundElement %s = {CENTER_FOCUS, %s};",
+                return String.format("struct ForegroundElement %s = {CENTER_FOCUS, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
-                        setForeground.getSrc());
+                        PortraitAssetNameVariableSanitiser.getForegroundAssetName(setForeground.getSrc()));
             default:
                 throw new UnsupportedOperationException();
         }
     }
 
     @Override
-    public String visitDelay(Delay delay) {
+    public String visitDelay(final Delay delay) {
         final var body = String.format("struct Pause %s = {%d};",
                 NarrativeName.elementBodyName(narrativeId, index),
                 delay.getSeconds());
@@ -87,7 +88,7 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
 
 
     @Override
-    public String visitText(Text text) {
+    public String visitText(final Text text) {
         final var body = String.format("struct Text %s = {\"%s\"};",
                 NarrativeName.elementBodyName(narrativeId, index),
                 Optional.ofNullable(text.getText()).orElse(""));
@@ -96,7 +97,7 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     }
 
     @Override
-    public String visitPlayMusic(PlayMusic playMusic) {
+    public String visitPlayMusic(final PlayMusic playMusic) {
         // Convention from GBT
         final var contentsDeclaration = String.format("extern const unsigned char * %s_Data[];", playMusic.getSource());
         final var body = String.format("struct PlayMusicElement %s = {%s_Data};",
