@@ -50,12 +50,17 @@ play_foreground(asset) {
 */
 
 // TODO: acknowledge coupling of position to type of element
-
+// TODO: separate assets from narrative
+struct PatternBlock {
+    unsigned char * data;
+    unsigned int size;
+    unsigned int bank_number;
+};
+// TODO: consider being able to switch banks between patterns and block_references
 struct ForegroundAsset
 {
-    unsigned short pattern_block_number;
-    // unsigned short bank_number;
-    unsigned char * pattern_references;
+    struct PatternBlock * block;
+    unsigned char * pattern_block_references;
 };
 
 // TODO: clean up, separate and refactor
@@ -67,30 +72,35 @@ struct ForegroundElement {
     struct ForegroundAsset * asset;
 };
 
-int current_block_num_in_vram = 0;
+int current_bank_for_pattern_block_in_vram = 0;
+struct PatternBlock * current_block_in_vram = 0x00;
 
-void set_pattern_block(unsigned short index)
+void set_pattern_block(struct PatternBlock * pattern_block)
 {
-  if(current_block_num_in_vram != index)
+  if(current_bank_for_pattern_block_in_vram != pattern_block->bank_number
+  || current_block_in_vram != pattern_block)
   {
+      unsigned int bank_number = pattern_block->bank_number;
+      SWITCH_ROM_MBC1(bank_number);
       set_sprite_data(0,
-          foreground_asset_pattern_block_sizes[index],
-          foreground_asset_pattern_block_index[index]);
-      current_block_num_in_vram = index;
+          pattern_block->size,
+          pattern_block->data);
+      current_bank_for_pattern_block_in_vram = bank_number;
+      current_block_in_vram = pattern_block;
   }
 }
 
 void set_focus_tile(struct ForegroundAsset * asset)
 {
   HIDE_SPRITES;
-  set_pattern_block(asset->pattern_block_number);
+  set_pattern_block(asset->block);
   for(int i = 0; i < 40; i++)
   {
       if(i % 5 == 0)
       {
           delay_with_music(1);
       }
-    set_sprite_tile(i, asset->pattern_references[i]);
+    set_sprite_tile(i, asset->pattern_block_references[i]);
     move_sprite(i,(i%10)*8 + FOCUS_MODE_X_OFFSET, (i/10)*16 + FOCUS_MODE_Y_OFFSET);
   }
   delay_with_music(4);
@@ -102,11 +112,11 @@ unsigned short current_foreground_offset = 0;
 void set_character_tile(unsigned short left_offset, struct ForegroundAsset * asset)
 {
     HIDE_SPRITES;
-    set_pattern_block(asset->pattern_block_number);
+    set_pattern_block(asset->block);
 
     for(unsigned short i_a = 0; i_a < 40; i_a++)
     {
-        set_sprite_tile(i_a, asset->pattern_references[i_a]);
+        set_sprite_tile(i_a, asset->pattern_block_references[i_a]);
     }
 
     delay_with_music(1);

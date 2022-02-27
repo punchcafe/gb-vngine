@@ -57,7 +57,7 @@ public class ForegroundAssetSet extends BankableAssetBase {
 
     @Builder
     @Getter
-    public class IndexArray {
+    public static class IndexArray {
         private final List<Integer> indexes;
         private final String arrayCName;
 

@@ -1,11 +1,13 @@
-package dev.punchcafe.gbvng.gen.render.sprites.prt;
+package dev.punchcafe.gbvng.gen.mbanks.renderers;
 
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.config.PortraitSetConfig;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.render.sprites.Tile;
-import lombok.AllArgsConstructor;
+import dev.punchcafe.gbvng.gen.render.sprites.prt.ForegroundImageConvert;
+import dev.punchcafe.gbvng.gen.render.sprites.prt.PatternBlock;
+import dev.punchcafe.gbvng.gen.render.sprites.prt.PortraitAsset;
+import dev.punchcafe.gbvng.gen.render.sprites.prt.PortraitAssetCModel;
 
 import java.io.File;
 import java.util.*;
@@ -20,25 +22,7 @@ import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.FOREGROUND_AS
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.partitioningBy;
 
-@AllArgsConstructor
-public class PortraitAssetConverter implements ComponentRenderer {
-
-    private final File assetDirectory;
-
-    @Override
-    public String render() {
-        return new ForegroundImageConvert().allAssetDeclarations(assetDirectory);
-    }
-
-    @Override
-    public List<String> dependencies() {
-        return List.of();
-    }
-
-    @Override
-    public String componentName() {
-        return FOREGROUND_ASSET_RENDERER_NAME;
-    }
+public class PortraitAssetConverter /* implements ComponentRenderer */ {
 /*
 
     private final File assetDirectory;
@@ -50,7 +34,6 @@ public class PortraitAssetConverter implements ComponentRenderer {
     public PortraitAssetConverter(final File assetDirectory,
                                   final HexValueConfig hexValueConfig,
                                   final NarrativeConfig narrativeConfig) {
-
         try {
             final var imageConverter = new ForegroundImageConvert(hexValueConfig);
             this.assetDirectory = assetDirectory;

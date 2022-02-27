@@ -213,7 +213,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer foregroundAssetRenderer() throws IOException {
-        return new PortraitAssetConverter(this.assetDirectory, this.hexValueConfig, this.narrativeConfig);
+        return new PortraitAssetConverter(this.assetDirectory);
     }
 
     @RendererSupplier
