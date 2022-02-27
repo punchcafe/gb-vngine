@@ -9,7 +9,7 @@ package dev.punchcafe.gbvng.gen.mbanks;
  * check size of all data rendered, to know how much space is left in standard ROM. (potentially we can calculate this from
  * the model itself.)
  */
-public interface Asset {
+public interface BankableAsset {
     /**
      * return the size of the asset in BYTES.
      *
@@ -24,4 +24,8 @@ public interface Asset {
      * @return the id
      */
     String getId();
+
+    void assignBank(int bankNumber);
+
+    int getBank();
 }

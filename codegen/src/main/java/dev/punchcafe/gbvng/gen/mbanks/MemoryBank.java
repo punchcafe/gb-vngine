@@ -10,9 +10,9 @@ public class MemoryBank {
         return 16_000;
     }
 
-    private final List<Asset> assets = new ArrayList<>();
+    private final List<BankableAsset> assets = new ArrayList<>();
 
-    public void addAsset(final Asset asset){
+    public void addAsset(final BankableAsset asset){
         if(remainingBytes() + asset.getSize() > bankByteSize()){
             throw new IllegalArgumentException();
         }
@@ -21,7 +21,7 @@ public class MemoryBank {
 
     public long remainingBytes(){
         return assets.stream()
-                .map(Asset::getSize)
+                .map(BankableAsset::getSize)
                 .reduce(Long::sum)
                 .or(() -> Optional.of(0L))
                 .map(totalBytesUsed -> bankByteSize() - totalBytesUsed)
