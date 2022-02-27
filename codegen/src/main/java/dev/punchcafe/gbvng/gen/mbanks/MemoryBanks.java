@@ -5,6 +5,11 @@ import java.util.Map;
 
 public interface MemoryBanks {
 
+    MemoryBankConfiguration NONE = MemoryBankConfiguration.builder()
+            .numberOfBanks(1)
+            .bankRanges(List.of(MemoryBankConfiguration.Range.builder().fromInclusive(1).toExclusive(2).build()))
+            .build();
+
     MemoryBankConfiguration MBC1 = MemoryBankConfiguration.builder()
             .numberOfBanks(125)
             .bankRanges(List.of(
@@ -28,6 +33,7 @@ public interface MemoryBanks {
             .build();
     MemoryBankConfiguration HuC1 = MBC1;
 
+    String NONE_ID = "NONE";
     String MBC1_ID = "MBC1";
     String MBC2_ID = "MBC2";
     String MBC3_ID = "MBC3";
@@ -35,6 +41,7 @@ public interface MemoryBanks {
     String HuC1_ID = "HuC1";
 
     Map<String, MemoryBankConfiguration> BANK_CONFIGURATION = Map.of(
+            NONE_ID, NONE,
             MBC1_ID, MBC1,
             MBC2_ID, MBC2,
             MBC3_ID, MBC3,

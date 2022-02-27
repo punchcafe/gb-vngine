@@ -1,4 +1,5 @@
 <narrative_config>
+    <cartridge>MBC1</cartridge>
     <font>
         <text_theme>dark</text_theme>
         <default_font>gothic</default_font>
