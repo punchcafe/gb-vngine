@@ -1,5 +1,7 @@
 package dev.punchcafe.gbvng.gen.mbanks;
 
+import java.util.Optional;
+
 /**
  * An asset is something stored in ROM, typically a pattern table and indicies, or a song.
  *
@@ -27,5 +29,5 @@ public interface BankableAsset {
 
     void assignBank(int bankNumber);
 
-    int getBank();
+    Optional<Integer> getBank();
 }

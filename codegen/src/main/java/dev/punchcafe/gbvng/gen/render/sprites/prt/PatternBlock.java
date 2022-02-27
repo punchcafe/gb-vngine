@@ -20,6 +20,8 @@ import static java.util.stream.Collectors.toMap;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class PatternBlock {
 
+    private static final int TALL_TILE_SIZE_BYTES = 32;
+
     public static PatternBlock from(Collection<TallTile> tiles){
         final List<TallTile> distinctList = new LinkedList<>(new HashSet<>(tiles));
         final var patternMap = IntStream.range(0, distinctList.size())
@@ -54,5 +56,9 @@ public class PatternBlock {
     public int numberOfUniqueTiles(){
         //return String.format("NUMBER OF UNIQUE TILES:        %d", this.patternMap.size());
         return this.patternMap.size();
+    }
+
+    public int sizeInBytes(){
+        return this.patternMap.size() * TALL_TILE_SIZE_BYTES;
     }
 }
