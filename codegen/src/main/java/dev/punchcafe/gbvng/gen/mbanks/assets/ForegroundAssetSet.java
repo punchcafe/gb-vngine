@@ -41,6 +41,10 @@ public class ForegroundAssetSet extends BankableAssetBase {
 
     private static final int INTEGER_SIZE_BYTES = 2;
 
+    private final String assetName;
+    private final List<IndexArray> indexArrays;
+    private final PatternBlock patternBlock;
+
     @Override
     public long getSize() {
         return patternBlock.sizeInBytes() +
@@ -65,8 +69,4 @@ public class ForegroundAssetSet extends BankableAssetBase {
             return indexes.size() * INTEGER_SIZE_BYTES;
         }
     }
-
-    private final String assetName;
-    private final List<IndexArray> indexArrays;
-    private final PatternBlock patternBlock;
 }

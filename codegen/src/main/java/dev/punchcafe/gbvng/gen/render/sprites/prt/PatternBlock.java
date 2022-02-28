@@ -5,6 +5,7 @@ import dev.punchcafe.gbvng.gen.render.sprites.Tile;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,9 +28,10 @@ public class PatternBlock {
         final var patternMap = IntStream.range(0, distinctList.size())
                 .mapToObj(index -> Map.entry(distinctList.get(index), index))
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
-        return new PatternBlock(patternMap);
+        return new PatternBlock("", patternMap);
     }
 
+    @Getter private final String blockName;
     private final Map<TallTile, Integer> patternMap;
 
     public String renderCDataArray(){

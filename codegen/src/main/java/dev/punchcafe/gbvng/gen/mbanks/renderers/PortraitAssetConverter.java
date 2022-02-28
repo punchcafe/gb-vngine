@@ -22,8 +22,8 @@ import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.FOREGROUND_AS
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.partitioningBy;
 
-public class PortraitAssetConverter /* implements ComponentRenderer */ {
-/*
+public class PortraitAssetConverter implements ComponentRenderer {
+
 
     private final File assetDirectory;
     private final NarrativeConfig narrativeConfig;
@@ -167,5 +167,4 @@ public class PortraitAssetConverter /* implements ComponentRenderer */ {
         return FOREGROUND_ASSET_RENDERER_NAME;
     }
 
- */
 }

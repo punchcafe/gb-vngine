@@ -26,6 +26,7 @@ public class ForegroundImageConvert {
 
     private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(prt|fcs)\\.asset\\..+$");
 
+    // TODO: replace this with Asset list
     public String allAssetDeclarations(final File dir){
         return allAssetFilesInDirectory(dir)
                 .map(PortraitAssetNameVariableSanitiser::getForegroundAssetName)

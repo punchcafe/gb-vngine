@@ -63,13 +63,19 @@ struct ForegroundAsset
     unsigned char * pattern_block_references;
 };
 
+struct ExternalForegroundAsset
+{
+    struct ForegroundAsset * asset;
+    unsigned int block;
+};
+
 // TODO: clean up, separate and refactor
 /*
     Narrative element to be played by narrative player.
 */
 struct ForegroundElement {
     enum ForegroundElementPosition position;
-    struct ForegroundAsset * asset;
+    struct ExternalForegroundAsset * asset;
 };
 
 int current_bank_for_pattern_block_in_vram = 0;
@@ -108,10 +114,17 @@ void set_focus_tile(struct ForegroundAsset * asset)
 }
 
 unsigned short current_foreground_offset = 0;
+unsigned int current_bank = 0;
 
-void set_character_tile(unsigned short left_offset, struct ForegroundAsset * asset)
+void set_character_tile(unsigned short left_offset, struct ExternalForegroundAsset * external_asset)
 {
     HIDE_SPRITES;
+    if(external_asset->bank_number != current_bank)
+    {
+        current_bank = external_asset->bank_number;
+        SWITCH_ROM_MBC1(external_asset->bank_number)
+    }
+    ForegroundAsset * external_asset->asset;
     set_pattern_block(asset->block);
 
     for(unsigned short i_a = 0; i_a < 40; i_a++)
@@ -151,17 +164,17 @@ void set_character_tile(unsigned short left_offset, struct ForegroundAsset * ass
     SHOW_SPRITES;
 }
 
-void set_character_tile_left(struct ForegroundAsset * asset)
+void set_character_tile_left(struct ExternalForegroundAsset * asset)
 {
   set_character_tile(LEFT_PORTRAIT_MODE_X_OFFSET, asset);
 }
 
-void set_character_tile_right(struct ForegroundAsset * asset)
+void set_character_tile_right(struct ExternalForegroundAsset * asset)
 {
   set_character_tile(RIGHT_PORTRAIT_MODE_X_OFFSET, asset);
 }
 
-void set_character_tile_center(struct ForegroundAsset * asset)
+void set_character_tile_center(struct ExternalForegroundAsset * asset)
 {
   set_character_tile(CENTER_PORTRAIT_MODE_X_OFFSET, asset);
 }
