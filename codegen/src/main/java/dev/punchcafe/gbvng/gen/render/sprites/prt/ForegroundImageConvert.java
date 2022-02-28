@@ -19,9 +19,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Finds and converts all portrait images in file directorys and returns the model {@link PortraitAsset}
- */
 public class ForegroundImageConvert {
 
     private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(prt|fcs)\\.asset\\..+$");

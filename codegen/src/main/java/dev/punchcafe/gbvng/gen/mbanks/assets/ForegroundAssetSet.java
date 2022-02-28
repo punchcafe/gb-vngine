@@ -7,9 +7,8 @@ import lombok.Getter;
 
 import java.util.List;
 
-/*
-TODO: move pattern block stuff over here, and have simple external declarations in the C script.
-Consider simplifying background into this set, too.
+/**
+ * A forground asset set encompasses a set of foreground assets which share a common pattern table.
  */
 @Builder
 public class ForegroundAssetSet extends BankableAssetBase {
@@ -39,17 +38,15 @@ public class ForegroundAssetSet extends BankableAssetBase {
      * extern struct ForegroundAsset portrait_asset_raye;
      */
 
-    private static final int INTEGER_SIZE_BYTES = 2;
-
     private final String assetName;
-    private final List<IndexArray> indexArrays;
+    @Getter private final List<ForegroundAsset> foregroundAssets;
     private final PatternBlock patternBlock;
 
     @Override
     public long getSize() {
         return patternBlock.sizeInBytes() +
-                this.indexArrays.stream()
-                        .map(IndexArray::sizeInBytes)
+                this.foregroundAssets.stream()
+                        .map(ForegroundAsset::sizeInBytes)
                         .reduce(Integer::sum)
                         .orElse(0);
     }
@@ -57,16 +54,5 @@ public class ForegroundAssetSet extends BankableAssetBase {
     @Override
     public String getId() {
         return this.assetName;
-    }
-
-    @Builder
-    @Getter
-    public static class IndexArray {
-        private final List<Integer> indexes;
-        private final String arrayCName;
-
-        public int sizeInBytes(){
-            return indexes.size() * INTEGER_SIZE_BYTES;
-        }
     }
 }

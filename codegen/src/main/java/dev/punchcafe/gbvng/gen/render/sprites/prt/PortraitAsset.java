@@ -8,6 +8,7 @@ import lombok.Getter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// TODO: rename to ForegroundAssetFile or somethi
 @Builder
 public class PortraitAsset {
 
