@@ -2,7 +2,7 @@ package dev.punchcafe.gbvng.gen.render.transition;
 
 import dev.punchcafe.gbvng.gen.csan.NodeTransitionName;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.render.ComponentRendererName;
+import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
@@ -43,12 +43,12 @@ public class TransitionDeclarer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(ComponentRendererName.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
-                ComponentRendererName.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME);
+        return List.of(ComponentRendererNames.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
+                ComponentRendererNames.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME);
     }
 
     @Override
     public String componentName() {
-        return ComponentRendererName.TRANSITION_INITIALIZER_RENDERER_NAME;
+        return ComponentRendererNames.TRANSITION_INITIALIZER_RENDERER_NAME;
     }
 }

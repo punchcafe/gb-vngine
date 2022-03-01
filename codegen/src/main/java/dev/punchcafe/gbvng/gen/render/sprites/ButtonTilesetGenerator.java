@@ -4,11 +4,10 @@ import dev.punchcafe.gbvng.gen.CodeGenerator;
 import dev.punchcafe.gbvng.gen.config.FontConfig;
 import dev.punchcafe.gbvng.gen.config.TextTheme;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.render.ComponentRendererName;
+import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -80,6 +79,6 @@ public class ButtonTilesetGenerator implements ComponentRenderer {
 
     @Override
     public String componentName() {
-        return ComponentRendererName.BUTTON_TILESET_RENDERER_NAME;
+        return ComponentRendererNames.BUTTON_TILESET_RENDERER_NAME;
     }
 }

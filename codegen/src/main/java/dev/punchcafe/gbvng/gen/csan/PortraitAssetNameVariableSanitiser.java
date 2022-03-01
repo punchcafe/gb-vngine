@@ -23,10 +23,10 @@ public class PortraitAssetNameVariableSanitiser {
     }
 
     public static String getForegroundAssetName(final PortraitAsset asset){
-        return String.format("portrait_asset_%s", asset.getName());
+        return String.format("external_%s", asset.getName());
     }
     public static String getForegroundAssetName(final String assetName){
-        return String.format("portrait_asset_%s", assetName);
+        return String.format("external_%s", assetName);
     }
 
     public static String getForegroundAssetPatternReferenceName(final SetForeground xmlModel){

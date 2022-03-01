@@ -66,7 +66,7 @@ struct ForegroundAsset
 struct ExternalForegroundAsset
 {
     struct ForegroundAsset * asset;
-    unsigned int block;
+    unsigned int bank_number;
 };
 
 // TODO: clean up, separate and refactor
@@ -78,12 +78,12 @@ struct ForegroundElement {
     struct ExternalForegroundAsset * asset;
 };
 
-int current_bank_for_pattern_block_in_vram = 0;
+unsigned int current_bank = 0;
 struct PatternBlock * current_block_in_vram = 0x00;
 
 void set_pattern_block(struct PatternBlock * pattern_block)
 {
-  if(current_bank_for_pattern_block_in_vram != pattern_block->bank_number
+  if(current_bank != pattern_block->bank_number
   || current_block_in_vram != pattern_block)
   {
       unsigned int bank_number = pattern_block->bank_number;
@@ -91,14 +91,20 @@ void set_pattern_block(struct PatternBlock * pattern_block)
       set_sprite_data(0,
           pattern_block->size,
           pattern_block->data);
-      current_bank_for_pattern_block_in_vram = bank_number;
+      current_bank = bank_number;
       current_block_in_vram = pattern_block;
   }
 }
 
-void set_focus_tile(struct ForegroundAsset * asset)
+void set_focus_tile(struct ExternalForegroundAsset * external_asset)
 {
+  struct ForegroundAsset * asset = external_asset -> asset;
   HIDE_SPRITES;
+  if(external_asset->bank_number != current_bank)
+  {
+      current_bank = external_asset->bank_number;
+      SWITCH_ROM_MBC1(external_asset->bank_number);
+  }
   set_pattern_block(asset->block);
   for(int i = 0; i < 40; i++)
   {
@@ -114,7 +120,6 @@ void set_focus_tile(struct ForegroundAsset * asset)
 }
 
 unsigned short current_foreground_offset = 0;
-unsigned int current_bank = 0;
 
 void set_character_tile(unsigned short left_offset, struct ExternalForegroundAsset * external_asset)
 {
@@ -122,9 +127,9 @@ void set_character_tile(unsigned short left_offset, struct ExternalForegroundAss
     if(external_asset->bank_number != current_bank)
     {
         current_bank = external_asset->bank_number;
-        SWITCH_ROM_MBC1(external_asset->bank_number)
+        SWITCH_ROM_MBC1(external_asset->bank_number);
     }
-    ForegroundAsset * external_asset->asset;
+    struct ForegroundAsset * asset = external_asset->asset;
     set_pattern_block(asset->block);
 
     for(unsigned short i_a = 0; i_a < 40; i_a++)

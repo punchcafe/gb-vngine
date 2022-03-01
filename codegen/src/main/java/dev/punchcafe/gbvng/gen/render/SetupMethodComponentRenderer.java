@@ -13,7 +13,7 @@ import lombok.Builder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.*;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
 import static dev.punchcafe.gbvng.gen.render.predicate.PredicatesRenderer.PREDICATES_RENDERER_NAME;
 
 @Builder

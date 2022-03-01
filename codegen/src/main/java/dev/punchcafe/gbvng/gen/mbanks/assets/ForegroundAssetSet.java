@@ -9,8 +9,10 @@ import java.util.List;
 
 /**
  * A forground asset set encompasses a set of foreground assets which share a common pattern table.
+ * All foreground assets must belong to a foreground asset set, even if one is not specified in the configuration.
+ * In the case of one not being specified, a Set will be created for a single asset.
  */
-@Builder
+@Builder(toBuilder = true)
 public class ForegroundAssetSet extends BankableAssetBase {
 
     /**

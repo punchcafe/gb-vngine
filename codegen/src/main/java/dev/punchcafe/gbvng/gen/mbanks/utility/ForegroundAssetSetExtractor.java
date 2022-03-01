@@ -4,7 +4,6 @@ import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.config.PortraitSetConfig;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
-import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.render.sprites.prt.*;
 import dev.punchcafe.gbvng.gen.render.sprites.prt.ForegroundImageConverter;
@@ -13,12 +12,9 @@ import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser.getForegroundAssetName;
 import static dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser.getForegroundAssetPatternReferenceName;
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.FOREGROUND_ASSET_RENDERER_NAME;
 import static java.util.stream.Collectors.*;
 
 public class ForegroundAssetSetExtractor {

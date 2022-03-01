@@ -8,6 +8,9 @@ import lombok.Builder;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.FOREGROUND_ASSET_RENDERER_NAME;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.FOREGROUND_ELEM_STRUCT_RENDERER_NAME;
+
 /**
  * Renders the external asset declarations found in the main game.c script, including
  * the ExternalAssetStruct which allow the correct bank to be switched to.
@@ -33,11 +36,13 @@ public class ExternalForegroundAssetSetRenderer implements ComponentRenderer {
     }
 
     private String renderForegroundAsset(final ForegroundAsset asset, int bank) {
-        return String.format("extern struct ForegroundAsset %s;\n" +
-                "const struct ExternalForegroundAsset = {%d, &%s};",
+        return String.format("const extern struct ForegroundAsset %s;\n" +
+                "const struct ExternalForegroundAsset %s = {&%s, %d};",
                 asset.getCVariableName(),
-                bank,
-                asset.getCVariableName());
+                // TODO: use a C San method
+                "external_" + asset.getCVariableName(),
+                asset.getCVariableName(),
+                bank);
     }
 
     @Override
@@ -47,11 +52,11 @@ public class ExternalForegroundAssetSetRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of();
+        return List.of(FOREGROUND_ELEM_STRUCT_RENDERER_NAME);
     }
 
     @Override
     public String componentName() {
-        return null;
+        return FOREGROUND_ASSET_RENDERER_NAME;
     }
 }

@@ -3,6 +3,7 @@
  */
 package dev.punchcafe.gbvng.gen;
 
+import dev.punchcafe.gbvng.gen.mbanks.utility.ForegroundAssetSetExtractor;
 import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.model.narrative.NarrativeReader;
 import dev.punchcafe.gbvng.gen.config.ColorConfig;
@@ -109,7 +110,17 @@ public class CodeGenerator {
                 .findAny()
                 .orElseThrow();
 
+
         final HexValueConfig hexConfig = extractHexConfig(narrativeConfig.getImageConfig());
+
+        final var foregroundAssetSets = new ForegroundAssetSetExtractor(assetsDirectory, hexConfig, narrativeConfig)
+                .convertAllForegroundAssetSets()
+                .stream()
+                //TODO: fix this ugly monstrosity
+                .map(assetSet -> {
+                    assetSet.assignBank(0);
+                    return assetSet;
+                }).collect(toList());
 
         final ProjectObjectModel<Narrative> gameConfig = PomLoader.<Narrative>forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
 
@@ -119,7 +130,12 @@ public class CodeGenerator {
                 .flatMap(List::stream)
                 .anyMatch(elem -> elem.getClass().equals(PlayMusic.class));
 
-        final var rendererFactory = new RendererFactory(gameConfig, assetsDirectory, narrativeConfig, hexConfig, hasMusic);
+        final var rendererFactory = new RendererFactory(gameConfig,
+                assetsDirectory,
+                narrativeConfig,
+                hexConfig,
+                foregroundAssetSets,
+                hasMusic);
 
         final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
                 .filter(method -> method.isAnnotationPresent(RendererSupplier.class))

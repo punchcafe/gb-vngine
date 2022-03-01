@@ -23,11 +23,11 @@ public class CurrentNodeRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(ComponentRendererName.NODE_DEFINITION_RENDERER_NAME);
+        return List.of(ComponentRendererNames.NODE_DEFINITION_RENDERER_NAME);
     }
 
     @Override
     public String componentName() {
-        return ComponentRendererName.CURRENT_NODE_RENDERER_NAME;
+        return ComponentRendererNames.CURRENT_NODE_RENDERER_NAME;
     }
 }

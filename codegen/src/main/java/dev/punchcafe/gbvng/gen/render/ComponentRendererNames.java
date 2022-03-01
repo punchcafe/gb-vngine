@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render;
 
-public interface ComponentRendererName {
+public interface ComponentRendererNames {
 
     String UTILITY_METHOD_RENDERER_NAME = "UTILITY_METHOD_RENDERER";
     String MAIN_METHOD_RENDERER_NAME = "MAIN_METHOD_RENDERER";

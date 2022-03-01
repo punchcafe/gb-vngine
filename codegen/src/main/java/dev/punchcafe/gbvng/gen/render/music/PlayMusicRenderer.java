@@ -5,8 +5,8 @@ import lombok.Builder;
 
 import java.util.List;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.GBT_HEADER_RENDERER_NAME;
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.PLAY_MUSIC_RENDERER_NAME;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.GBT_HEADER_RENDERER_NAME;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.PLAY_MUSIC_RENDERER_NAME;
 
 /**
  * Provides a wrapper layer so other functions can call play_music, and it will only render

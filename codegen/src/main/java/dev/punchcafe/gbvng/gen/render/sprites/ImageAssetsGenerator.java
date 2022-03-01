@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.IMAGE_ASSET_RENDERER_NAME;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.IMAGE_ASSET_RENDERER_NAME;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 

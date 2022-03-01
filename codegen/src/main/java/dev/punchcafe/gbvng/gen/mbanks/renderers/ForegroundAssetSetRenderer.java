@@ -1,37 +1,29 @@
 package dev.punchcafe.gbvng.gen.mbanks.renderers;
 
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.prt.PatternBlock;
 
-public class ForegroundAssetSetRenderer {
+import java.util.List;
 
-    public static String render(final ForegroundAssetSet assetSet){
+public class ForegroundAssetSetRenderer implements ComponentRenderer {
 
-    }
-
-    private static String renderForegroundAssets(final ForegroundAssetSet.IndexArray array){
+    public ForegroundAssetSetRenderer(List<ForegroundAssetSet> allAssetSets){
 
     }
 
-    private static String renderPatternBlockStruct(final PatternBlock patternBlock, final int bankNumber){
-        return String.format("PatternBlock %s = { &%s, %d, %d };",
-                patternBlockCVariableName(patternBlock),
-                patternBlockDataCVariableName(patternBlock),
-                patternBlock.numberOfUniqueTiles(),
-                bankNumber);
+    @Override
+    public String render() {
+        return null;
     }
 
-    private static String renderPatternBlockData(final PatternBlock patternBlock){
-        return String.format("const unsigned char %s [] = {%s};",
-                patternBlockDataCVariableName(patternBlock),
-                patternBlock.renderCDataArray());
+    @Override
+    public List<String> dependencies() {
+        return null;
     }
 
-    private static String patternBlockDataCVariableName(final PatternBlock patternBlock){
-        return String.format("foreground_asset_pattern_block_%s_data", patternBlock.getBlockName());
-    }
-
-    private static String patternBlockCVariableName(final PatternBlock patternBlock){
-        return String.format("foreground_asset_pattern_block_%s", patternBlock.getBlockName());
+    @Override
+    public String componentName() {
+        return null;
     }
 }

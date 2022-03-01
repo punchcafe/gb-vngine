@@ -15,7 +15,7 @@ import lombok.Getter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.*;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
 
 @Builder
 @Getter

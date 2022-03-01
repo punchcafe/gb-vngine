@@ -1,7 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.render.ComponentRendererName;
+import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -56,6 +56,6 @@ public class AssetRenderer implements ComponentRenderer {
 
     @Override
     public String componentName() {
-        return ComponentRendererName.ASSET_RENDERER_NAME;
+        return ComponentRendererNames.ASSET_RENDERER_NAME;
     }
 }

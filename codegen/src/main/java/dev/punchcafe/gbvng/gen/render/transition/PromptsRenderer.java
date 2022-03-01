@@ -3,7 +3,7 @@ package dev.punchcafe.gbvng.gen.render.transition;
 import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
 import dev.punchcafe.gbvng.gen.csan.PromptName;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.render.ComponentRendererName;
+import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import dev.punchcafe.vngine.pom.model.Branch;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
@@ -44,11 +44,11 @@ public class PromptsRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(ComponentRendererName.NODE_RENDERER_NAME);
+        return List.of(ComponentRendererNames.NODE_RENDERER_NAME);
     }
 
     @Override
     public String componentName() {
-        return ComponentRendererName.PROMPTS_RENDERER_NAME;
+        return ComponentRendererNames.PROMPTS_RENDERER_NAME;
     }
 }

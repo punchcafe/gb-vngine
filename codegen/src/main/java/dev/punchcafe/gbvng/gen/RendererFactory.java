@@ -1,6 +1,8 @@
 package dev.punchcafe.gbvng.gen;
 
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
+import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.mbanks.renderers.ExternalForegroundAssetSetRenderer;
 import dev.punchcafe.gbvng.gen.render.*;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;
 import dev.punchcafe.gbvng.gen.render.music.DelayWithMusicRenderer;
@@ -12,7 +14,6 @@ import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
 import dev.punchcafe.gbvng.gen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.gbvng.gen.render.node.NodeRenderer;
 import dev.punchcafe.gbvng.gen.render.predicate.PredicatesRenderer;
-import dev.punchcafe.gbvng.gen.render.sprites.prt.PortraitAssetConverter;
 import dev.punchcafe.gbvng.gen.render.transition.BranchRenderer;
 import dev.punchcafe.gbvng.gen.render.transition.PromptsRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.*;
@@ -25,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.*;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
 
 @Builder
 public class RendererFactory {
@@ -34,12 +35,13 @@ public class RendererFactory {
     private final File assetDirectory;
     private final NarrativeConfig narrativeConfig;
     private final HexValueConfig hexValueConfig;
+    private final List<ForegroundAssetSet> allForegroundAssetSets;
     private final boolean hasMusic;
 
     @RendererSupplier
     public ComponentRenderer utilsRender() throws IOException {
         return FixtureRender.fromFile("/string_comparator.c")
-                .componentName(ComponentRendererName.UTILITY_METHOD_RENDERER_NAME)
+                .componentName(ComponentRendererNames.UTILITY_METHOD_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -63,7 +65,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer playerBasedTransitionDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("/player_based_transition.c")
-                .componentName(ComponentRendererName.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME)
+                .componentName(ComponentRendererNames.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -71,31 +73,38 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer predicateBasedTransitionDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("/predicate_based_transition.c")
-                .componentName(ComponentRendererName.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME)
+                .componentName(ComponentRendererNames.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME)
                 .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer externalForegroundAssetSetsRenderer() throws IOException {
+        return ExternalForegroundAssetSetRenderer.builder()
+                .allForegroundAssetSets(this.allForegroundAssetSets)
                 .build();
     }
 
     @RendererSupplier
     public ComponentRenderer nodeDefinitionRenderer() throws IOException {
         return FixtureRender.fromFile("/node.c")
-                .componentName(ComponentRendererName.NODE_DEFINITION_RENDERER_NAME)
-                .dependencies(List.of(ComponentRendererName.NARRATIVE_STRUCT_RENDERER_NAME, GameStateRenderer.GAME_STATE_RENDERER_NAME))
+                .componentName(ComponentRendererNames.NODE_DEFINITION_RENDERER_NAME)
+                .dependencies(List.of(ComponentRendererNames.NARRATIVE_STRUCT_RENDERER_NAME, GameStateRenderer.GAME_STATE_RENDERER_NAME))
                 .build();
     }
 
     @RendererSupplier
     public ComponentRenderer backgroundRendererRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/render_background.c")
-                .componentName(ComponentRendererName.BACKGROUND_RENDERER_RENDERER_NAME)
-                .dependencies(List.of(ComponentRendererName.BACKGROUND_ELEM_STRUCT_RENDERER_NAME, ComponentRendererName.TEXT_RENDERER_RENDERER_NAME))
+                .componentName(ComponentRendererNames.BACKGROUND_RENDERER_RENDERER_NAME)
+                .dependencies(List.of(ComponentRendererNames.BACKGROUND_ELEM_STRUCT_RENDERER_NAME, ComponentRendererNames.TEXT_RENDERER_RENDERER_NAME))
                 .build();
     }
 
     @RendererSupplier
     public ComponentRenderer backgroundElementRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/background_elem.c")
-                .componentName(ComponentRendererName.BACKGROUND_ELEM_STRUCT_RENDERER_NAME)
+                .componentName(ComponentRendererNames.BACKGROUND_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -154,9 +163,9 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer getNextNodeFunctionRenderer() throws IOException {
         return FixtureRender.fromFile("/functions/get_next_node.c")
-                .componentName(ComponentRendererName.GET_NEXT_NODE_FUNCTION_RENDERER_NAME)
-                .dependencies(List.of(ComponentRendererName.TEXT_RENDERER_RENDERER_NAME,
-                        ComponentRendererName.NODE_RENDERER_NAME,
+                .componentName(ComponentRendererNames.GET_NEXT_NODE_FUNCTION_RENDERER_NAME)
+                .dependencies(List.of(ComponentRendererNames.TEXT_RENDERER_RENDERER_NAME,
+                        ComponentRendererNames.NODE_RENDERER_NAME,
                         GameStateRenderer.GAME_STATE_RENDERER_NAME,
                         PredicatesRenderer.PREDICATES_RENDERER_NAME))
                 .build();
@@ -165,7 +174,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer noMutationArray() throws IOException {
         return FixtureRender.fromFile("/do_nothing_mutation.c")
-                .componentName(ComponentRendererName.DO_NOTHING_MUTATION_ARRAY_RENDERER_NAME)
+                .componentName(ComponentRendererNames.DO_NOTHING_MUTATION_ARRAY_RENDERER_NAME)
                 .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME))
                 .build();
     }
@@ -173,7 +182,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer alwaysTruePredicate() throws IOException {
         return FixtureRender.fromFile("/always_true_predicate.c")
-                .componentName(ComponentRendererName.ALWAYS_TRUE_PREDICATE_RENDERER_NAME)
+                .componentName(ComponentRendererNames.ALWAYS_TRUE_PREDICATE_RENDERER_NAME)
                 .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME))
                 .build();
     }
@@ -181,7 +190,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer gameOverNodeIdConstant() throws IOException {
         return FixtureRender.fromFile("/game_over_node_id_constant.c")
-                .componentName(ComponentRendererName.GAME_OVER_NODE_ID_CONSTANT_RENDERER_NAME)
+                .componentName(ComponentRendererNames.GAME_OVER_NODE_ID_CONSTANT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -212,11 +221,6 @@ public class RendererFactory {
      */
 
     @RendererSupplier
-    public ComponentRenderer foregroundAssetRenderer() throws IOException {
-        return new PortraitAssetConverter(this.assetDirectory);
-    }
-
-    @RendererSupplier
     public ComponentRenderer imageAssetRenderer() throws IOException {
         final var converters = List.of(
                 new BackgroundConverter(this.hexValueConfig),
@@ -240,15 +244,15 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer playNarrativeFunctionRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/play_narrative.c")
-                .componentName(ComponentRendererName.PLAY_NARRATIVE_RENDERER_NAME)
+                .componentName(ComponentRendererNames.PLAY_NARRATIVE_RENDERER_NAME)
                 .dependencies(List.of(
-                        ComponentRendererName.TEXT_RENDERER_RENDERER_NAME,
-                        ComponentRendererName.FOREGROUND_ELEM_STRUCT_RENDERER_NAME,
-                        ComponentRendererName.TEXT_ELEM_STRUCT_RENDERER_NAME,
-                        ComponentRendererName.PAUSE_ELEM_STRUCT_RENDERER_NAME,
-                        ComponentRendererName.NARRATIVE_STRUCT_RENDERER_NAME,
-                        ComponentRendererName.FOREGROUND_RENDERER_RENDERER_NAME,
-                        ComponentRendererName.TEXT_RENDERER_RENDERER_NAME,
+                        ComponentRendererNames.TEXT_RENDERER_RENDERER_NAME,
+                        ComponentRendererNames.FOREGROUND_ELEM_STRUCT_RENDERER_NAME,
+                        ComponentRendererNames.TEXT_ELEM_STRUCT_RENDERER_NAME,
+                        ComponentRendererNames.PAUSE_ELEM_STRUCT_RENDERER_NAME,
+                        ComponentRendererNames.NARRATIVE_STRUCT_RENDERER_NAME,
+                        ComponentRendererNames.FOREGROUND_RENDERER_RENDERER_NAME,
+                        ComponentRendererNames.TEXT_RENDERER_RENDERER_NAME,
                         PLAY_MUSIC_STRUCT_RENDERER_NAME,
                         PLAY_MUSIC_RENDERER_NAME))
                 .build();
@@ -257,7 +261,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer foregroundRendererRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/render_foreground.c")
-                .componentName(ComponentRendererName.FOREGROUND_RENDERER_RENDERER_NAME)
+                .componentName(ComponentRendererNames.FOREGROUND_RENDERER_RENDERER_NAME)
                 .dependencies(List.of(DELAY_WITH_MUSIC_RENDERER_NAME))
                 .build();
     }
@@ -265,9 +269,9 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer textRendererRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/text_renderer.c")
-                .componentName(ComponentRendererName.TEXT_RENDERER_RENDERER_NAME)
-                .dependencies(List.of(ComponentRendererName.BUTTON_TILESET_RENDERER_NAME,
-                        ComponentRendererName.GET_CHAR_POSITION_RENDERER_NAME,
+                .componentName(ComponentRendererNames.TEXT_RENDERER_RENDERER_NAME)
+                .dependencies(List.of(ComponentRendererNames.BUTTON_TILESET_RENDERER_NAME,
+                        ComponentRendererNames.GET_CHAR_POSITION_RENDERER_NAME,
                         DELAY_WITH_MUSIC_RENDERER_NAME))
                 .build();
     }
@@ -280,7 +284,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer narrativeStructRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/narrative.c")
-                .componentName(ComponentRendererName.NARRATIVE_STRUCT_RENDERER_NAME)
+                .componentName(ComponentRendererNames.NARRATIVE_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -288,15 +292,15 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer foregroundElemRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/foreground_elem.c")
-                .componentName(ComponentRendererName.FOREGROUND_ELEM_STRUCT_RENDERER_NAME)
-                .dependencies(List.of(FOREGROUND_ASSET_RENDERER_NAME))
+                .componentName(ComponentRendererNames.FOREGROUND_ELEM_STRUCT_RENDERER_NAME)
+                .dependencies(List.of())
                 .build();
     }
 
     @RendererSupplier
     public ComponentRenderer pauseElemRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/pause_elem.c")
-                .componentName(ComponentRendererName.PAUSE_ELEM_STRUCT_RENDERER_NAME)
+                .componentName(ComponentRendererNames.PAUSE_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -304,7 +308,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer textElemRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/structs/text_elem.c")
-                .componentName(ComponentRendererName.TEXT_ELEM_STRUCT_RENDERER_NAME)
+                .componentName(ComponentRendererNames.TEXT_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -335,23 +339,23 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer mainMethodRender() throws IOException {
         return FixtureRender.fromFile("/main.c")
-                .componentName(ComponentRendererName.MAIN_METHOD_RENDERER_NAME)
+                .componentName(ComponentRendererNames.MAIN_METHOD_RENDERER_NAME)
                 .dependencies(List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME,
                         GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER,
                         PredicatesRenderer.PREDICATES_RENDERER_NAME,
-                        ComponentRendererName.SETUP_METHOD_RENDERER_NAME,
-                        ComponentRendererName.TRANSITION_INITIALIZER_RENDERER_NAME,
-                        ComponentRendererName.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
-                        ComponentRendererName.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME,
-                        ComponentRendererName.NODE_DEFINITION_RENDERER_NAME,
-                        ComponentRendererName.NODE_MUTATION_RENDERER_NAME,
-                        ComponentRendererName.NARRATIVE_RENDERER_NAME,
-                        ComponentRendererName.IMAGE_ASSET_RENDERER_NAME,
-                        ComponentRendererName.NODE_RENDERER_NAME,
-                        ComponentRendererName.GET_NEXT_NODE_FUNCTION_RENDERER_NAME,
-                        ComponentRendererName.PLAY_NARRATIVE_RENDERER_NAME,
-                        ComponentRendererName.CURRENT_NODE_RENDERER_NAME,
-                        ComponentRendererName.NARRATIVE_STRUCT_RENDERER_NAME))
+                        ComponentRendererNames.SETUP_METHOD_RENDERER_NAME,
+                        ComponentRendererNames.TRANSITION_INITIALIZER_RENDERER_NAME,
+                        ComponentRendererNames.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
+                        ComponentRendererNames.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME,
+                        ComponentRendererNames.NODE_DEFINITION_RENDERER_NAME,
+                        ComponentRendererNames.NODE_MUTATION_RENDERER_NAME,
+                        ComponentRendererNames.NARRATIVE_RENDERER_NAME,
+                        ComponentRendererNames.IMAGE_ASSET_RENDERER_NAME,
+                        ComponentRendererNames.NODE_RENDERER_NAME,
+                        ComponentRendererNames.GET_NEXT_NODE_FUNCTION_RENDERER_NAME,
+                        ComponentRendererNames.PLAY_NARRATIVE_RENDERER_NAME,
+                        ComponentRendererNames.CURRENT_NODE_RENDERER_NAME,
+                        ComponentRendererNames.NARRATIVE_STRUCT_RENDERER_NAME))
                 .build();
     }
 }

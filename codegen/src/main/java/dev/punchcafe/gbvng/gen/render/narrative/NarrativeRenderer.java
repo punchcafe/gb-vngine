@@ -9,7 +9,7 @@ import lombok.Builder;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.*;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
 import static java.util.stream.Collectors.joining;
 
 @Builder

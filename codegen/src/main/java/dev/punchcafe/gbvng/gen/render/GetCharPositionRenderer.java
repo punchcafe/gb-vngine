@@ -35,11 +35,11 @@ public class GetCharPositionRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(ComponentRendererName.BUTTON_TILESET_RENDERER_NAME);
+        return List.of(ComponentRendererNames.BUTTON_TILESET_RENDERER_NAME);
     }
 
     @Override
     public String componentName() {
-        return ComponentRendererName.GET_CHAR_POSITION_RENDERER_NAME;
+        return ComponentRendererNames.GET_CHAR_POSITION_RENDERER_NAME;
     }
 }

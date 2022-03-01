@@ -14,7 +14,7 @@ import lombok.Getter;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.*;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
 import static dev.punchcafe.gbvng.gen.render.predicate.PredicatesRenderer.PREDICATES_RENDERER_NAME;
 import static java.util.stream.Collectors.joining;
 

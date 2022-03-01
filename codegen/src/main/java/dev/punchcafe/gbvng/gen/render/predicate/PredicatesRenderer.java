@@ -1,7 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.predicate;
 
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.render.ComponentRendererName;
+import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;
 import dev.punchcafe.vngine.pom.model.*;
 import dev.punchcafe.vngine.pom.parse.vngpl.PredicateParser;
@@ -35,7 +35,7 @@ public class PredicatesRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME, ComponentRendererName.UTILITY_METHOD_RENDERER_NAME);
+        return List.of(GameStateRenderer.GAME_STATE_RENDERER_NAME, ComponentRendererNames.UTILITY_METHOD_RENDERER_NAME);
     }
 
     @Override

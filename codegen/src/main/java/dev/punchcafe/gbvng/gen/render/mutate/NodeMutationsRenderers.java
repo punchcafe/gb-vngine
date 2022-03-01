@@ -10,7 +10,7 @@ import lombok.Builder;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static dev.punchcafe.gbvng.gen.render.ComponentRendererName.NODE_MUTATION_RENDERER_NAME;
+import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.NODE_MUTATION_RENDERER_NAME;
 import static dev.punchcafe.gbvng.gen.render.mutate.GameStateMutationRenderer.GAME_STATE_MUTATION_RENDERER;
 import static java.util.stream.Collectors.joining;
 
