@@ -1,21 +1,23 @@
 package dev.punchcafe.gbvng.gen.mbanks;
 
+import lombok.Builder;
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Builder
 public class MemoryBank {
 
     public static int bankByteSize(){
         return 16_000;
     }
 
-    private final List<BankableAsset> assets = new ArrayList<>();
+    @Getter private final List<BankableAsset> assets = new ArrayList<>();
 
     public void addAsset(final BankableAsset asset){
-        if(remainingBytes() + asset.getSize() > bankByteSize()){
-            throw new IllegalArgumentException();
-        }
+
         assets.add(asset);
     }
 

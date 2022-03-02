@@ -1,7 +1,3 @@
-#ifndef FORGROUND_ELEMENT_DEFINITION
-#define FORGROUND_ELEMENT_DEFINITION
-
-
 #define FOCUS_MODE_X_OFFSET 45
 #define FOCUS_MODE_Y_OFFSET 40
 
@@ -51,17 +47,22 @@ play_foreground(asset) {
 
 // TODO: acknowledge coupling of position to type of element
 // TODO: separate assets from narrative
+// TODO: consider being able to switch banks between patterns and block_references
+#ifndef FORGROUND_ASSET_STRUCT_DEFINITION
+#define FORGROUND_ASSET_STRUCT_DEFINITION
+
 struct PatternBlock {
     unsigned char * data;
     unsigned int size;
     unsigned int bank_number;
 };
-// TODO: consider being able to switch banks between patterns and block_references
+
 struct ForegroundAsset
 {
-    struct PatternBlock * block;
-    unsigned char * pattern_block_references;
+    const struct PatternBlock * block;
+    const unsigned char * pattern_block_references;
 };
+#endif
 
 struct ExternalForegroundAsset
 {
@@ -83,15 +84,12 @@ struct PatternBlock * current_block_in_vram = 0x00;
 
 void set_pattern_block(struct PatternBlock * pattern_block)
 {
-  if(current_bank != pattern_block->bank_number
-  || current_block_in_vram != pattern_block)
+//todo: factor in case where address is the same but block is different
+  if(current_block_in_vram != pattern_block)
   {
-      unsigned int bank_number = pattern_block->bank_number;
-      SWITCH_ROM_MBC1(bank_number);
       set_sprite_data(0,
           pattern_block->size,
           pattern_block->data);
-      current_bank = bank_number;
       current_block_in_vram = pattern_block;
   }
 }
@@ -204,5 +202,3 @@ void handle_foreground(struct ForegroundElement* foreground)
         break;
     }
 }
-
-#endif

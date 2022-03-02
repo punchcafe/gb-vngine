@@ -1,6 +1,7 @@
 package dev.punchcafe.gbvng.gen.mbanks.assets;
 
 import dev.punchcafe.gbvng.gen.mbanks.BankableAssetBase;
+import dev.punchcafe.gbvng.gen.mbanks.renderers.AssetVisitor;
 import dev.punchcafe.gbvng.gen.render.sprites.prt.PatternBlock;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,7 +43,7 @@ public class ForegroundAssetSet extends BankableAssetBase {
 
     private final String assetName;
     @Getter private final List<ForegroundAsset> foregroundAssets;
-    private final PatternBlock patternBlock;
+    @Getter private final PatternBlock patternBlock;
 
     @Override
     public long getSize() {
@@ -56,5 +57,10 @@ public class ForegroundAssetSet extends BankableAssetBase {
     @Override
     public String getId() {
         return this.assetName;
+    }
+
+    @Override
+    public <T> T acceptVisitor(AssetVisitor<T> visitor) {
+        return visitor.visitForegroundAsset(this);
     }
 }

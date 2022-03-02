@@ -3,6 +3,8 @@
  */
 package dev.punchcafe.gbvng.gen;
 
+import dev.punchcafe.gbvng.gen.mbanks.MemoryBank;
+import dev.punchcafe.gbvng.gen.mbanks.renderers.BankRenderer;
 import dev.punchcafe.gbvng.gen.mbanks.utility.ForegroundAssetSetExtractor;
 import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.model.narrative.NarrativeReader;
@@ -23,6 +25,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Path;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -148,8 +151,21 @@ public class CodeGenerator {
 
         final var renderedScript = scriptRenderer.render();
         final var out = new BufferedWriter(new FileWriter(scriptDestination));
+
         out.write(renderedScript);
         out.close();
+
+        final var bankWriteLocation = Path.of(scriptDestination).getParent();
+        final var memoryBankWriter = new BankRenderer(bankWriteLocation.toFile());
+
+        //TODO: replace with clever optimisation
+        final var sampleBank = MemoryBank.builder().build();
+        for(final var asset : foregroundAssetSets){
+            sampleBank.addAsset(asset);
+        }
+        System.out.println(foregroundAssetSets.size());
+        System.out.println(sampleBank.getAssets().size());
+        memoryBankWriter.generateBankFile(sampleBank, 1);
     }
 
     private HexValueConfig extractHexConfig(ImageConfig imageConfig) {

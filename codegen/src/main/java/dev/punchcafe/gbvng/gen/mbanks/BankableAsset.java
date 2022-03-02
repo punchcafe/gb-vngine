@@ -1,5 +1,7 @@
 package dev.punchcafe.gbvng.gen.mbanks;
 
+import dev.punchcafe.gbvng.gen.mbanks.renderers.AssetVisitor;
+
 import java.util.Optional;
 
 /**
@@ -30,4 +32,6 @@ public interface BankableAsset {
     void assignBank(int bankNumber);
 
     Optional<Integer> getBank();
+
+    <T> T acceptVisitor(final AssetVisitor<T> visitor);
 }
