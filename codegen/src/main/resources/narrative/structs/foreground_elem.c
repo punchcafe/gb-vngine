@@ -85,24 +85,20 @@ struct PatternBlock * current_block_in_vram = 0x00;
 void set_pattern_block(struct PatternBlock * pattern_block)
 {
 //todo: factor in case where address is the same but block is different
-  if(current_block_in_vram != pattern_block)
-  {
+//  if(current_block_in_vram != pattern_block)
+//  {
       set_sprite_data(0,
           pattern_block->size,
           pattern_block->data);
       current_block_in_vram = pattern_block;
-  }
+//  }
 }
 
 void set_focus_tile(struct ExternalForegroundAsset * external_asset)
 {
   struct ForegroundAsset * asset = external_asset -> asset;
   HIDE_SPRITES;
-  if(external_asset->bank_number != current_bank)
-  {
-      current_bank = external_asset->bank_number;
-      SWITCH_ROM_MBC1(external_asset->bank_number);
-  }
+  SWITCH_ROM_MBC1(external_asset->bank_number);
   set_pattern_block(asset->block);
   for(int i = 0; i < 40; i++)
   {
@@ -122,11 +118,7 @@ unsigned short current_foreground_offset = 0;
 void set_character_tile(unsigned short left_offset, struct ExternalForegroundAsset * external_asset)
 {
     HIDE_SPRITES;
-    if(external_asset->bank_number != current_bank)
-    {
-        current_bank = external_asset->bank_number;
-        SWITCH_ROM_MBC1(external_asset->bank_number);
-    }
+    SWITCH_ROM_MBC1(external_asset->bank_number);
     struct ForegroundAsset * asset = external_asset->asset;
     set_pattern_block(asset->block);
 

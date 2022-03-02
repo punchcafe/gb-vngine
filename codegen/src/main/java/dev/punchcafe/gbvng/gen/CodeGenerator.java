@@ -121,7 +121,7 @@ public class CodeGenerator {
                 .stream()
                 //TODO: fix this ugly monstrosity
                 .map(assetSet -> {
-                    assetSet.assignBank(0);
+                    assetSet.assignBank(3);
                     return assetSet;
                 }).collect(toList());
 
@@ -165,7 +165,7 @@ public class CodeGenerator {
         }
         System.out.println(foregroundAssetSets.size());
         System.out.println(sampleBank.getAssets().size());
-        memoryBankWriter.generateBankFile(sampleBank, 1);
+        memoryBankWriter.generateBankFile(sampleBank, 3);
     }
 
     private HexValueConfig extractHexConfig(ImageConfig imageConfig) {
