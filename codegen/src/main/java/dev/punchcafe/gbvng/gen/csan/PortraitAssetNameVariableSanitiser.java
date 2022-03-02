@@ -1,7 +1,7 @@
 package dev.punchcafe.gbvng.gen.csan;
 
 import dev.punchcafe.gbvng.gen.model.narrative.SetForeground;
-import dev.punchcafe.gbvng.gen.render.sprites.prt.PortraitAsset;
+import dev.punchcafe.gbvng.gen.graphics.CompositeSprite;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -21,7 +21,7 @@ public class PortraitAssetNameVariableSanitiser {
         return String.format("portrait_asset_%s", fileNameMatcher.group(1));
     }
 
-    public static String getForegroundAssetName(final PortraitAsset asset){
+    public static String getForegroundAssetName(final CompositeSprite asset){
         return String.format("external_%s", asset.getName());
     }
     public static String getForegroundAssetName(final String assetName){
@@ -32,7 +32,7 @@ public class PortraitAssetNameVariableSanitiser {
         return String.format("portrait_asset_%s_pattern_reference", xmlModel.getSrc());
     }
 
-    public static String getForegroundAssetPatternReferenceName(final PortraitAsset asset){
+    public static String getForegroundAssetPatternReferenceName(final CompositeSprite asset){
         return String.format("portrait_asset_%s_pattern_reference", asset.getName());
     }
 

@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
+import dev.punchcafe.gbvng.gen.graphics.CompositeSprite;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.graphics.TallTile;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Finds and converts all portrait images in file directorys and returns the model {@link PortraitAsset}
+ * Finds and converts all portrait images in file directorys and returns the model {@link CompositeSprite}
  */
 @AllArgsConstructor()
 public class ForegroundImageConverter {
@@ -29,7 +30,7 @@ public class ForegroundImageConverter {
 
     private HexValueConfig hexValueConfig;
 
-    public List<PortraitAsset> extractAllAssetsFromDirectory(final File dir) {
+    public List<CompositeSprite> extractAllAssetsFromDirectory(final File dir) {
         return allAssetFilesInDirectory(dir)
                 .map(this::convertFileToAsset)
                 .collect(Collectors.toList());
@@ -61,7 +62,7 @@ public class ForegroundImageConverter {
         return IMAGE_ASSET_EXTENSION.matcher(fileName).matches();
     }
 
-    private PortraitAsset convertFileToAsset(final File assetFile) {
+    private CompositeSprite convertFileToAsset(final File assetFile) {
         final var matcher = IMAGE_ASSET_EXTENSION.matcher(assetFile.getName());
         matcher.matches();
         final var assetName = matcher.group(1);
@@ -69,7 +70,7 @@ public class ForegroundImageConverter {
         return Optional.of(assetFile)
                 .map(this::openImage)
                 .map(image -> this.extractTallTilesFromImage(image, imageType))
-                .map(tiles -> PortraitAsset.builder().imageData(tiles).name(assetName).build())
+                .map(tiles -> CompositeSprite.builder().imageData(tiles).name(assetName).build())
                 .get();
     }
 

@@ -3,10 +3,10 @@ package dev.punchcafe.gbvng.gen.mbanks.utility;
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.config.PortraitSetConfig;
 import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
+import dev.punchcafe.gbvng.gen.graphics.CompositeSprite;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.render.sprites.prt.*;
 import dev.punchcafe.gbvng.gen.render.sprites.prt.ForegroundImageConverter;
 
 import java.io.File;
@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.*;
 
 public class ForegroundAssetSetExtractor {
 
-    private final Map<String, PortraitAsset> allAssetsByName;
+    private final Map<String, CompositeSprite> allAssetsByName;
     private final List<PortraitSetConfig> foregroundAssetSets;
 
     public ForegroundAssetSetExtractor(final File assetDirectory,
@@ -30,7 +30,7 @@ public class ForegroundAssetSetExtractor {
             final var imageConverter = new ForegroundImageConverter(hexValueConfig);
             this.allAssetsByName = imageConverter.extractAllAssetsFromDirectory(assetDirectory)
                     .stream()
-                    .collect(Collectors.toUnmodifiableMap(PortraitAsset::getName, Function.identity()));
+                    .collect(Collectors.toUnmodifiableMap(CompositeSprite::getName, Function.identity()));
             this.foregroundAssetSets = narrativeConfig.getImageConfig().getPortraitSets();
         } catch (RuntimeException ex) {
             throw new RuntimeException();
@@ -89,7 +89,7 @@ public class ForegroundAssetSetExtractor {
                 .build();
     }
 
-    private ForegroundAsset convertFromConfig(final PortraitAsset asset, final PatternBlock block) {
+    private ForegroundAsset convertFromConfig(final CompositeSprite asset, final PatternBlock block) {
         return ForegroundAsset.builder()
                 .cVariableName(asset.getName())
                 .patternTableIndexArray(asset.createReferencePatternBlock(block))
@@ -100,7 +100,7 @@ public class ForegroundAssetSetExtractor {
     public PatternBlock getPatternBlockForSet(final PortraitSetConfig setConfig) {
         final var allUniqueTiles = setConfig.allFilesInSet().stream()
                 .map(this.allAssetsByName::get)
-                .map(PortraitAsset::uniqueTiles)
+                .map(CompositeSprite::uniqueTiles)
                 .flatMap(Set::stream)
                 .collect(Collectors.toSet());
         if (allUniqueTiles.size() > 150) {
