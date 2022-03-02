@@ -34,8 +34,8 @@ public class AssetRenderer implements AssetVisitor<String> {
     private String renderEntireForegroundAsset(final ForegroundAsset asset, final String patternBlockName) {
         final var refArray = String.format("const unsigned char %s_pattern_ref_array [] = {%s};", asset.getCVariableName(), asset.getPatternTableIndexArray()
                 .stream()
-                .map(Integer::toHexString)
-                .map(string -> String.format("0x%s", string))
+                .map(integer -> integer * 2)
+                .map(string -> String.format("0x%02x", string))
                 .collect(joining(",")));
         final var struct = String.format("const struct ForegroundAsset %s = {&%s, %s_pattern_ref_array};",
                 asset.getCVariableName(),
@@ -46,7 +46,8 @@ public class AssetRenderer implements AssetVisitor<String> {
 
     private String renderPatternBlock(final String name, final PatternBlock block) {
         final var blockData = String.format("const unsigned char %s_data [] = %s;", name, block.renderCDataArray());
-        final var patternBlock = String.format("const struct PatternBlock %s = {%s_data, %d};", name, name, block.numberOfUniqueTiles());
+        // TODO: handle the * 2 issue
+        final var patternBlock = String.format("const struct PatternBlock %s = {%s_data, %d};", name, name, block.numberOfUniqueTiles() * 2);
         return blockData + "\n" + patternBlock;
     }
 }
