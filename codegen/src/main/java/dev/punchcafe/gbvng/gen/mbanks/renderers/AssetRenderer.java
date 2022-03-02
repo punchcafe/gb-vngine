@@ -2,7 +2,7 @@ package dev.punchcafe.gbvng.gen.mbanks.renderers;
 
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
-import dev.punchcafe.gbvng.gen.render.sprites.prt.PatternBlock;
+import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
 
 import static java.util.stream.Collectors.joining;
 

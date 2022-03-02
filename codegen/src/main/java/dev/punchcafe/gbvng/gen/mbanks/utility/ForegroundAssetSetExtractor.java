@@ -2,6 +2,7 @@ package dev.punchcafe.gbvng.gen.mbanks.utility;
 
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.config.PortraitSetConfig;
+import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;

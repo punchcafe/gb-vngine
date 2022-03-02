@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
+import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
 import lombok.Builder;
 import lombok.Getter;
 

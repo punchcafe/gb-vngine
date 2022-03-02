@@ -1,7 +1,6 @@
 package dev.punchcafe.gbvng.gen.csan;
 
 import dev.punchcafe.gbvng.gen.model.narrative.SetForeground;
-import dev.punchcafe.gbvng.gen.render.sprites.prt.PatternBlock;
 import dev.punchcafe.gbvng.gen.render.sprites.prt.PortraitAsset;
 
 import java.io.File;

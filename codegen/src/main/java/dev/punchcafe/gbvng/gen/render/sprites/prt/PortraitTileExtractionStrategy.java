@@ -2,7 +2,7 @@ package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
 import dev.punchcafe.gbvng.gen.render.sprites.ConverterFunctions;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.render.sprites.TallTile;
+import dev.punchcafe.gbvng.gen.graphics.TallTile;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;

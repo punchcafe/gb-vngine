@@ -1,8 +1,13 @@
-package dev.punchcafe.gbvng.gen.render.sprites;
+package dev.punchcafe.gbvng.gen.graphics;
+
+import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+/**
+ * Utility functions for parsing {@link Tile}s from IO.
+ */
 public class TileConverters {
 
     public static List<SquareTile> extractTilesFromImage(final BufferedImage image,

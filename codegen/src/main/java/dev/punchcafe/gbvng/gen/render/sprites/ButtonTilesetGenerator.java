@@ -1,6 +1,9 @@
 package dev.punchcafe.gbvng.gen.render.sprites;
 
 import dev.punchcafe.gbvng.gen.CodeGenerator;
+import dev.punchcafe.gbvng.gen.graphics.PixelValue;
+import dev.punchcafe.gbvng.gen.graphics.Tile;
+import dev.punchcafe.gbvng.gen.graphics.TileConverters;
 import dev.punchcafe.gbvng.gen.config.FontConfig;
 import dev.punchcafe.gbvng.gen.config.TextTheme;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;

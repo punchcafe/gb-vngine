@@ -1,8 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.render.sprites.TallTile;
-import lombok.AccessLevel;
+import dev.punchcafe.gbvng.gen.graphics.TallTile;
 import lombok.AllArgsConstructor;
 
 import javax.imageio.ImageIO;

@@ -1,4 +1,4 @@
-package dev.punchcafe.gbvng.gen.render.sprites;
+package dev.punchcafe.gbvng.gen.graphics;
 
 public class SquareTile extends Tile {
 

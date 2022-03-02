@@ -14,7 +14,7 @@ import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.model.narrative.PlayMusic;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.render.sprites.PixelValue;
+import dev.punchcafe.gbvng.gen.graphics.PixelValue;
 import dev.punchcafe.vngine.pom.PomLoader;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Getter;

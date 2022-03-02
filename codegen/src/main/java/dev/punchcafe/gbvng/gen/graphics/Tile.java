@@ -1,4 +1,4 @@
-package dev.punchcafe.gbvng.gen.render.sprites;
+package dev.punchcafe.gbvng.gen.graphics;
 
 import lombok.NonNull;
 
@@ -6,7 +6,15 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-// TODO: extract into own library for tile image conversion utility
+/**
+ * A tile is an 2 bits per pixel format for representing an 8x8 pixel tile on the Gameboy screen.
+ * These tiles make up the primitive building blocks for all gameboy graphics, from sprites to
+ * window and background display.
+ *
+ * This class is the model representation of this format, while also providing convenience functions
+ * for manipulating and building graphics images, as well as being able to render it's raw data
+ * for gbdk C array use.
+ */
 public abstract class Tile {
 
     private static char ZERO_HEX = 0x0;
@@ -14,10 +22,23 @@ public abstract class Tile {
 
     abstract PixelValue[][] getInternalArray();
 
+    /**
+     * Set a pixel in the tile to one of the three permitted values in {@link PixelValue}.
+     *
+     * @param value the pixel value to set
+     * @param x the x position of the pixel to set, between 0-7
+     * @param y the y position of the pixel to set, between 0-7
+     */
     public void setPixel(@NonNull final PixelValue value, int x, int y){
         this.getInternalArray()[y][x] = value;
     }
 
+    /**
+     * coverts the current tile to a 2 bits per pixel representation in hexadecimal, with
+     * each value being of the form 0x00, separated by commas.
+     *
+     * @return the comma separated hexadecimal string
+     */
     public String toGBDKCode(){
         return Arrays.stream(this.getInternalArray())
                 .map(this::getRowCharPair)

@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.sprites;
 
+import dev.punchcafe.gbvng.gen.graphics.SquareTile;
 import lombok.AllArgsConstructor;
 
 import java.awt.image.BufferedImage;

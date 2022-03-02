@@ -1,6 +1,4 @@
-package dev.punchcafe.gbvng.gen.render.sprites;
-
-import lombok.EqualsAndHashCode;
+package dev.punchcafe.gbvng.gen.graphics;
 
 import java.util.Arrays;
 

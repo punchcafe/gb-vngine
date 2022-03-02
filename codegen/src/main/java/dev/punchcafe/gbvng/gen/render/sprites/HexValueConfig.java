@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.sprites;
 
+import dev.punchcafe.gbvng.gen.graphics.PixelValue;
 import lombok.Builder;
 
 import java.util.Map;

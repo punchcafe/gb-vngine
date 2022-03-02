@@ -1,7 +1,8 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
 
-import dev.punchcafe.gbvng.gen.render.sprites.TallTile;
+import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
+import dev.punchcafe.gbvng.gen.graphics.TallTile;
 import lombok.Builder;
 import lombok.Getter;
 

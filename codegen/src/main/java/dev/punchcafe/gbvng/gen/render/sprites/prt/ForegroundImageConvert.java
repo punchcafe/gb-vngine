@@ -1,20 +1,8 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
 import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
-import dev.punchcafe.gbvng.gen.render.sprites.ConverterFunctions;
-import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.render.sprites.TallTile;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

@@ -2,7 +2,7 @@ package dev.punchcafe.gbvng.gen.mbanks.assets;
 
 import dev.punchcafe.gbvng.gen.mbanks.BankableAssetBase;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.AssetVisitor;
-import dev.punchcafe.gbvng.gen.render.sprites.prt.PatternBlock;
+import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
 import lombok.Builder;
 import lombok.Getter;
 
