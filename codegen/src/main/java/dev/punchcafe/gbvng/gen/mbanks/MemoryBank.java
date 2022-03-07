@@ -22,6 +22,10 @@ public class MemoryBank {
         assets.add(asset);
     }
 
+    public boolean isEmpty(){
+        return assets.isEmpty();
+    }
+
     public long remainingBytes(){
         return assets.stream()
                 .map(BankableAsset::getSize)

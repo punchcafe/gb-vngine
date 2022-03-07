@@ -19,9 +19,9 @@ public class BankRenderer {
     public void generateBankFile(final MemoryBank bank) {
         // TODO: allow throwing in method signature, but use punchcafe wrapper lib
         try {
-            final var outputFile = new File(bankOutputDirectory.getAbsolutePath() + "/bank_1.c");
+            final var outputFile = new File(bankOutputDirectory.getAbsolutePath() + String.format("/bank_%d.c", bank.getAssignedBankNumber()));
             final var writer = new BufferedWriter(new FileWriter(outputFile));
-            final var renderedAssets = this.renderString(bank, bank.getAssignedBankNumber());
+            final var renderedAssets = this.renderString(bank);
             writer.write(renderedAssets);
             writer.close();
         } catch (IOException ex){
@@ -29,10 +29,14 @@ public class BankRenderer {
         }
     }
 
-    private String renderString(final MemoryBank bank, final int bankNumber){
+    private String renderString(final MemoryBank bank){
         return bank.getAssets().stream()
                 .map(asset -> asset.acceptVisitor(renderer))
-                .collect(Collectors.joining("\n", String.format("#pragma bank %d\n", bankNumber), ""));
+                .collect(Collectors.joining("\n", pragmaStringForBankNumber(bank.getAssignedBankNumber()), ""));
+    }
+
+    private String pragmaStringForBankNumber(final int bankNumber){
+        return bankNumber == 0 ? "" : String.format("#pragma bank %d\n", bankNumber);
     }
 
 }

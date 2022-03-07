@@ -168,7 +168,10 @@ public class CodeGenerator {
                 .configuration(memoryBankConfig)
                 .build();
 
-        memoryBankFactory.buildBanks()
+        final var banks = memoryBankFactory.buildBanks();
+
+        banks.stream()
+                .filter(bank -> !bank.isEmpty())
                 .forEach(memoryBankWriter::generateBankFile);
     }
 
