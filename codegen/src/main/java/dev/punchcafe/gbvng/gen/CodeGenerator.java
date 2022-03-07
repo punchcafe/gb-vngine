@@ -3,7 +3,9 @@
  */
 package dev.punchcafe.gbvng.gen;
 
-import dev.punchcafe.gbvng.gen.mbanks.MemoryBank;
+import dev.punchcafe.gbvng.gen.mbanks.MemoryBanks;
+import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.mbanks.factory.MemoryBankFactory;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.BankRenderer;
 import dev.punchcafe.gbvng.gen.mbanks.utility.ForegroundAssetSetExtractor;
 import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
@@ -117,13 +119,11 @@ public class CodeGenerator {
         final HexValueConfig hexConfig = extractHexConfig(narrativeConfig.getImageConfig());
 
         final var foregroundAssetSets = new ForegroundAssetSetExtractor(assetsDirectory, hexConfig, narrativeConfig)
-                .convertAllForegroundAssetSets()
-                .stream()
-                //TODO: fix this ugly monstrosity
-                .map(assetSet -> {
-                    assetSet.assignBank(3);
-                    return assetSet;
-                }).collect(toList());
+                .convertAllForegroundAssetSets();
+
+        final var bankWriteLocation = Path.of(scriptDestination).getParent().toFile();
+        renderAllMemoryBanks(bankWriteLocation, foregroundAssetSets, narrativeConfig);
+
 
         final ProjectObjectModel<Narrative> gameConfig = PomLoader.<Narrative>forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
 
@@ -154,18 +154,22 @@ public class CodeGenerator {
 
         out.write(renderedScript);
         out.close();
+    }
 
-        final var bankWriteLocation = Path.of(scriptDestination).getParent();
-        final var memoryBankWriter = new BankRenderer(bankWriteLocation.toFile());
+    private void renderAllMemoryBanks(final File bankWriteLocation,
+                                      final List<ForegroundAssetSet> foregroundAssetSets,
+                                      final NarrativeConfig narrativeConfig){
+        final var memoryBankWriter = new BankRenderer(bankWriteLocation);
 
-        //TODO: replace with clever optimisation
-        final var sampleBank = MemoryBank.builder().build();
-        for(final var asset : foregroundAssetSets){
-            sampleBank.addAsset(asset);
-        }
-        System.out.println(foregroundAssetSets.size());
-        System.out.println(sampleBank.getAssets().size());
-        memoryBankWriter.generateBankFile(sampleBank, 3);
+        final var memoryBankConfig = MemoryBanks.getConfigurationForMemoryBankString(narrativeConfig.getCartridge());
+
+        final var memoryBankFactory = MemoryBankFactory.builder()
+                .allBankableAssets(foregroundAssetSets)
+                .configuration(memoryBankConfig)
+                .build();
+
+        memoryBankFactory.buildBanks()
+                .forEach(memoryBankWriter::generateBankFile);
     }
 
     private HexValueConfig extractHexConfig(ImageConfig imageConfig) {

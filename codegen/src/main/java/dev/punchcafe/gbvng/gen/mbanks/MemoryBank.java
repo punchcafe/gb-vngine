@@ -15,6 +15,7 @@ public class MemoryBank {
     }
 
     @Getter private final List<BankableAsset> assets = new ArrayList<>();
+    @Getter  private final int assignedBankNumber;
 
     public void addAsset(final BankableAsset asset){
 

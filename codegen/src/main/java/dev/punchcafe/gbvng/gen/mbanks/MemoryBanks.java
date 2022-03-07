@@ -2,6 +2,7 @@ package dev.punchcafe.gbvng.gen.mbanks;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public interface MemoryBanks {
 
@@ -48,4 +49,13 @@ public interface MemoryBanks {
             MBC5_ID, MBC5,
             HuC1_ID, HuC1
     );
+
+    static MemoryBankConfiguration getConfigurationForMemoryBankString(final String string){
+        return Optional.ofNullable(string)
+                .or(() -> Optional.of(NONE_ID))
+                .map(String::trim)
+                .map(String::toUpperCase)
+                .map(BANK_CONFIGURATION::get)
+                .orElseThrow();
+    }
 }

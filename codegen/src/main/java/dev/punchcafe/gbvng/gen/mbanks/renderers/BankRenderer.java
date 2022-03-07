@@ -16,12 +16,17 @@ public class BankRenderer {
     private final File bankOutputDirectory;
 
 
-    public void generateBankFile(final MemoryBank bank, final int bankNumber) throws IOException {
-        final var outputFile = new File(bankOutputDirectory.getAbsolutePath() + "/bank_1.c");
-        final var writer = new BufferedWriter(new FileWriter(outputFile));
-        final var renderedAssets = this.renderString(bank, bankNumber);
-        writer.write(renderedAssets);
-        writer.close();
+    public void generateBankFile(final MemoryBank bank) {
+        // TODO: allow throwing in method signature, but use punchcafe wrapper lib
+        try {
+            final var outputFile = new File(bankOutputDirectory.getAbsolutePath() + "/bank_1.c");
+            final var writer = new BufferedWriter(new FileWriter(outputFile));
+            final var renderedAssets = this.renderString(bank, bank.getAssignedBankNumber());
+            writer.write(renderedAssets);
+            writer.close();
+        } catch (IOException ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     private String renderString(final MemoryBank bank, final int bankNumber){
