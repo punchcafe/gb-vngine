@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.csan;
 
-import dev.punchcafe.gbvng.gen.model.narrative.SetForeground;
+import dev.punchcafe.gbvng.gen.narrative.SetForeground;
 import dev.punchcafe.gbvng.gen.graphics.CompositeSprite;
 
 import java.io.File;

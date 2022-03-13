@@ -1,9 +1,9 @@
 package dev.punchcafe.gbvng.gen;
 
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
-import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusic;
+import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
-import dev.punchcafe.gbvng.gen.mbanks.renderers.ExternalForegroundAssetSetRenderer;
+import dev.punchcafe.gbvng.gen.render.external.ExternalForegroundAssetSetRenderer;
 import dev.punchcafe.gbvng.gen.render.*;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;
 import dev.punchcafe.gbvng.gen.render.music.DelayWithMusicRenderer;
@@ -12,14 +12,14 @@ import dev.punchcafe.gbvng.gen.render.music.PlayMusicRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.NodeMutationsRenderers;
 import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
-import dev.punchcafe.gbvng.gen.render.narrative.ExternalMusicAssetRenderer;
+import dev.punchcafe.gbvng.gen.render.external.ExternalMusicAssetRenderer;
 import dev.punchcafe.gbvng.gen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.gbvng.gen.render.node.NodeRenderer;
 import dev.punchcafe.gbvng.gen.render.predicate.PredicatesRenderer;
 import dev.punchcafe.gbvng.gen.render.transition.BranchRenderer;
 import dev.punchcafe.gbvng.gen.render.transition.PromptsRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.*;
-import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
+import dev.punchcafe.gbvng.gen.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.render.transition.TransitionDeclarer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
@@ -38,7 +38,7 @@ public class RendererFactory {
     private final NarrativeConfig narrativeConfig;
     private final HexValueConfig hexValueConfig;
     private final List<ForegroundAssetSet> allForegroundAssetSets;
-    private final List<BackgroundMusic> allBackgroundMusic;
+    private final List<BackgroundMusicAsset> allBackgroundMusic;
     private final boolean hasMusic;
 
     @RendererSupplier

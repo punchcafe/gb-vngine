@@ -1,4 +1,4 @@
-package dev.punchcafe.gbvng.gen.model.narrative;
+package dev.punchcafe.gbvng.gen.narrative;
 
 public interface NarrativeElementVisitor<T> {
     T visitClearText(final ClearText clearText);

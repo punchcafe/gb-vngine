@@ -1,5 +1,4 @@
-package dev.punchcafe.gbvng.gen.model.narrative;
-
+package dev.punchcafe.gbvng.gen.narrative;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,13 +6,13 @@ import org.simpleframework.xml.Attribute;
 
 @Data
 @NoArgsConstructor
-public class PlayMusic implements NarrativeElement {
+public class SetBackground implements NarrativeElement {
 
     @Attribute(name = "src")
-    private String source;
+    private String src;
 
     @Override
     public <T> T acceptVisitor(NarrativeElementVisitor<T> visitor) {
-        return visitor.visitPlayMusic(this);
+        return visitor.visitSetBackground(this);
     }
 }

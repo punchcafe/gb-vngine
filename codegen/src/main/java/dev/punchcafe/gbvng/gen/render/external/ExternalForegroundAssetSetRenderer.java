@@ -1,4 +1,4 @@
-package dev.punchcafe.gbvng.gen.mbanks.renderers;
+package dev.punchcafe.gbvng.gen.render.external;
 
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;

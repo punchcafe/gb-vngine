@@ -5,7 +5,7 @@ import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.csan.NarrativeName;
 import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
 import dev.punchcafe.gbvng.gen.csan.NodeTransitionName;
-import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
+import dev.punchcafe.gbvng.gen.narrative.Narrative;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;

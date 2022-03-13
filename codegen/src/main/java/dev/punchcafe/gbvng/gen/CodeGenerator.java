@@ -5,17 +5,17 @@ package dev.punchcafe.gbvng.gen;
 
 import dev.punchcafe.gbvng.gen.mbanks.BankableAsset;
 import dev.punchcafe.gbvng.gen.mbanks.MemoryBanks;
-import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusic;
-import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.factory.MemoryBankFactory;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.BankRenderer;
 import dev.punchcafe.gbvng.gen.mbanks.utility.ForegroundAssetSetExtractor;
-import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
-import dev.punchcafe.gbvng.gen.model.narrative.NarrativeReader;
+import dev.punchcafe.gbvng.gen.mbanks.utility.MusicAssetExtractor;
+import dev.punchcafe.gbvng.gen.narrative.Narrative;
+import dev.punchcafe.gbvng.gen.narrative.NarrativeReader;
 import dev.punchcafe.gbvng.gen.config.ColorConfig;
 import dev.punchcafe.gbvng.gen.config.ImageConfig;
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
-import dev.punchcafe.gbvng.gen.model.narrative.PlayMusic;
+import dev.punchcafe.gbvng.gen.narrative.PlayMusic;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.graphics.PixelValue;
@@ -29,7 +29,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
@@ -137,7 +136,10 @@ public class CodeGenerator {
                 .anyMatch(elem -> elem.getClass().equals(PlayMusic.class));
 
 
-        final var allMusicAssets = allShippedMusicAssets(vngProjectRoot);
+        final var allMusicAssets = MusicAssetExtractor.builder()
+                .vngProjectRoot(vngProjectRoot)
+                .build()
+                .allShippedMusicAssets();
 
         final var allAssets = Stream.of(allMusicAssets, foregroundAssetSets)
                 .flatMap(List::stream)
@@ -168,28 +170,6 @@ public class CodeGenerator {
 
         out.write(renderedScript);
         out.close();
-    }
-
-    private List<BackgroundMusic> allShippedMusicAssets(final File vngProjectRoot){
-        // TODO: extract to music extractor
-        // This requires this stage to be executed after music assets have been built.
-        // Assumes only files in build/music will be music files.
-        final var buildShipDirectory = Path.of(vngProjectRoot.toString() + "/build/music").toFile();
-        return recursiveFileFinder(buildShipDirectory)
-                .map(BackgroundMusic::new)
-                .collect(Collectors.toUnmodifiableList());
-    }
-
-    private Stream<File> recursiveFileFinder(final File file){
-        if(file.isDirectory()){
-            final var stream = Stream.<Stream<File>>builder();
-            for(final var childFile : file.listFiles()){
-                stream.add(recursiveFileFinder(childFile));
-            }
-            return stream.build()
-                    .flatMap(Function.identity());
-        }
-        return Stream.of(file);
     }
 
     private void renderAllMemoryBanks(final File bankWriteLocation,

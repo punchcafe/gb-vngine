@@ -1,4 +1,4 @@
-package dev.punchcafe.gbvng.gen.model.narrative;
+package dev.punchcafe.gbvng.gen.narrative;
 
 import dev.punchcafe.vngine.pom.NarrativeAdaptor;
 import org.simpleframework.xml.core.Persister;

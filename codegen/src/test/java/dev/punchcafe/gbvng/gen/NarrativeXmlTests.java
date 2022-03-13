@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen;
 
-import dev.punchcafe.gbvng.gen.model.narrative.Narrative;
+import dev.punchcafe.gbvng.gen.narrative.Narrative;
 import org.junit.jupiter.api.Test;
 import org.simpleframework.xml.core.Persister;
 

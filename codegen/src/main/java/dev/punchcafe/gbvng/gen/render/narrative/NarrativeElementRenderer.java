@@ -1,9 +1,9 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
 import dev.punchcafe.gbvng.gen.csan.MusicAssetName;
-import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
-import dev.punchcafe.gbvng.gen.model.narrative.*;
 import dev.punchcafe.gbvng.gen.csan.NarrativeName;
+import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
+import dev.punchcafe.gbvng.gen.narrative.*;
 import lombok.Builder;
 
 import java.util.Optional;

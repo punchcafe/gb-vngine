@@ -1,11 +1,9 @@
 package dev.punchcafe.gbvng.gen.mbanks.renderers;
 
-import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusic;
+import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
-
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
 
@@ -35,7 +33,7 @@ public class AssetRenderer implements AssetVisitor<String> {
     }
 
     @Override
-    public String visitBackgroundMusicAsset(BackgroundMusic asset) {
+    public String visitBackgroundMusicAsset(BackgroundMusicAsset asset) {
         return String.join("\n", asset.getBody());
     }
 

@@ -1,7 +1,7 @@
-package dev.punchcafe.gbvng.gen.render.narrative;
+package dev.punchcafe.gbvng.gen.render.external;
 
 import dev.punchcafe.gbvng.gen.csan.MusicAssetName;
-import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusic;
+import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import lombok.Builder;
 
@@ -14,7 +14,7 @@ import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.EXTERNAL_MUS
 @Builder
 public class ExternalMusicAssetRenderer implements ComponentRenderer {
 
-    private final List<BackgroundMusic> allMusicAssets;
+    private final List<BackgroundMusicAsset> allMusicAssets;
 
     @Override
     public String render() {
@@ -23,7 +23,7 @@ public class ExternalMusicAssetRenderer implements ComponentRenderer {
                 .collect(Collectors.joining("\n"));
     }
 
-    private String renderAsset(final BackgroundMusic music){
+    private String renderAsset(final BackgroundMusicAsset music){
         final var externalDataName = MusicAssetName.getMusicFileDataName(music.getId());
         final var externalDataDeclaration = String.format("extern const unsigned char * %s [];", externalDataName);
         final var musicAsset = String.format("const struct ExternalMusicAsset %s = {%d, %s};",

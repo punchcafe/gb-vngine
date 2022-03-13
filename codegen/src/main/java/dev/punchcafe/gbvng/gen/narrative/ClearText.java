@@ -1,4 +1,4 @@
-package dev.punchcafe.gbvng.gen.model.narrative;
+package dev.punchcafe.gbvng.gen.narrative;
 
 public class ClearText implements NarrativeElement {
 

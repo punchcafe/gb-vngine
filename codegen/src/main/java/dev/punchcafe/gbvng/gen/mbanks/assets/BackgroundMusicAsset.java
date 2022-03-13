@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.joining;
  * Read in from a given Music file, strip the first few lines, including the pragma
  * bank, calculate the size, then store body as pure string.
  */
-public class BackgroundMusic extends BankableAssetBase {
+public class BackgroundMusicAsset extends BankableAssetBase {
 
     private Pattern DATA_AT_FUNCTION = Pattern.compile("(const void __at\\((.+)\\) __bank_.+_Data;)");
 
@@ -26,7 +26,7 @@ public class BackgroundMusic extends BankableAssetBase {
     private boolean hasSwappedBankNumber = false;
     @Getter private List<String> body;
 
-    public BackgroundMusic(final File songFile){
+    public BackgroundMusicAsset(final File songFile){
         this.id = songFile.getName().substring(0, songFile.getName().length() - 2);
         List<String> allLines;
         try {
