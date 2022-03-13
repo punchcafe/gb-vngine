@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
+import dev.punchcafe.gbvng.gen.csan.MusicAssetName;
 import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
 import dev.punchcafe.gbvng.gen.model.narrative.*;
 import dev.punchcafe.gbvng.gen.csan.NarrativeName;
@@ -98,14 +99,11 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
 
     @Override
     public String visitPlayMusic(final PlayMusic playMusic) {
-        // Convention from GBT
-        final var contentsDeclaration = String.format("extern const unsigned char * %s_Data[];", playMusic.getSource());
-        final var body = String.format("struct PlayMusicElement %s = {%s_Data};",
-                NarrativeName.elementBodyName(narrativeId, index),
-                playMusic.getSource());
+        final var assetName = MusicAssetName.getExternalMusicAssetName(playMusic.getSource());
+        return String.format("struct NarrativeElement %s = {&%s, %s};", NarrativeName.elementName(narrativeId, index),
+                assetName,
+                "PLAY_MUSIC");
 
-        final String narrativeElement = narrativeElementForType("PLAY_MUSIC");
-        return contentsDeclaration + "\n" + body + "\n" + narrativeElement;
     }
 
     private String narrativeElementForType(final String cEnumType){

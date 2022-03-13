@@ -1,6 +1,7 @@
 package dev.punchcafe.gbvng.gen;
 
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
+import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusic;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.ExternalForegroundAssetSetRenderer;
 import dev.punchcafe.gbvng.gen.render.*;
@@ -11,6 +12,7 @@ import dev.punchcafe.gbvng.gen.render.music.PlayMusicRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.NodeMutationsRenderers;
 import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
+import dev.punchcafe.gbvng.gen.render.narrative.ExternalMusicAssetRenderer;
 import dev.punchcafe.gbvng.gen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.gbvng.gen.render.node.NodeRenderer;
 import dev.punchcafe.gbvng.gen.render.predicate.PredicatesRenderer;
@@ -36,6 +38,7 @@ public class RendererFactory {
     private final NarrativeConfig narrativeConfig;
     private final HexValueConfig hexValueConfig;
     private final List<ForegroundAssetSet> allForegroundAssetSets;
+    private final List<BackgroundMusic> allBackgroundMusic;
     private final boolean hasMusic;
 
     @RendererSupplier
@@ -82,6 +85,13 @@ public class RendererFactory {
     public ComponentRenderer externalForegroundAssetSetsRenderer() throws IOException {
         return ExternalForegroundAssetSetRenderer.builder()
                 .allForegroundAssetSets(this.allForegroundAssetSets)
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer externalMusicAssetsRenderer(){
+        return ExternalMusicAssetRenderer.builder()
+                .allMusicAssets(this.allBackgroundMusic)
                 .build();
     }
 
@@ -160,6 +170,7 @@ public class RendererFactory {
                 .build();
     }
 
+
     @RendererSupplier
     public ComponentRenderer getNextNodeFunctionRenderer() throws IOException {
         return FixtureRender.fromFile("/functions/get_next_node.c")
@@ -191,6 +202,14 @@ public class RendererFactory {
     public ComponentRenderer gameOverNodeIdConstant() throws IOException {
         return FixtureRender.fromFile("/game_over_node_id_constant.c")
                 .componentName(ComponentRendererNames.GAME_OVER_NODE_ID_CONSTANT_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer externalMusicAssetStruct() throws IOException {
+        return FixtureRender.fromFile("/assets/external_music_asset.c")
+                .componentName(EXTERNAL_MUSIC_ASSET_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -235,6 +254,7 @@ public class RendererFactory {
     public ComponentRenderer assetRenderer() throws IOException {
         return AssetRenderer.rendererFor(assetDirectory);
     }
+
 
     @RendererSupplier
     public ComponentRenderer buttonTilesetRenderer() throws IOException {

@@ -5,7 +5,7 @@ import lombok.Setter;
 import java.util.Optional;
 
 public abstract class BankableAssetBase implements BankableAsset {
-    private Integer assignedBank;
+    protected Integer assignedBank;
 
     @Override
     public Optional<Integer> getBank(){

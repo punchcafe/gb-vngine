@@ -1,12 +1,70 @@
 package dev.punchcafe.gbvng.gen.mbanks.assets;
 
+import dev.punchcafe.gbvng.gen.mbanks.BankableAssetBase;
+import dev.punchcafe.gbvng.gen.mbanks.renderers.AssetVisitor;
+import lombok.Getter;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 /**
- * TODO:
  *
  * Read in from a given Music file, strip the first few lines, including the pragma
  * bank, calculate the size, then store body as pure string.
  */
-public class BackgroundMusic {
+public class BackgroundMusic extends BankableAssetBase {
+
+    private Pattern DATA_AT_FUNCTION = Pattern.compile("(const void __at\\((.+)\\) __bank_.+_Data;)");
+
+    private String id;
+    private boolean hasSwappedBankNumber = false;
+    @Getter private List<String> body;
+
+    public BackgroundMusic(final File songFile){
+        this.id = songFile.getName().substring(0, songFile.getName().length() - 2);
+        List<String> allLines;
+        try {
+            allLines = Files.lines(songFile.toPath()).collect(Collectors.toList());
+        } catch (IOException ex){
+            throw new RuntimeException();
+        }
+        final var bodyList = allLines.subList(5, allLines.size());
+        final var pattern = Pattern.compile(String.format("const unsigned char %s0\\[] = \\{", this.id));
+        if(!pattern.matcher(bodyList.get(0)).matches()){
+            System.out.println(bodyList.get(0));
+            throw new RuntimeException(String.format("unexpected format for sound format file: %s", bodyList.get(0)));
+        }
+        this.body = bodyList;
+    }
+
+    private String mapAtFunction(final String line){
+        final var matcher = DATA_AT_FUNCTION.matcher(line);
+        if(matcher.matches()) {
+            return matcher.replaceFirst(String.format("$1%d$3", this.assignedBank));
+        }
+        return line;
+    }
+
+    @Override
+    public long getSize() {
+        // TODO: actually calculate based on file
+        return 1_000;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
+    }
+
+    @Override
+    public <T> T acceptVisitor(AssetVisitor<T> visitor) {
+        return visitor.visitBackgroundMusicAsset(this);
+    }
+
 
     /**
      * Something like:

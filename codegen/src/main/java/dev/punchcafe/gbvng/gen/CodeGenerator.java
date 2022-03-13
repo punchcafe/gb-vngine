@@ -3,7 +3,9 @@
  */
 package dev.punchcafe.gbvng.gen;
 
+import dev.punchcafe.gbvng.gen.mbanks.BankableAsset;
 import dev.punchcafe.gbvng.gen.mbanks.MemoryBanks;
+import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusic;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.mbanks.factory.MemoryBankFactory;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.BankRenderer;
@@ -27,8 +29,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -121,9 +127,6 @@ public class CodeGenerator {
         final var foregroundAssetSets = new ForegroundAssetSetExtractor(assetsDirectory, hexConfig, narrativeConfig)
                 .convertAllForegroundAssetSets();
 
-        final var bankWriteLocation = Path.of(scriptDestination).getParent().toFile();
-        renderAllMemoryBanks(bankWriteLocation, foregroundAssetSets, narrativeConfig);
-
 
         final ProjectObjectModel<Narrative> gameConfig = PomLoader.<Narrative>forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
 
@@ -133,11 +136,22 @@ public class CodeGenerator {
                 .flatMap(List::stream)
                 .anyMatch(elem -> elem.getClass().equals(PlayMusic.class));
 
+
+        final var allMusicAssets = allShippedMusicAssets(vngProjectRoot);
+
+        final var allAssets = Stream.of(allMusicAssets, foregroundAssetSets)
+                .flatMap(List::stream)
+                .collect(toList());
+
+        final var bankWriteLocation = Path.of(scriptDestination).getParent().toFile();
+        renderAllMemoryBanks(bankWriteLocation, allAssets, narrativeConfig);
+
         final var rendererFactory = new RendererFactory(gameConfig,
                 assetsDirectory,
                 narrativeConfig,
                 hexConfig,
                 foregroundAssetSets,
+                allMusicAssets,
                 hasMusic);
 
         final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
@@ -156,15 +170,37 @@ public class CodeGenerator {
         out.close();
     }
 
+    private List<BackgroundMusic> allShippedMusicAssets(final File vngProjectRoot){
+        // TODO: extract to music extractor
+        // This requires this stage to be executed after music assets have been built.
+        // Assumes only files in build/music will be music files.
+        final var buildShipDirectory = Path.of(vngProjectRoot.toString() + "/build/music").toFile();
+        return recursiveFileFinder(buildShipDirectory)
+                .map(BackgroundMusic::new)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private Stream<File> recursiveFileFinder(final File file){
+        if(file.isDirectory()){
+            final var stream = Stream.<Stream<File>>builder();
+            for(final var childFile : file.listFiles()){
+                stream.add(recursiveFileFinder(childFile));
+            }
+            return stream.build()
+                    .flatMap(Function.identity());
+        }
+        return Stream.of(file);
+    }
+
     private void renderAllMemoryBanks(final File bankWriteLocation,
-                                      final List<ForegroundAssetSet> foregroundAssetSets,
+                                      final List<? extends BankableAsset> bankableAssets,
                                       final NarrativeConfig narrativeConfig){
         final var memoryBankWriter = new BankRenderer(bankWriteLocation);
 
         final var memoryBankConfig = MemoryBanks.getConfigurationForMemoryBankString(narrativeConfig.getCartridge());
 
         final var memoryBankFactory = MemoryBankFactory.builder()
-                .allBankableAssets(foregroundAssetSets)
+                .allBankableAssets(bankableAssets)
                 .configuration(memoryBankConfig)
                 .build();
 
