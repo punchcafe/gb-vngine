@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
+
 /**
  *
  * Read in from a given Music file, strip the first few lines, including the pragma
@@ -51,8 +53,23 @@ public class BackgroundMusic extends BankableAssetBase {
 
     @Override
     public long getSize() {
-        // TODO: actually calculate based on file
-        return 1_000;
+        final var stringBuilder = new StringBuilder();
+        int scope = 0;
+        for(final char character :  this.body.stream().collect(joining()).toCharArray()){
+            if(character == '{'){
+                scope++;
+            } else if(character == '}') {
+                scope--;
+            } else {
+                if(scope == 1){
+                    stringBuilder.append(character);
+                }
+            }
+        }
+        final int numberOfBytes = stringBuilder.toString().split(",").length;
+
+        // TODO: remove and replace with actual accurate representation
+        return numberOfBytes * 3;
     }
 
     @Override

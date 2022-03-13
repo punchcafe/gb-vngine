@@ -16,7 +16,9 @@ public class SimpleAllocationStrategy implements BankAllocationStrategy {
                 asset.assignBank(currentBank.getAssignedBankNumber());
             } else {
                 if(bankIterator.hasNext()){
-                    bankIterator.next();
+                    currentBank = bankIterator.next();
+                    currentBank.addAsset(asset);
+                    asset.assignBank(currentBank.getAssignedBankNumber());
                 } else {
                     throw new RuntimeException("Ran out of bankable memory");
                 }
