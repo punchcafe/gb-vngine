@@ -1,12 +1,14 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
 import dev.punchcafe.gbvng.gen.csan.NarrativeName;
+import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
@@ -16,6 +18,7 @@ import static java.util.stream.Collectors.joining;
 public class NarrativeRenderer implements ComponentRenderer {
 
     private final ProjectObjectModel<Narrative> gameConfig;
+    private final Map<String, TextAsset> textAssetCache;
 
     @Override
     public String render() {
@@ -32,7 +35,7 @@ public class NarrativeRenderer implements ComponentRenderer {
         final var elements = Stream.<String>builder();
         final var elementNames = Stream.<String>builder();
         for(int i = 0; i < numberOfElements; i++){
-            final var elementRenderer = new NarrativeElementRenderer(i, narrative.getNarrativeId());
+            final var elementRenderer = new NarrativeElementRenderer(i, narrative.getNarrativeId(), this.textAssetCache);
             elements.add(narrative.getElements().get(i).acceptVisitor(elementRenderer));
             elementNames.add(NarrativeName.elementName(narrative.getNarrativeId(), i));
         }
@@ -63,7 +66,8 @@ public class NarrativeRenderer implements ComponentRenderer {
                 FOREGROUND_RENDERER_RENDERER_NAME,
                 IMAGE_ASSET_RENDERER_NAME,
                 TEXT_RENDERER_RENDERER_NAME,
-                DELAY_WITH_MUSIC_RENDERER_NAME);
+                DELAY_WITH_MUSIC_RENDERER_NAME,
+                EXTERNAL_TEXT_RENDERER_NAME);
     }
 
     @Override

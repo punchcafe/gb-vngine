@@ -3,8 +3,10 @@ package dev.punchcafe.gbvng.gen;
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.render.external.ExternalForegroundAssetSetRenderer;
 import dev.punchcafe.gbvng.gen.render.*;
+import dev.punchcafe.gbvng.gen.render.external.ExternalTextAssetRender;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;
 import dev.punchcafe.gbvng.gen.render.music.DelayWithMusicRenderer;
 import dev.punchcafe.gbvng.gen.render.music.GBTHeaderRenderer;
@@ -27,11 +29,13 @@ import lombok.Builder;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
 
 @Builder
 public class RendererFactory {
+    // TODO: split renderer factory into relevant isolated sub factories
 
     private final ProjectObjectModel<Narrative> gameConfig;
     private final File assetDirectory;
@@ -39,6 +43,8 @@ public class RendererFactory {
     private final HexValueConfig hexValueConfig;
     private final List<ForegroundAssetSet> allForegroundAssetSets;
     private final List<BackgroundMusicAsset> allBackgroundMusic;
+    private final List<TextAsset> allTextAssets;
+    private final Map<String, TextAsset> textAssetCache;
     private final boolean hasMusic;
 
     @RendererSupplier
@@ -94,6 +100,14 @@ public class RendererFactory {
                 .allMusicAssets(this.allBackgroundMusic)
                 .build();
     }
+
+    @RendererSupplier
+    public ComponentRenderer externalTextAssetsRenderer(){
+        return ExternalTextAssetRender.builder()
+                .textAssets(this.allTextAssets)
+                .build();
+    }
+
 
     @RendererSupplier
     public ComponentRenderer nodeDefinitionRenderer() throws IOException {
@@ -160,6 +174,7 @@ public class RendererFactory {
     public ComponentRenderer narrativeRenderer() {
         return NarrativeRenderer.builder()
                 .gameConfig(this.gameConfig)
+                .textAssetCache(this.textAssetCache)
                 .build();
     }
 
@@ -327,7 +342,7 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer textElemRenderer() throws IOException {
-        return FixtureRender.fromFile("/narrative/structs/text_elem.c")
+        return FixtureRender.fromFile("/narrative/structs/external_text_elem.c")
                 .componentName(ComponentRendererNames.TEXT_ELEM_STRUCT_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();

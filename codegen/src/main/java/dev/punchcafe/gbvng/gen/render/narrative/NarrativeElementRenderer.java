@@ -3,9 +3,11 @@ package dev.punchcafe.gbvng.gen.render.narrative;
 import dev.punchcafe.gbvng.gen.csan.MusicAssetName;
 import dev.punchcafe.gbvng.gen.csan.NarrativeName;
 import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
+import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.narrative.*;
 import lombok.Builder;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Builder
@@ -13,6 +15,7 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
 
     private final int index;
     private final String narrativeId;
+    private final Map<String, TextAsset> textAssetCache;
 
     @Override
     public String visitClearText(final ClearText clearText) {
@@ -43,7 +46,7 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     public static String TILE_DATA_SUFFIX = "_tile_data";
     public static String TILE_DATA_SIZE_DEFINITION_SUFFIX = "_TILE_DATA_SIZE";
 
-    private String renderSetBackgroundBody(final SetBackground setBackground){
+    private String renderSetBackgroundBody(final SetBackground setBackground) {
         final var elementBodyName = NarrativeName.elementBodyName(narrativeId, index);
         final var backgroundDataName = setBackground.getSrc().concat(TILE_DATA_SUFFIX);
         final var backgroundDataSizeName = setBackground.getSrc().toUpperCase().concat(TILE_DATA_SIZE_DEFINITION_SUFFIX);
@@ -55,8 +58,8 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
                 backgroundTileAssignmentName);
     }
 
-    private String renderSetForegroundBody(final SetForeground setForeground){
-        switch (setForeground.getAlignment().toLowerCase()){
+    private String renderSetForegroundBody(final SetForeground setForeground) {
+        switch (setForeground.getAlignment().toLowerCase()) {
             case "left":
                 return String.format("struct ForegroundElement %s = {LEFT_PORTRAIT, &%s};",
                         NarrativeName.elementBodyName(narrativeId, index),
@@ -90,11 +93,9 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
 
     @Override
     public String visitText(final Text text) {
-        final var body = String.format("struct Text %s = {\"%s\"};",
-                NarrativeName.elementBodyName(narrativeId, index),
-                Optional.ofNullable(text.getText()).orElse(""));
-        final String narrativeElement = narrativeElementForType("TEXT");
-        return body + "\n" + narrativeElement;
+        final var externalAssetName = this.textAssetCache.get(text.getText()).getExternalAssetSourceName().toString();
+        return String.format("struct NarrativeElement %s = {&%s, TEXT};",
+        NarrativeName.elementName(narrativeId, index), externalAssetName);
     }
 
     @Override
@@ -106,7 +107,7 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
 
     }
 
-    private String narrativeElementForType(final String cEnumType){
+    private String narrativeElementForType(final String cEnumType) {
         return String.format("struct NarrativeElement %s = {&%s, %s};",
                 NarrativeName.elementName(narrativeId, index),
                 NarrativeName.elementBodyName(narrativeId, index),

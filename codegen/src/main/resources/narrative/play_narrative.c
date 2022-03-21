@@ -3,9 +3,9 @@
 
 #include <gb/gb.h>
 
-void handle_text(struct Text* text)
+void handle_text(struct ExternalText * text)
 {
-    render_whole_text(text->text);
+    render_whole_text(text->text, text->bank);
     await_a_button_press();
 }
 
@@ -27,7 +27,7 @@ void play_narrative_element(struct NarrativeElement *element)
     switch (element->type)
     {
     case TEXT:
-        handle_text((struct Text*)element->content);
+        handle_text((struct ExternalText*)element->content);
         break;
     case FOREGROUND:
         handle_foreground((struct ForegroundElement*)element->content);

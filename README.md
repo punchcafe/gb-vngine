@@ -22,6 +22,9 @@
 
 ## Tasks
 - Full documentation 
+- Clean up C functions
+- Investigate use of `SWITCH_ROM_MBC1(external_asset->bank_number);`. If it needs specifics, can do as Macro def
+- Choose bank number `unsigned int` or `unsigned short` based on bank config
 ## Refactors
 #### `SourceName`
 - Add `SourceName` type, and add to all classes currently using string.

@@ -4,6 +4,7 @@ import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
+import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 
 import static java.util.stream.Collectors.joining;
 
@@ -35,6 +36,11 @@ public class AssetRenderer implements AssetVisitor<String> {
     @Override
     public String visitBackgroundMusicAsset(BackgroundMusicAsset asset) {
         return String.join("\n", asset.getBody());
+    }
+
+    @Override
+    public String visitTextAsset(TextAsset asset) {
+        return String.format("const unsigned char %s [] = \"%s\";", asset.getSourceName().toString(), asset.getText());
     }
 
     private String renderEntireForegroundAsset(final ForegroundAsset asset, final String patternBlockName) {

@@ -15,9 +15,9 @@ void print_choices(char ** prompts, short number_of_prompts){
     clear_text_box();
     for(int i = 0; i < number_of_prompts; i++)
     {
-        text_box_print("\n");
+        text_box_print("\n", 1);
         special_char_renderers[i]();
-        text_box_print(prompts[i]);
+        text_box_print(prompts[i], 1);
     }
 }
 

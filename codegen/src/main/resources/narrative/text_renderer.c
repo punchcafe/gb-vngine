@@ -64,12 +64,15 @@ void new_line()
     cursor = (row + 1) * TEXT_WIDTH;
 }
 
-int text_box_print(char * str_char)
+int text_box_print(char * str_char, unsigned int bank_num)
 {
+
 // TODO: refactor and make less terrible
+    SWITCH_ROM_MBC1(bank_num);
     int offset = 0;
     while(*str_char != '\0' && cursor < CURSOR_MAX_EXCLUSIVE)
     {
+        SWITCH_ROM_MBC1(bank_num);
         if(*str_char == ' ')
         {
             if(str_char[1] == ' ')
@@ -143,15 +146,15 @@ void clear_text_box(){
     set_bkg_tiles(0, 12, 20, 6, black_tiles);
 }
 
-void render_whole_text(char * text)
+void render_whole_text(char * text, unsigned int bank_num)
 {
     clear_text_box();
-    int rendered_offset = text_box_print(text);
+    int rendered_offset = text_box_print(text, bank_num);
     while(rendered_offset > 0){
         await_a_button_press();
         clear_text_box();
         text += rendered_offset;
-        rendered_offset = text_box_print(text);
+        rendered_offset = text_box_print(text, bank_num);
     }
 }
 

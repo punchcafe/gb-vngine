@@ -6,10 +6,12 @@ package dev.punchcafe.gbvng.gen;
 import dev.punchcafe.gbvng.gen.mbanks.BankableAsset;
 import dev.punchcafe.gbvng.gen.mbanks.MemoryBanks;
 import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.mbanks.factory.MemoryBankFactory;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.BankRenderer;
 import dev.punchcafe.gbvng.gen.mbanks.utility.ForegroundAssetSetExtractor;
 import dev.punchcafe.gbvng.gen.mbanks.utility.MusicAssetExtractor;
+import dev.punchcafe.gbvng.gen.mbanks.utility.TextAssetExtractor;
 import dev.punchcafe.gbvng.gen.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.narrative.NarrativeReader;
 import dev.punchcafe.gbvng.gen.config.ColorConfig;
@@ -129,6 +131,10 @@ public class CodeGenerator {
 
         final ProjectObjectModel<Narrative> gameConfig = PomLoader.<Narrative>forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
 
+        final var allTextAssets = new TextAssetExtractor(gameConfig).extractAllTextAssets();
+        // TODO: use in rendering
+        final var textAssetsByBody = allTextAssets.stream().collect(toMap(TextAsset::getText, Function.identity()));
+
         final var hasMusic = gameConfig.getNarrativeConfigs().stream()
                 .map(Narrative::getElements)
                 .filter(Objects::nonNull)
@@ -141,7 +147,7 @@ public class CodeGenerator {
                 .build()
                 .allShippedMusicAssets();
 
-        final var allAssets = Stream.of(allMusicAssets, foregroundAssetSets)
+        final var allAssets = Stream.of(allMusicAssets, foregroundAssetSets, allTextAssets)
                 .flatMap(List::stream)
                 .collect(toList());
 
@@ -154,6 +160,8 @@ public class CodeGenerator {
                 hexConfig,
                 foregroundAssetSets,
                 allMusicAssets,
+                allTextAssets,
+                textAssetsByBody,
                 hasMusic);
 
         final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
@@ -230,8 +238,10 @@ public class CodeGenerator {
 
     private ComponentRenderer getFromMethod(final Method method, final RendererFactory factory) {
         try {
+            System.out.println(method);
             return (ComponentRenderer) method.invoke(factory);
         } catch (Exception e) {
+            System.out.println(e);
             throw new RuntimeException();
         }
     }
