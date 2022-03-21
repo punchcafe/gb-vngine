@@ -34,7 +34,7 @@ int cursor = 0;
 returns 0 if the full string is rendered, otherwise returns an int of the offset of the string.
 */
 
-void write_position_and_increment_cursor(unsigned char tile_number)
+void write_position_and_increment_cursor(unsigned char tile_number, unsigned int bank_num)
 {
     if(cursor < CURSOR_MAX_EXCLUSIVE)
     {
@@ -43,6 +43,8 @@ void write_position_and_increment_cursor(unsigned char tile_number)
         unsigned char tile_number_array [1]= {tile_number};
         set_bkg_tiles(x, y, 1, 1, tile_number_array);
         delay_with_music(2);
+        // god save us we need to refactor this abomination
+        SWITCH_ROM_MBC1(bank_num);
         cursor++;
     }
 }
@@ -67,7 +69,7 @@ void new_line()
 int text_box_print(char * str_char, unsigned int bank_num)
 {
 
-// TODO: refactor and make less terrible
+   // TODO: refactor and make less terrible
     SWITCH_ROM_MBC1(bank_num);
     int offset = 0;
     while(*str_char != '\0' && cursor < CURSOR_MAX_EXCLUSIVE)
@@ -99,7 +101,7 @@ int text_box_print(char * str_char, unsigned int bank_num)
             } else {
             // DUPLICATED
                 unsigned char tile_number = get_char_position(*str_char);
-                write_position_and_increment_cursor(tile_number);
+                write_position_and_increment_cursor(tile_number, bank_num);
                 offset++;
                 str_char++;
                 continue;
@@ -113,7 +115,7 @@ int text_box_print(char * str_char, unsigned int bank_num)
             continue;
         }
         unsigned char tile_number = get_char_position(*str_char);
-        write_position_and_increment_cursor(tile_number);
+        write_position_and_increment_cursor(tile_number, bank_num);
         offset++;
         str_char++;
     }
@@ -126,19 +128,19 @@ int text_box_print(char * str_char, unsigned int bank_num)
 }
 
 void text_box_print_special_char_up() {
-    write_position_and_increment_cursor(PRESS_UP_BUTTON_PRESSED_POSITION);
+    write_position_and_increment_cursor(PRESS_UP_BUTTON_PRESSED_POSITION, 1);
 }
 
 void text_box_print_special_char_down() {
-    write_position_and_increment_cursor(PRESS_DOWN_BUTTON_PRESSED_POSITION);
+    write_position_and_increment_cursor(PRESS_DOWN_BUTTON_PRESSED_POSITION, 1);
 }
 
 void text_box_print_special_char_left() {
-    write_position_and_increment_cursor(PRESS_LEFT_BUTTON_PRESSED_POSITION);
+    write_position_and_increment_cursor(PRESS_LEFT_BUTTON_PRESSED_POSITION, 1);
 }
 
 void text_box_print_special_char_right() {
-    write_position_and_increment_cursor(PRESS_RIGHT_BUTTON_PRESSED_POSITION);
+    write_position_and_increment_cursor(PRESS_RIGHT_BUTTON_PRESSED_POSITION, 1);
 }
 
 void clear_text_box(){
