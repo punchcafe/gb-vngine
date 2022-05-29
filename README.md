@@ -18,6 +18,7 @@
 - Node variable type
 - Next node as $node.node-id
 - Player input node
+- Rand function
 - Prompts as asset IDs
 
 ## Tasks
