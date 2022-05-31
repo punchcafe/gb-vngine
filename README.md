@@ -26,6 +26,11 @@
 - Clean up C functions
 - Investigate use of `SWITCH_ROM_MBC1(external_asset->bank_number);`. If it needs specifics, can do as Macro def
 - Choose bank number `unsigned int` or `unsigned short` based on bank config
+- create a testing framework
+
+For testing, consider:
+- A logic flow tester, which replaces the gb.h function with mocked alternatives, and runs all provided tests.
+- An actual player, which can take snapshots at designated intervals and compare like a snapshot test
 ## Refactors
 #### `SourceName`
 - Add `SourceName` type, and add to all classes currently using string.
