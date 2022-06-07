@@ -39,7 +39,8 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     public String visitSetBackground(final SetBackground setBackground) {
         return String.format("struct NarrativeElement %s = {&%s, %s};",
                 NarrativeName.elementName(narrativeId, index),
-                setBackground.getSrc(),
+                //TODO: have this use a Background Asset Cache to get the external soruce name
+                setBackground.getSrc() + "_external_asset",
                 "BACKGROUND");
     }
 
@@ -47,17 +48,6 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
     public static String TILE_DATA_SUFFIX = "_tile_data";
     public static String TILE_DATA_SIZE_DEFINITION_SUFFIX = "_TILE_DATA_SIZE";
 
-    private String renderSetBackgroundBody(final SetBackground setBackground) {
-        final var elementBodyName = NarrativeName.elementBodyName(narrativeId, index);
-        final var backgroundDataName = setBackground.getSrc().concat(TILE_DATA_SUFFIX);
-        final var backgroundDataSizeName = setBackground.getSrc().toUpperCase().concat(TILE_DATA_SIZE_DEFINITION_SUFFIX);
-        final var backgroundTileAssignmentName = setBackground.getSrc().concat(TILE_ASSIGNMENT_SUFFIX);
-        return String.format("struct ExternalBackgroundAsset %s = {%s, %s, %s};",
-                elementBodyName,
-                backgroundDataName,
-                backgroundDataSizeName,
-                backgroundTileAssignmentName);
-    }
 
     private String renderSetForegroundBody(final SetForeground setForeground) {
         switch (setForeground.getAlignment().toLowerCase()) {
