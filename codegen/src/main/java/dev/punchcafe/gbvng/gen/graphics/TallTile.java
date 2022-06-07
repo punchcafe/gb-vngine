@@ -2,6 +2,7 @@ package dev.punchcafe.gbvng.gen.graphics;
 
 import java.util.Arrays;
 
+//TODO: review abstractions here
 public class TallTile extends Tile {
 
     private PixelValue[][] internalArray = new PixelValue[16][8];

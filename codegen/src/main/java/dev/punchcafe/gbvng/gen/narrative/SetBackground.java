@@ -8,6 +8,7 @@ import org.simpleframework.xml.Attribute;
 @NoArgsConstructor
 public class SetBackground implements NarrativeElement {
 
+    // TODO: change to use source object
     @Attribute(name = "src")
     private String src;
 

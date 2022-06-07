@@ -37,9 +37,10 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
 
     @Override
     public String visitSetBackground(final SetBackground setBackground) {
-        final var body = renderSetBackgroundBody(setBackground);
-        final String narrativeElement = narrativeElementForType("BACKGROUND");
-        return body + "\n" + narrativeElement;
+        return String.format("struct NarrativeElement %s = {&%s, %s};",
+                NarrativeName.elementName(narrativeId, index),
+                setBackground.getSrc(),
+                "BACKGROUND");
     }
 
     public static String TILE_ASSIGNMENT_SUFFIX = "_tile_assign";
@@ -51,7 +52,7 @@ public class NarrativeElementRenderer implements NarrativeElementVisitor<String>
         final var backgroundDataName = setBackground.getSrc().concat(TILE_DATA_SUFFIX);
         final var backgroundDataSizeName = setBackground.getSrc().toUpperCase().concat(TILE_DATA_SIZE_DEFINITION_SUFFIX);
         final var backgroundTileAssignmentName = setBackground.getSrc().concat(TILE_ASSIGNMENT_SUFFIX);
-        return String.format("struct BackgroundElement %s = {%s, %s, %s};",
+        return String.format("struct ExternalBackgroundAsset %s = {%s, %s, %s};",
                 elementBodyName,
                 backgroundDataName,
                 backgroundDataSizeName,

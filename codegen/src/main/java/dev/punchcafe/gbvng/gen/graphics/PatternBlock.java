@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toMap;
  * table.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class PatternBlock {
+public class PatternBlock<T extends Tile> {
 
     private static final int TALL_TILE_SIZE_BYTES = 32;
 
@@ -33,16 +33,16 @@ public class PatternBlock {
      * @param tiles the list of tiles to create the pattern block from
      * @return the created pattern block
      */
-    public static PatternBlock from(Collection<TallTile> tiles){
-        final List<TallTile> distinctList = new LinkedList<>(new HashSet<>(tiles));
+    public static <T extends Tile> PatternBlock<T> from(Collection<T> tiles){
+        final List<T> distinctList = new LinkedList<>(new HashSet<>(tiles));
         final var patternMap = IntStream.range(0, distinctList.size())
                 .mapToObj(index -> Map.entry(distinctList.get(index), index))
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
-        return new PatternBlock("", patternMap);
+        return new PatternBlock<T>("", patternMap);
     }
 
     @Getter private final String blockName;
-    private final Map<TallTile, Integer> patternMap;
+    private final Map<T, Integer> patternMap;
 
     /**
      * coverts the pattern block in to a 2 bits per pixel representation in hexadecimal, with
@@ -61,7 +61,7 @@ public class PatternBlock {
      *
      * @return the ordered {@link TallTile}s
      */
-    private List<TallTile> getOrderedDataBlock(){
+    private List<T> getOrderedDataBlock(){
         return patternMap.entrySet().stream()
                 .sorted(Comparator.comparing(Map.Entry::getValue, Integer::compareTo))
                 .map(Map.Entry::getKey)
@@ -73,7 +73,7 @@ public class PatternBlock {
      *
      * @return the tile's position
      */
-    public Optional<Integer> getTilePosition(final TallTile tile) {
+    public Optional<Integer> getTilePosition(final T tile) {
         return Optional.ofNullable(patternMap.get(tile));
     }
 

@@ -1,14 +1,12 @@
 package dev.punchcafe.gbvng.gen.mbanks.renderers;
 
-import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
-import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
-import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.mbanks.assets.*;
 import dev.punchcafe.gbvng.gen.graphics.PatternBlock;
-import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 
 import static java.util.stream.Collectors.joining;
 
 public class AssetRenderer implements AssetVisitor<String> {
+    // TODO: split class up with facade pattern?
 
     @Override
     public String visitForegroundAsset(final ForegroundAssetSet set) {
@@ -16,6 +14,7 @@ public class AssetRenderer implements AssetVisitor<String> {
         final var indexArrays = set.getForegroundAssets().stream()
                 .map(asset -> renderEntireForegroundAsset(asset, set.getId()))
                 .collect(joining("\n"));
+        //TODO: make this definition nicer
         return "#ifndef FORGROUND_ASSET_STRUCT_DEFINITION\n" +
                 "#define FORGROUND_ASSET_STRUCT_DEFINITION\n" +
                 "\n" +
@@ -43,7 +42,44 @@ public class AssetRenderer implements AssetVisitor<String> {
         return String.format("const unsigned char %s [] = \"%s\";", asset.getSourceName().toString(), asset.getText());
     }
 
+    @Override
+    public String visitBackgroundImageAsset(BackgroundImageAsset asset) {
+        final var patternBlockData = String.format("const unsigned char %s [] = %s;",
+                asset.getPatternName().toString(),
+                asset.getPatternBlock().renderCDataArray());
+        // TODO: de-duplicate in new index array class
+        final var patternReferenceArray = String.format("const unsigned char %s [] = {%s};",
+                asset.getIndexArrayName().toString(),
+                asset.getIndexArray().asHexString());
+        final var macroDefinition = String.format("#define %s %d", asset.getIndexArraySizeMacro().toString(), asset.getPatternBlock().numberOfUniqueTiles());
+        final var assetStruct = String.format("struct BackgroundAsset %s = {%s, %s, %s};",
+                asset.getId(),
+                asset.getPatternName().toString(),
+                asset.getIndexArraySizeMacro().toString(),
+                asset.getIndexArrayName().toString());
+        // TODO: have bankable include all structs
+        final var structDef = "#ifndef BACKGROUND_ELEMENT_DEFINITION\n" +
+                "#define BACKGROUND_ELEMENT_DEFINITION\n" +
+                "\n" +
+                "// TODO: separate into clean files\n" +
+                "\n" +
+                "struct BackgroundAsset {\n" +
+                "    unsigned char * background_tiles;\n" +
+                "    unsigned short number_of_tiles;\n" +
+                "    unsigned char * tile_assignements;\n" +
+                "};\n" +
+                "\n" +
+                "struct ExternalBackgroundAsset {\n" +
+                "    struct BackgroundAsset * asset;\n" +
+                "    unsigned short bank;\n" +
+                "};\n" +
+                "\n" +
+                "#endif";
+        return String.join("\n", structDef, patternBlockData, patternReferenceArray, macroDefinition, assetStruct);
+    }
+
     private String renderEntireForegroundAsset(final ForegroundAsset asset, final String patternBlockName) {
+        // TODO: replace with index array utility
         final var refArray = String.format("const unsigned char %s_pattern_ref_array [] = {%s};", asset.getCVariableName(), asset.getPatternTableIndexArray()
                 .stream()
                 .map(integer -> integer * 2)

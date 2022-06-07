@@ -1,9 +1,11 @@
 package dev.punchcafe.gbvng.gen;
 
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
+import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundImageAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
+import dev.punchcafe.gbvng.gen.render.external.ExternalBackgroundAssetRenderer;
 import dev.punchcafe.gbvng.gen.render.external.ExternalForegroundAssetSetRenderer;
 import dev.punchcafe.gbvng.gen.render.*;
 import dev.punchcafe.gbvng.gen.render.external.ExternalTextAssetRender;
@@ -42,6 +44,7 @@ public class RendererFactory {
     private final NarrativeConfig narrativeConfig;
     private final HexValueConfig hexValueConfig;
     private final List<ForegroundAssetSet> allForegroundAssetSets;
+    private final List<BackgroundImageAsset> allBackgroundImageAssets;
     private final List<BackgroundMusicAsset> allBackgroundMusic;
     private final List<TextAsset> allTextAssets;
     private final Map<String, TextAsset> textAssetCache;
@@ -91,6 +94,13 @@ public class RendererFactory {
     public ComponentRenderer externalForegroundAssetSetsRenderer() throws IOException {
         return ExternalForegroundAssetSetRenderer.builder()
                 .allForegroundAssetSets(this.allForegroundAssetSets)
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer externalBackgroundAssetSetsRenderer() throws IOException {
+        return ExternalBackgroundAssetRenderer.builder()
+                .allBackgroundImageAssets(this.allBackgroundImageAssets)
                 .build();
     }
 

@@ -52,7 +52,7 @@ public class CompositeSprite {
      * @param patternBlock the {@link PatternBlock} to derive the references from.
      * @return the index array as a list of integers
      */
-    public List<Integer> createReferencePatternBlock(final PatternBlock patternBlock){
+    public List<Integer> createReferencePatternBlock(final PatternBlock<TallTile> patternBlock){
         // Can be used to render the reference array of the asset
         return imageData.stream()
                 .map(patternBlock::getTilePosition)

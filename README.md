@@ -21,6 +21,11 @@
 - Rand function
 - Prompts as asset IDs
 
+
+### Future nice to haves
+- Animations on backgrounds (using delta format)
+- Animation on characters (using delta format)
+
 ## Tasks
 - Full documentation 
 - Clean up C functions

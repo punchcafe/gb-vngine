@@ -7,11 +7,14 @@
 #define BACKGROUND_START_Y_INDEX 0
 #define BACKGROUND_START_X_INDEX 0
 
-void render_background(struct BackgroundElement * element)
+void render_background(struct ExternalBackgroundAsset * asset)
 {
+    SWITCH_ROM_MBC1(asset->bank);
+    struct BackgroundAsset * element = asset->asset;
     unsigned char updated_sign_off [BACKGROUND_TILE_AREA];
     for(int i = 0; i < BACKGROUND_TILE_AREA; i++)
     {
+    // TODO: consider doing this ahead of time by mutating the index array when rendering
         unsigned char shifted_index = element->tile_assignements[i] + TEXT_PATTERNS_END_INDEX + 1;
         updated_sign_off[i] = shifted_index;
     }

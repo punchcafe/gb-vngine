@@ -9,6 +9,7 @@ import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.mbanks.factory.MemoryBankFactory;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.BankRenderer;
+import dev.punchcafe.gbvng.gen.mbanks.utility.BackgroundAssetExtractor;
 import dev.punchcafe.gbvng.gen.mbanks.utility.ForegroundAssetSetExtractor;
 import dev.punchcafe.gbvng.gen.mbanks.utility.MusicAssetExtractor;
 import dev.punchcafe.gbvng.gen.mbanks.utility.TextAssetExtractor;
@@ -128,6 +129,8 @@ public class CodeGenerator {
         final var foregroundAssetSets = new ForegroundAssetSetExtractor(assetsDirectory, hexConfig, narrativeConfig)
                 .convertAllForegroundAssetSets();
 
+        final var allBackgroundAssets = new BackgroundAssetExtractor(assetsDirectory, hexConfig)
+                .extract();
 
         final ProjectObjectModel<Narrative> gameConfig = PomLoader.<Narrative>forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();
 
@@ -147,7 +150,7 @@ public class CodeGenerator {
                 .build()
                 .allShippedMusicAssets();
 
-        final var allAssets = Stream.of(allMusicAssets, foregroundAssetSets, allTextAssets)
+        final var allAssets = Stream.of(allMusicAssets, foregroundAssetSets, allTextAssets, allBackgroundAssets)
                 .flatMap(List::stream)
                 .collect(toList());
 
@@ -159,6 +162,7 @@ public class CodeGenerator {
                 narrativeConfig,
                 hexConfig,
                 foregroundAssetSets,
+                allBackgroundAssets,
                 allMusicAssets,
                 allTextAssets,
                 textAssetsByBody,

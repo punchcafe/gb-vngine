@@ -14,7 +14,7 @@ void handle_pause(struct Pause* pause)
     delay_with_music(pause->seconds_duration * 60);
 }
 
-void handle_background(struct BackgroundElement * element){
+void handle_background(struct ExternalBackgroundAsset * element){
     render_background(element);
 }
 
@@ -39,7 +39,7 @@ void play_narrative_element(struct NarrativeElement *element)
         handle_pause((struct Pause*)element->content);
         break;
     case BACKGROUND:
-        handle_background((struct BackgroundElement*)element->content);
+        handle_background((struct ExternalBackgroundAsset*)element->content);
         break;
     case PLAY_MUSIC:
         handle_play_music((struct ExternalMusicAsset*)element->content);

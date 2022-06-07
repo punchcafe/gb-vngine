@@ -64,6 +64,7 @@ public class NarrativeRenderer implements ComponentRenderer {
                 PAUSE_ELEM_STRUCT_RENDERER_NAME,
                 NARRATIVE_STRUCT_RENDERER_NAME,
                 FOREGROUND_RENDERER_RENDERER_NAME,
+                EXTERNAL_BACKGROUND_ASSET_RENDERER_NAME,
                 IMAGE_ASSET_RENDERER_NAME,
                 TEXT_RENDERER_RENDERER_NAME,
                 DELAY_WITH_MUSIC_RENDERER_NAME,

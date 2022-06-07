@@ -12,11 +12,12 @@ import java.util.stream.Stream;
  * (which is never directly used at all) and the _text and _external derivative source names which
  * _are_ used.
  */
-@Builder
+@Builder(toBuilder = true)
 public class SourceName {
     private final String sourceName;
     private final SourceName prefix;
     private final SourceName suffix;
+    private final boolean isUppercase;
 
     @Override
     public String toString() {
@@ -25,7 +26,12 @@ public class SourceName {
                 Optional.ofNullable(suffix).map(Object::toString))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .map(this::applyCase)
                 .collect(Collectors.joining("_"));
+    }
+
+    private String applyCase(final String string){
+        return isUppercase ? string.toUpperCase() : string;
     }
 
     public SourceName withPrefix(final String prefix){
@@ -34,5 +40,9 @@ public class SourceName {
 
     public SourceName withSuffix(final String suffix){
         return SourceName.builder().sourceName(suffix).prefix(this).build();
+    }
+
+    public SourceName toUppercase(){
+        return this.toBuilder().isUppercase(true).build();
     }
 }
