@@ -1,6 +1,7 @@
 /**/*.gb
 /**/*.out
 /**/*.sav
+/**/build
 /**/*.ihx
 /**/*.gradle
 /**/*.idea
