@@ -42,12 +42,12 @@ public class SetupMethodComponentRenderer implements ComponentRenderer {
 
     private String renderIndividualPromptSetup(final Node node){
         final var transitionVariableName = NodeTransitionName.getTransitionNameForNode(node);
-        final var targetsNames = PromptName.getPromptTargetsArrayName(node);
+        final String branchesArrayName = BranchName.nodesBranchArrayName(node.getId());
         final var promptsNames = PromptName.getPromptArrayName(node);
         final var numberOfPrompts = node.getBranches().size();
-        return String.format("    %s.node_choices = %s;\n", transitionVariableName, targetsNames)
+        return String.format("    %s.branches = %s;\n", transitionVariableName, branchesArrayName)
                 + String.format("    %s.prompts = %s;\n", transitionVariableName, promptsNames)
-                + String.format("    %s.number_of_prompts = %d;", transitionVariableName, numberOfPrompts);
+                + String.format("    %s.number_of_branches = %d;", transitionVariableName, numberOfPrompts);
     }
 
     private String renderBranchSetUpStatements(){

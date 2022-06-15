@@ -43,8 +43,7 @@ public class TransitionDeclarer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(ComponentRendererNames.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
-                ComponentRendererNames.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME);
+        return List.of(ComponentRendererNames.TRANSITION_BRANCHES_DEFINITION_RENDERER_NAME);
     }
 
     @Override

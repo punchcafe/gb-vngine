@@ -76,16 +76,8 @@ public class RendererFactory {
 
     @RendererSupplier
     public ComponentRenderer playerBasedTransitionDefinitionRenderer() throws IOException {
-        return FixtureRender.fromFile("/player_based_transition.c")
-                .componentName(ComponentRendererNames.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME)
-                .dependencies(List.of())
-                .build();
-    }
-
-    @RendererSupplier
-    public ComponentRenderer predicateBasedTransitionDefinitionRenderer() throws IOException {
-        return FixtureRender.fromFile("/predicate_based_transition.c")
-                .componentName(ComponentRendererNames.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME)
+        return FixtureRender.fromFile("/transition_branches.c")
+                .componentName(ComponentRendererNames.TRANSITION_BRANCHES_DEFINITION_RENDERER_NAME)
                 .dependencies(List.of())
                 .build();
     }
@@ -390,8 +382,7 @@ public class RendererFactory {
                         PredicatesRenderer.PREDICATES_RENDERER_NAME,
                         ComponentRendererNames.SETUP_METHOD_RENDERER_NAME,
                         ComponentRendererNames.TRANSITION_INITIALIZER_RENDERER_NAME,
-                        ComponentRendererNames.PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
-                        ComponentRendererNames.PREDICATE_TRANSITION_DEFINITION_RENDERER_NAME,
+                        ComponentRendererNames.TRANSITION_BRANCHES_DEFINITION_RENDERER_NAME,
                         ComponentRendererNames.NODE_DEFINITION_RENDERER_NAME,
                         ComponentRendererNames.NODE_MUTATION_RENDERER_NAME,
                         ComponentRendererNames.NARRATIVE_RENDERER_NAME,

@@ -27,7 +27,6 @@ public class BranchRenderer implements ComponentRenderer {
     @Override
     public String render() {
         return gameConfig.getChapterConfigs().get(0).getNodes().stream()
-                .filter(node -> node.getType() == NodeType.AUTOMATIC)
                 .map(this::renderNodesBranches)
                 .collect(joining("\n"));
     }
@@ -72,14 +71,16 @@ public class BranchRenderer implements ComponentRenderer {
 
     private String renderBranch(final Branch branch, final String nodeId, final int index) {
         final var branchName = BranchName.numberedBranchName(nodeId, index);
-        final var branchPredicate = PredicateMethodNameConverter.convertPredicateExpression(branch.getPredicateExpression());
+        final var branchPredicate = PredicateMethodNameConverter.convertPredicateExpression(branch.getPredicateExpression())
+                .map(string -> "&" + string)
+                .orElse("NULL_PREDICATE_POINTER");
         final var targetNode = NodeIdSanitiser.sanitiseNodeId(branch.getNodeId());
-        return String.format("struct Branch %s = {&%s, &%s};", branchName, branchPredicate, targetNode);
+        return String.format("struct Branch %s = {%s, &%s};", branchName, branchPredicate, targetNode);
     }
 
     @Override
     public List<String> dependencies() {
-        return List.of(PLAYER_TRANSITION_DEFINITION_RENDERER_NAME,
+        return List.of(TRANSITION_BRANCHES_DEFINITION_RENDERER_NAME,
                 PREDICATES_RENDERER_NAME, NODE_RENDERER_NAME,
                 ALWAYS_TRUE_PREDICATE_RENDERER_NAME,
                 GAME_OVER_NODE_ID_CONSTANT_RENDERER_NAME);

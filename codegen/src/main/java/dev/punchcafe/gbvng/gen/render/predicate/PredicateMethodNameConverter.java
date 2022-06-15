@@ -20,14 +20,16 @@ import dev.punchcafe.vngine.pom.model.vngpl.variable.string.StringLiteral;
 import dev.punchcafe.vngine.pom.model.vngpl.variable.string.StringVariable;
 import dev.punchcafe.vngine.pom.parse.vngpl.PredicateParser;
 
-public class PredicateMethodNameConverter implements PredicateVisitor<String> {
+import java.util.Optional;
 
+public class PredicateMethodNameConverter implements PredicateVisitor<String> {
 
 
     private static PredicateMethodNameConverter SINGLETON = new PredicateMethodNameConverter();
 
-    public static String convertPredicateExpression(String expression) {
-        return convertPredicateExpression(PredicateParser.defaultParser().parse(expression));
+    public static Optional<String> convertPredicateExpression(final String expression) {
+        return expression == null ? Optional.empty()
+                : Optional.of(convertPredicateExpression(PredicateParser.defaultParser().parse(expression)));
     }
 
     public static String convertPredicateExpression(PredicateExpression expression) {
@@ -93,7 +95,7 @@ public class PredicateMethodNameConverter implements PredicateVisitor<String> {
     }
 
     private String sanitiseLinkOperation(AndOrOperation operation) {
-        switch (operation){
+        switch (operation) {
             case OR:
                 return "_or_";
             case AND:

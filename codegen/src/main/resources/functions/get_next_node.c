@@ -11,13 +11,13 @@ const void (*special_char_renderers[4])()  = {&text_box_print_special_char_up,
 &text_box_print_special_char_down,
 &text_box_print_special_char_left};
 
-void print_choices(char ** prompts, short number_of_prompts){
+void print_choices(char ** prompts, short * available_choices, short number_of_available_choices){
     clear_text_box();
-    for(int i = 0; i < number_of_prompts; i++)
+    for(int i = 0; i < number_of_available_choices; i++)
     {
         text_box_print("\n", 1);
         special_char_renderers[i]();
-        text_box_print(prompts[i], 1);
+        text_box_print(prompts[available_choices[i]], 1);
     }
 }
 
@@ -45,9 +45,21 @@ short get_choice_index(int number_of_prompts){
 struct Node * get_player_based_node(struct PlayerBasedTransition * transition,
                                     struct GameState * game_state)
 {
-    print_choices(transition->prompts, transition->number_of_prompts);
-    short choice = get_choice_index(transition->number_of_prompts);
-    return transition->node_choices[choice];
+    unsigned short available_choices [MAX_NUMBER_OF_BRANCHES];
+    unsigned short number_of_available_choices = 0;
+    for(int i = 0; i < transition->number_of_branches; i++)
+    {
+        if(transition->branches[i]->predicate == NULL_PREDICATE_POINTER
+            || transition->branches[i]->predicate(game_state)){
+            available_choices[number_of_available_choices] = i;
+            number_of_available_choices++;
+        }
+    }
+
+    print_choices(transition->prompts, available_choices, number_of_available_choices);
+    short options_choice = get_choice_index(number_of_available_choices);
+    short branch_choice = available_choices[options_choice];
+    return transition->branches[branch_choice]->node;
 }
 
 struct Node * get_predicate_based_node(struct PredicateBasedTransition * transition,

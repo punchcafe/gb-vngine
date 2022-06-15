@@ -27,6 +27,13 @@
 - Animation on characters (using delta format)
 
 ## Tasks
+- Sections refactor:
+```
+Tree -- all thing around rending the game tree. Nodes, branches and prompts (also contains a "setup" component, which stays
+with the service class context but is composed for the setup controller rendering).
+Predicate -- Predicate service for collecting all predicates and returning source names for a given expression (model)
+
+```
 - Full documentation 
 - Clean up C functions
 - Investigate use of `SWITCH_ROM_MBC1(external_asset->bank_number);`. If it needs specifics, can do as Macro def

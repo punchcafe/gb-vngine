@@ -22,10 +22,10 @@ public class PredicatesRenderer implements ComponentRenderer {
     public String render() {
         final ChapterConfig chapterConfig = gameConfig.getChapterConfigs().get(0);
         return chapterConfig.getNodes().stream()
-                .filter(node -> node.getType() == NodeType.AUTOMATIC)
                 .map(Node::getBranches)
                 .filter(Objects::nonNull)
                 .flatMap(List::stream)
+                .filter(branch -> branch.getPredicateExpression() != null)
                 .map(Branch::getPredicateExpression)
                 .distinct()
                 .map(PredicateParser.defaultParser()::parse)
