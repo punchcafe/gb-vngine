@@ -1,12 +1,11 @@
 package dev.punchcafe.gbvng.gen.render.transition;
 
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.render.predicate.PredicateMethodNameConverter;
+import dev.punchcafe.gbvng.gen.predicate.PredicateMethodNameConverter;
 import dev.punchcafe.gbvng.gen.csan.BranchName;
 import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
 import dev.punchcafe.vngine.pom.model.Branch;
 import dev.punchcafe.vngine.pom.model.Node;
-import dev.punchcafe.vngine.pom.model.NodeType;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
 import lombok.Getter;

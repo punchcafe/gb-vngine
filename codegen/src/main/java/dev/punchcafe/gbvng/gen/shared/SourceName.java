@@ -19,6 +19,11 @@ public class SourceName {
     private final SourceName suffix;
     private final boolean isUppercase;
 
+    public static SourceName from(final String sourceString){
+        //TODO: add runtime validation checks here that sourcename is valid
+        return SourceName.builder().sourceName(sourceString).build();
+    }
+
     @Override
     public String toString() {
         return Stream.of(Optional.ofNullable(prefix).map(Object::toString),

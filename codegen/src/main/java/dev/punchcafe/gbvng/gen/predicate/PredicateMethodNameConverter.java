@@ -1,4 +1,4 @@
-package dev.punchcafe.gbvng.gen.render.predicate;
+package dev.punchcafe.gbvng.gen.predicate;
 
 import dev.punchcafe.gbvng.gen.csan.CNameSanitiser;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
@@ -22,17 +22,12 @@ import dev.punchcafe.vngine.pom.parse.vngpl.PredicateParser;
 
 import java.util.Optional;
 
-public class PredicateMethodNameConverter implements PredicateVisitor<String> {
+class PredicateMethodNameConverter implements PredicateVisitor<String> {
 
 
     private static PredicateMethodNameConverter SINGLETON = new PredicateMethodNameConverter();
 
-    public static Optional<String> convertPredicateExpression(final String expression) {
-        return expression == null ? Optional.empty()
-                : Optional.of(convertPredicateExpression(PredicateParser.defaultParser().parse(expression)));
-    }
-
-    public static String convertPredicateExpression(PredicateExpression expression) {
+    public static String convertPredicateExpression(final PredicateExpression expression) {
         return expression.acceptPredicateVisitor(SINGLETON);
     }
 

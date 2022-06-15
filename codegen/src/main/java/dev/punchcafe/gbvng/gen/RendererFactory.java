@@ -15,7 +15,6 @@ import dev.punchcafe.gbvng.gen.render.music.GBTHeaderRenderer;
 import dev.punchcafe.gbvng.gen.render.music.PlayMusicRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.GameStateMutationRenderer;
 import dev.punchcafe.gbvng.gen.render.mutate.NodeMutationsRenderers;
-import dev.punchcafe.gbvng.gen.render.narrative.AssetRenderer;
 import dev.punchcafe.gbvng.gen.render.external.ExternalMusicAssetRenderer;
 import dev.punchcafe.gbvng.gen.render.narrative.NarrativeRenderer;
 import dev.punchcafe.gbvng.gen.render.node.NodeRenderer;
@@ -265,11 +264,6 @@ public class RendererFactory {
                         .hexValueConfig(this.hexValueConfig)
                         .build());
         return new ImageAssetsGenerator(converters, this.assetDirectory);
-    }
-
-    @RendererSupplier
-    public ComponentRenderer assetRenderer() throws IOException {
-        return AssetRenderer.rendererFor(assetDirectory);
     }
 
 

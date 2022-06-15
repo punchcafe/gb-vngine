@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.predicate;
 
+import dev.punchcafe.gbvng.gen.predicate.PredicateMethodNameConverter;
 import dev.punchcafe.vngine.pom.model.vngpl.PredicateExpression;
 
 public class PredicateMethodRenderer {
