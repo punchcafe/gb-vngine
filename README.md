@@ -32,6 +32,7 @@
 Tree -- all thing around rending the game tree. Nodes, branches and prompts (also contains a "setup" component, which stays
 with the service class context but is composed for the setup controller rendering).
 Predicate -- Predicate service for collecting all predicates and returning source names for a given expression (model)
+Text -- Manages all written text in the narratives. Will be the source of truth for any compressions around commonly used words.
 
 ```
 - Full documentation 
