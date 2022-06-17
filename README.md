@@ -9,8 +9,8 @@
 
 ## Features
 ### 0.1.0
-- Bankable Assets
-- Predicate user selection branches
+- ~Bankable Assets~ ✅
+- Predicate user selection branches 🚧
 - Saving
 - vNgine splash page
 ### 0.2.0
