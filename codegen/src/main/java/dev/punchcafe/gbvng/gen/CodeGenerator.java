@@ -19,6 +19,7 @@ import dev.punchcafe.gbvng.gen.config.ColorConfig;
 import dev.punchcafe.gbvng.gen.config.ImageConfig;
 import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.narrative.PlayMusic;
+import dev.punchcafe.gbvng.gen.predicate.PredicateService;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.graphics.PixelValue;
@@ -157,7 +158,10 @@ public class CodeGenerator {
         final var bankWriteLocation = Path.of(scriptDestination).getParent().toFile();
         renderAllMemoryBanks(bankWriteLocation, allAssets, narrativeConfig);
 
+        final var predicateService = PredicateService.from(gameConfig);
+
         final var rendererFactory = new RendererFactory(gameConfig,
+                predicateService,
                 assetsDirectory,
                 narrativeConfig,
                 hexConfig,

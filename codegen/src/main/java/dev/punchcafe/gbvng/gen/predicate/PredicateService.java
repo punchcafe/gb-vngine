@@ -21,7 +21,11 @@ import java.util.stream.Stream;
  */
 public class PredicateService {
 
-    private final Map<PredicateExpression, SourceName> predicateExpressions;
+    private final Map<SourceName, PredicateExpression> predicateExpressions;
+
+    public static PredicateService from(final ProjectObjectModel<?> gameConfig) {
+        return new PredicateService(gameConfig);
+    }
 
     private PredicateService(final ProjectObjectModel<?> gameConfig) {
         final var predicateParser = PredicateParser.defaultParser();
@@ -35,11 +39,10 @@ public class PredicateService {
                 .map(Branch::getPredicateExpression)
                 .distinct()
                 .map(predicateParser::parse)
-                .collect(Collectors.toUnmodifiableMap(Function.identity(),
+                .collect(Collectors.toUnmodifiableMap(
                         //TODO: clean up this mess!
-                        expression ->
-                                SourceName.from(PredicateMethodNameConverter.convertPredicateExpression(expression))
-                ));
+                        expression -> SourceName.from(PredicateMethodNameConverter.convertPredicateExpression(expression)),
+                        Function.identity()));
 
     }
 
@@ -51,18 +54,18 @@ public class PredicateService {
      * @return the {@link Optional} {@link SourceName} of the predicate function in the target C code.
      */
     public Optional<SourceName> predicateFunctionName(final String expression) {
-        return Optional.of(expression)
+        return Optional.ofNullable(expression)
                 //TODO: clean up this mess!
                 .map(PredicateParser.defaultParser()::parse)
                 .flatMap(this::predicateFunctionName);
     }
 
-    public Stream<Map.Entry<PredicateExpression, SourceName>> allPredicateFunctions() {
+    public Stream<Map.Entry<SourceName, PredicateExpression>> allPredicateFunctions() {
         return this.predicateExpressions.entrySet().stream();
     }
 
     public Optional<SourceName> predicateFunctionName(final PredicateExpression expression) {
-        return Optional.of(expression)
-                .map(this.predicateExpressions::get);
+        final var name = SourceName.from(PredicateMethodNameConverter.convertPredicateExpression(expression));
+        return this.predicateExpressions.get(name) != null ? Optional.of(name) : Optional.empty();
     }
 }

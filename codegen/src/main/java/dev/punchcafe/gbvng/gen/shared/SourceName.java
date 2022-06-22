@@ -1,6 +1,7 @@
 package dev.punchcafe.gbvng.gen.shared;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import java.util.stream.Stream;
  * _are_ used.
  */
 @Builder(toBuilder = true)
+@EqualsAndHashCode
 public class SourceName {
     private final String sourceName;
     private final SourceName prefix;

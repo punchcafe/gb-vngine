@@ -1,9 +1,9 @@
 package dev.punchcafe.gbvng.gen.render.transition;
 
-import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.predicate.PredicateMethodNameConverter;
 import dev.punchcafe.gbvng.gen.csan.BranchName;
 import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
+import dev.punchcafe.gbvng.gen.predicate.PredicateService;
+import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.Branch;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
@@ -21,7 +21,8 @@ import static java.util.stream.Collectors.joining;
 @Getter
 public class BranchRenderer implements ComponentRenderer {
 
-    private ProjectObjectModel<?> gameConfig;
+    private final ProjectObjectModel<?> gameConfig;
+    private final PredicateService predicateService;
 
     @Override
     public String render() {
@@ -70,7 +71,7 @@ public class BranchRenderer implements ComponentRenderer {
 
     private String renderBranch(final Branch branch, final String nodeId, final int index) {
         final var branchName = BranchName.numberedBranchName(nodeId, index);
-        final var branchPredicate = PredicateMethodNameConverter.convertPredicateExpression(branch.getPredicateExpression())
+        final var branchPredicate = predicateService.predicateFunctionName(branch.getPredicateExpression())
                 .map(string -> "&" + string)
                 .orElse("NULL_PREDICATE_POINTER");
         final var targetNode = NodeIdSanitiser.sanitiseNodeId(branch.getNodeId());
