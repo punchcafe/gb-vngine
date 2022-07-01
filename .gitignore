@@ -3,6 +3,7 @@
 /**/*.sav
 /**/build
 /**/*.ihx
+/**/.envrc
 /**/*.gradle
 /**/*.idea
 /**/.DS_Store
