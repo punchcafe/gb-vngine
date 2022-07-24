@@ -14,6 +14,8 @@
 - Saving
 - vNgine splash page
 ### 0.2.0
+- JSON Schema for vngine
+- RNG schema for XML
 - Narrative-injectable variables
 - Node variable type
 - Next node as $node.node-id
