@@ -14,11 +14,12 @@
 
 void pause_mode()
 {
+    char  tiles []= {0x00};
     for(int i = 0; i < TILES_WIDTH; i++)
     {
       for(int j = 0; j < TILES_HEIGHT; j++)
       {
-        set_win_tiles(i, j, 1, 1, 1);
+        set_win_tiles(i, j, 1, 1, tiles);
       }
     }
     HIDE_SPRITES;
