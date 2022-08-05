@@ -167,6 +167,14 @@ public class RendererFactory {
     }
 
     @RendererSupplier
+    public ComponentRenderer pauseModeRenderer() {
+        return FixtureRender.fromFile("/pause_mode.c")
+                .componentName(ComponentRendererNames.PAUSE_MODE_RENDERER_NAME)
+                .dependencies(List.of())
+                .build();
+    }
+
+    @RendererSupplier
     public ComponentRenderer nodeMutationsRenderer() {
         return NodeMutationsRenderers.builder()
                 .gameConfig(this.gameConfig)
