@@ -170,7 +170,7 @@ public class RendererFactory {
     public ComponentRenderer pauseModeRenderer() {
         return FixtureRender.fromFile("/pause_mode.c")
                 .componentName(ComponentRendererNames.PAUSE_MODE_RENDERER_NAME)
-                .dependencies(List.of())
+                .dependencies(List.of(TEXT_RENDERER_RENDERER_NAME))
                 .build();
     }
 

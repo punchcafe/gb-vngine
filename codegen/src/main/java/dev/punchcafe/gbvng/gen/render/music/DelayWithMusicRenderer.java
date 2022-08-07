@@ -14,7 +14,8 @@ public class DelayWithMusicRenderer implements ComponentRenderer {
 
     @Override
     public String render() {
-        return "void delay_with_music(int delay_loops){\n" +
+        return "void pause_mode();" +
+                "void delay_with_music(int delay_loops){\n" +
                 "    int delay_accum = 0;\n" +
                 "    while (delay_accum < delay_loops)\n" +
                 "    {\n" +
@@ -32,7 +33,7 @@ public class DelayWithMusicRenderer implements ComponentRenderer {
 
     @Override
     public List<String> dependencies() {
-        return List.of(GBT_HEADER_RENDERER_NAME, PAUSE_MODE_RENDERER_NAME);
+        return List.of(GBT_HEADER_RENDERER_NAME);
     }
 
     @Override

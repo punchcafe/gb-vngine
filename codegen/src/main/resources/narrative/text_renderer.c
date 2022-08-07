@@ -1,4 +1,6 @@
 #ifndef TEXT_RENDER_DEFINITION
+#define TEXT_RENDER_DEFINITION
+#include <gb/hardware.h>
 
 #define ALPHABET_START_OFFSET 6
 
@@ -12,7 +14,7 @@ unsigned char black_tiles[] = {
 };
 
 
-char get_char_position(unsigned char character)
+unsigned char get_char_position(unsigned char character)
 {
     if(character == ' ')
     {
@@ -34,19 +36,66 @@ int cursor = 0;
 returns 0 if the full string is rendered, otherwise returns an int of the offset of the string.
 */
 
-void write_position_and_increment_cursor(unsigned char tile_number, unsigned int bank_num)
+unsigned char is_win_enabled(){
+    return LCDC_REG & 0x20U;
+}
+
+void print_tile_at(unsigned char tile_number, unsigned short x, unsigned short y)
+{
+    unsigned char tile_number_array [1]= {tile_number};
+    if(is_win_enabled())
+    {
+        set_win_tiles(x, y, 1, 1, tile_number_array);
+    } else {
+        set_bkg_tiles(x, y, 1, 1, tile_number_array);
+    }
+}
+
+void print_char_at(unsigned char character, unsigned short x, unsigned short y)
+{
+    unsigned char tile_number = get_char_position(character);
+    print_tile_at(tile_number, x, y);
+}
+
+/*
+TODO:
+Separate CURSOR and print at, into two entities. So something like
+cursor_increment();
+cursor_x();
+cursor_y();
+cursor_from();
+cursor_set_x_range();
+cursor_set_y_range();
+
+...
+print_char_at(my_char, cursor_x, cursor_y);
+cursor_increment();
+
+Also this way we can totally decouple from the bank_number minefield.
+
+
+TODO: also, if tracking rom switching is tricky we can just have our own wrapper function for
+the Macro which tracks the last time a rom bank was switched. Can additionally allow for a temp_switch() and temp_switch_back()
+*/
+
+void print_tile_number_at_cursor(unsigned char tile_number, unsigned int bank_num)
 {
     if(cursor < CURSOR_MAX_EXCLUSIVE)
     {
         short x = (cursor % TEXT_WIDTH) + TEXT_COLUMN_OFFSET;
         short y = (cursor / TEXT_WIDTH) + 12;
-        unsigned char tile_number_array [1]= {tile_number};
-        set_bkg_tiles(x, y, 1, 1, tile_number_array);
+        print_tile_at(tile_number, x, y);
         delay_with_music(2);
+        // check or add way to track current bank so we don't need to pass bank_num
         // god save us we need to refactor this abomination
         SWITCH_ROM_MBC1(bank_num);
         cursor++;
     }
+}
+
+void print_char_at_cursor(unsigned char character, unsigned int bank_num)
+{
+    print_tile_number_at_cursor(get_char_position(character), bank_num);
 }
 
 void new_line()
@@ -100,8 +149,7 @@ int text_box_print(char * str_char, unsigned int bank_num)
                 continue;
             } else {
             // DUPLICATED
-                unsigned char tile_number = get_char_position(*str_char);
-                write_position_and_increment_cursor(tile_number, bank_num);
+                print_char_at_cursor(*str_char, bank_num);
                 offset++;
                 str_char++;
                 continue;
@@ -114,8 +162,7 @@ int text_box_print(char * str_char, unsigned int bank_num)
             str_char++;
             continue;
         }
-        unsigned char tile_number = get_char_position(*str_char);
-        write_position_and_increment_cursor(tile_number, bank_num);
+        print_char_at_cursor(*str_char, bank_num);
         offset++;
         str_char++;
     }
@@ -128,19 +175,19 @@ int text_box_print(char * str_char, unsigned int bank_num)
 }
 
 void text_box_print_special_char_up() {
-    write_position_and_increment_cursor(PRESS_UP_BUTTON_PRESSED_POSITION, 1);
+    print_tile_number_at_cursor(PRESS_UP_BUTTON_PRESSED_POSITION, 1);
 }
 
 void text_box_print_special_char_down() {
-    write_position_and_increment_cursor(PRESS_DOWN_BUTTON_PRESSED_POSITION, 1);
+    print_tile_number_at_cursor(PRESS_DOWN_BUTTON_PRESSED_POSITION, 1);
 }
 
 void text_box_print_special_char_left() {
-    write_position_and_increment_cursor(PRESS_LEFT_BUTTON_PRESSED_POSITION, 1);
+    print_tile_number_at_cursor(PRESS_LEFT_BUTTON_PRESSED_POSITION, 1);
 }
 
 void text_box_print_special_char_right() {
-    write_position_and_increment_cursor(PRESS_RIGHT_BUTTON_PRESSED_POSITION, 1);
+    print_tile_number_at_cursor(PRESS_RIGHT_BUTTON_PRESSED_POSITION, 1);
 }
 
 void clear_text_box(){

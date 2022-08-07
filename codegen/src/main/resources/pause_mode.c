@@ -25,6 +25,12 @@ void pause_mode()
     HIDE_SPRITES;
     SHOW_WIN;
 
+    print_char_at('p', 10, 10);
+    print_char_at('a', 11, 10);
+    print_char_at('u', 12, 10);
+    print_char_at('s', 13, 10);
+    print_char_at('e', 14, 10);
+
     delay(500);
     unsigned char input = joypad();
     while(!(input & J_START))
