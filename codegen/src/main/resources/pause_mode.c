@@ -26,11 +26,13 @@ void pause_mode()
     HIDE_SPRITES;
     SHOW_WIN;
 
-    print_char_at('p', 10, 3);
-    print_char_at('a', 11, 3);
-    print_char_at('u', 12, 3);
-    print_char_at('s', 13, 3);
-    print_char_at('e', 14, 3);
+    // TODO: extract to a 'print mode' approach
+
+    print_char_at('p', 6, 3);
+    print_char_at('a', 7, 3);
+    print_char_at('u', 8, 3);
+    print_char_at('s', 9, 3);
+    print_char_at('e', 10, 3);
 
     selection_box_render(&sample_selection, 1, 20, 7, 15);
 
@@ -39,10 +41,20 @@ void pause_mode()
     while(!(input & J_START))
     {
         input=joypad();
+        if(input & J_UP)
+        {
+            selection_box_cursor_up(&sample_selection);
+            delay(200);
+        } else if(input & J_DOWN)
+        {
+            selection_box_cursor_down(&sample_selection);
+            delay(200);
+        }
     }
+    delay(200);
     SHOW_SPRITES;
     HIDE_WIN;
-    delay(500);
+
 }
 
 #endif
