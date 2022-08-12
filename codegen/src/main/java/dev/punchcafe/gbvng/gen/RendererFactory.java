@@ -170,6 +170,14 @@ public class RendererFactory {
     public ComponentRenderer pauseModeRenderer() {
         return FixtureRender.fromFile("/pause_mode.c")
                 .componentName(ComponentRendererNames.PAUSE_MODE_RENDERER_NAME)
+                .dependencies(List.of(TEXT_RENDERER_RENDERER_NAME, SELECTION_BOX_RENDERER_NAME))
+                .build();
+    }
+
+    @RendererSupplier
+    public ComponentRenderer selectionBoxRenderer() {
+        return FixtureRender.fromFile("/ui_components/selection_box.c")
+                .componentName(ComponentRendererNames.SELECTION_BOX_RENDERER_NAME)
                 .dependencies(List.of(TEXT_RENDERER_RENDERER_NAME))
                 .build();
     }

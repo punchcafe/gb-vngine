@@ -1,0 +1,1 @@
+// TODO: save last asset set of each type (Foreground/Background/Music)

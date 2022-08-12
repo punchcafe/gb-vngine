@@ -1,4 +1,14 @@
-int main(){
+// TODO:
+
+void game_mode()
+{
+
+}
+
+// TODO: move to a async model for this as opposed to a blocking process
+
+int main()
+{
      setup();
      SPRITES_8x16;
      SHOW_SPRITES;

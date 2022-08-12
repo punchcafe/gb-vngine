@@ -11,7 +11,8 @@
 //enum PauseMode { SAVE, LOAD };
 //enum PauseMode current_pause_mode = LOAD;
 
-
+char * opts [] = {"file k", "file b", "file c"};
+struct SelectionBox sample_selection = {opts,2,0,0,0,0,0};
 void pause_mode()
 {
     char  tiles []= {0x00};
@@ -25,11 +26,13 @@ void pause_mode()
     HIDE_SPRITES;
     SHOW_WIN;
 
-    print_char_at('p', 10, 10);
-    print_char_at('a', 11, 10);
-    print_char_at('u', 12, 10);
-    print_char_at('s', 13, 10);
-    print_char_at('e', 14, 10);
+    print_char_at('p', 10, 3);
+    print_char_at('a', 11, 3);
+    print_char_at('u', 12, 3);
+    print_char_at('s', 13, 3);
+    print_char_at('e', 14, 3);
+
+    selection_box_render(&sample_selection, 1, 20, 7, 15);
 
     delay(500);
     unsigned char input = joypad();
