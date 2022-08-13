@@ -4,6 +4,10 @@
 - Character Limit on string variables
 - Character limit on prompts to fit in one line
 
+## Dev notes TODO
+- get compile working for current
+- reimplement text box for async, with context/bindings pattern
+
 
 # Roadmap
 

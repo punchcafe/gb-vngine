@@ -38,6 +38,8 @@ int main()
 
     game_loop()
     {
+    // TODO: tracks whether it's done it's transformation per node or not, and waits for node_change callback
+    // to reset flag
      modify_game_state(); // ignored if nothing to do
      play_narrative();
      play_music(); //
