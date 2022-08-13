@@ -1,0 +1,1 @@
+// binding files will provide functions which are bound to state singletons

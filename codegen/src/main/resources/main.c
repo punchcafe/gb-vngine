@@ -42,5 +42,8 @@ int main()
      play_narrative();
      play_music(); //
      get_next_node(); // ignored if nothing to do
+     // TODO: get_next_node also alerts all subscribers. Will need to define subscriber functions in
+     // main.c as opposed to context, so that functions can be bound to state singletons, and contexts remain clear
+
     }
  */
