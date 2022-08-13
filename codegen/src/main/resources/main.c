@@ -21,3 +21,26 @@ int main()
      }
      return 1;
  }
+ /*
+ TODO: move to async could look like:
+
+    _game_loop_state {
+        current_narrative;
+
+    }
+
+    play_narrative():
+      records current narrative element / type
+      passes to element type. play_narrative then returns true or false if it finished or not
+      if it finished, move the type along.
+      When play narrative is entirely finished, it sets a flag _narrative_playing = false; which allows
+      the other functions ( modify game state and get_next_node ) to do their jobs
+
+    game_loop()
+    {
+     modify_game_state(); // ignored if nothing to do
+     play_narrative();
+     play_music(); //
+     get_next_node(); // ignored if nothing to do
+    }
+ */
