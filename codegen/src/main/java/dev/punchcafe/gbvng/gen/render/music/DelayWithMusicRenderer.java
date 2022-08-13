@@ -25,7 +25,8 @@ public class DelayWithMusicRenderer implements ComponentRenderer {
                 "  pause_mode();\n" +
                 "}" +
                 "        wait_vbl_done();   \n" +
-                (hasMusic ? "        gbt_update();\n" : "") +
+                // TODO: removed temporarily
+                //(hasMusic ? "        gbt_update();\n" : "") +
                 "        delay_accum++;\n" +
                 "    }\n" +
                 "}";

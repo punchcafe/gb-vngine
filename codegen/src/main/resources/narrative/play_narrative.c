@@ -12,6 +12,13 @@ struct NarrativeState {
     int narrative_finished;
 };
 
+void narrative_state_on_new_node(struct NarrativeState * state, struct Node * node)
+{
+    state->current_element_index = 0;
+    state->narrative_finished = 0;
+    state->current_narrative = node->narrative;
+}
+
 struct TextState {
     unsigned int current_character;
 };
@@ -55,9 +62,9 @@ int play_narrative_element(struct NarrativeElement *element)
         return handle_pause((struct Pause*)element->content);
     case BACKGROUND:
         return handle_background((struct ExternalBackgroundAsset*)element->content);
+        */
     case PLAY_MUSIC:
         return handle_play_music((struct ExternalMusicAsset*)element->content);
-        */
     default:
         return 0x01;
     }
@@ -85,7 +92,7 @@ void play_narrative(struct NarrativeState *narrative_state){
     int element_finished = play_narrative_element(current_element);
     if(element_finished)
     {
-        int narrative_finished = narrative_state->current_narrative->number_of_elements >= (narrative_state->current_element_index + 1);
+        int narrative_finished = narrative_state->current_narrative->number_of_elements <= (narrative_state->current_element_index + 1);
         if(narrative_finished){
             narrative_state->narrative_finished = 0x01;
         } else {

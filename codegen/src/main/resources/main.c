@@ -9,7 +9,6 @@ void game_mode()
 
 
 unsigned char _modify_game_state_done = 0x00;
-struct Node * _modify_game_state_current_node = 0x00;
 
 // MODIFY GAMESTATE SECTION
 // TODO: consider moving go gamestate context/binding
@@ -19,7 +18,7 @@ void modify_game_state()
     if(_modify_game_state_done){
         return;
     } else {
-        _modify_game_state_current_node->game_state_modification[0](&GAME_STATE);
+        current_node->game_state_modification[0](&GAME_STATE);
         _modify_game_state_done = 0x01;
     }
 }
@@ -38,23 +37,34 @@ void play_narrative_bound()
 
 void get_next_node_bound()
 {
-    get_next_node(current_node, &GAME_STATE);
+    if(narrative_state.narrative_finished){
+        // TODO: extract with proper binding
+        current_node = get_next_node(current_node, &GAME_STATE);
+         // TODO: extract to observer pattern
+        _modify_game_state_done = 0x00;
+        narrative_state.narrative_finished = 0x00;
+        narrative_state_on_new_node(&narrative_state, current_node);
+    }
     // TODO: update observers
 }
 
-
+void play_music_inc()
+{
+    gbt_update();
+}
 
 void game_mode_loop()
 {
      modify_game_state();
      play_narrative_bound();
-     //play_music();
+     play_music_inc();
      get_next_node_bound();
 }
 
 int main()
 {
      setup();
+     narrative_state_on_new_node(&narrative_state, current_node);
      SPRITES_8x16;
      SHOW_SPRITES;
      SHOW_BKG;
