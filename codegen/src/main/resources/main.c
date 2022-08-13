@@ -7,6 +7,51 @@ void game_mode()
 
 // TODO: move to a async model for this as opposed to a blocking process
 
+
+unsigned char _modify_game_state_done = 0x00;
+struct Node * _modify_game_state_current_node = 0x00;
+
+// MODIFY GAMESTATE SECTION
+// TODO: consider moving go gamestate context/binding
+// TODO: extract
+void modify_game_state()
+{
+    if(_modify_game_state_done){
+        return;
+    } else {
+        _modify_game_state_current_node->game_state_modification[0](&GAME_STATE);
+        _modify_game_state_done = 0x01;
+    }
+}
+
+// PLAY_NARRATIVE_SECTION
+
+
+struct NarrativeState narrative_state;
+
+void play_narrative_bound()
+{
+    play_narrative(&narrative_state);
+}
+
+
+
+void get_next_node_bound()
+{
+    get_next_node(current_node, &GAME_STATE);
+    // TODO: update observers
+}
+
+
+
+void game_mode_loop()
+{
+     modify_game_state();
+     play_narrative_bound();
+     //play_music();
+     get_next_node_bound();
+}
+
 int main()
 {
      setup();
@@ -15,9 +60,7 @@ int main()
      SHOW_BKG;
      while(current_node != GAME_OVER_NODE_ID)
      {
-         current_node->game_state_modification[0](&GAME_STATE);
-         play_narrative(current_node->narrative);
-         current_node = get_next_node(current_node, &GAME_STATE);
+         game_mode_loop();
      }
      return 1;
  }
