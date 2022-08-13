@@ -70,6 +70,7 @@ int main()
      SHOW_BKG;
      while(current_node != GAME_OVER_NODE_ID)
      {
+         wait_vbl_done();
          game_mode_loop();
      }
      return 1;

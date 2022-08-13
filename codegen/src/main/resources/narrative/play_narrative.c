@@ -23,11 +23,76 @@ struct TextState {
     unsigned int current_character;
 };
 
+// TODO: extract to clean context/binding pair
+struct TextNarrativeState {
+    unsigned char awaiting_press;
+    unsigned char finished;
+    unsigned int text_offset;
+    unsigned short vblank_waited;
+};
+
+struct TextNarrativeState text_narrative_state_base = {0x00, 0, 0};
+struct TextNarrativeState * text_narrative_state = &text_narrative_state_base;
+struct DialogueBox dialogue_box_base = {0,0};
+struct DialogueBox * dialogue_box = &dialogue_box_base;
+
+#define TEXT_NARRATIVE_STATE_VBLANKS_PER_CHAR 3
+#define TEXT_NARRATIVE_STATE_VBLANKS_PER_A_PRESS 25
+
+void text_narrative_state_reset(struct TextNarrativeState * state)
+{
+    state->awaiting_press = 0x00;
+    state->text_offset = 0x00;
+    state->vblank_waited = 0x00;
+    state->finished = 0x00;
+}
+
 int handle_text(struct ExternalText * text)
 {
-    render_whole_text(text->text, text->bank);
-    await_a_button_press();
-    return 0x01;
+    if(text_narrative_state->finished && joypad() & J_A)
+    {
+        text_narrative_state_reset(text_narrative_state);
+        dialogue_box_clear_screen(dialogue_box);
+        return 1;
+    }
+    text_narrative_state->vblank_waited++;
+    if(text_narrative_state->awaiting_press)
+    {
+        if(joypad() & J_A){
+            dialogue_box_clear_screen(dialogue_box);
+            text_narrative_state->awaiting_press = 0x00;
+            text_narrative_state->vblank_waited = 0;
+            return 0;
+        }
+        if(text_narrative_state->vblank_waited > TEXT_NARRATIVE_STATE_VBLANKS_PER_A_PRESS)
+        {
+            dialogue_box_toggle_a_button(dialogue_box);
+            text_narrative_state->vblank_waited = 0;
+        }
+        return 0;
+    } else {
+        if(text_narrative_state->vblank_waited > TEXT_NARRATIVE_STATE_VBLANKS_PER_CHAR){
+            text_narrative_state->vblank_waited = 0;
+            SWITCH_ROM_MBC1(text->bank);
+            unsigned char character = text->text[text_narrative_state->text_offset];
+            if(character == '\0')
+            {
+                text_narrative_state->finished = 0x01;
+                text_narrative_state->awaiting_press = 0x01;
+                return 0;
+            }
+            if(dialogue_box_cursor_increment(dialogue_box))
+            {
+                text_narrative_state->text_offset++;
+                dialogue_box_print_char(dialogue_box, character);
+                return 0;
+            } else {
+                text_narrative_state->awaiting_press = 0x01;
+                return 0;
+            }
+        }
+    }
+    return 0;
 }
 
 int handle_pause(struct Pause* pause)
@@ -56,8 +121,11 @@ int play_narrative_element(struct NarrativeElement *element)
         /*
     case FOREGROUND:
         return handle_foreground((struct ForegroundElement*)element->content);
+        */
     case CLEAR_TEXT:
-        return clear_text_box();
+        dialogue_box_clear_screen(dialogue_box);
+        return 0x01;
+/*
     case PAUSE:
         return handle_pause((struct Pause*)element->content);
     case BACKGROUND:

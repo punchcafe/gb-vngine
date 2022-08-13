@@ -183,6 +183,14 @@ public class RendererFactory {
     }
 
     @RendererSupplier
+    public ComponentRenderer dialogueBoxRenderer() {
+        return FixtureRender.fromFile("/ui_components/dialogue_box.c")
+                .componentName(DIALOGUE_BOX_RENDERER_NAME)
+                .dependencies(List.of(TEXT_RENDERER_RENDERER_NAME))
+                .build();
+    }
+
+    @RendererSupplier
     public ComponentRenderer nodeMutationsRenderer() {
         return NodeMutationsRenderers.builder()
                 .gameConfig(this.gameConfig)
