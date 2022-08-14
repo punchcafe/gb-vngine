@@ -47,6 +47,17 @@ void text_narrative_state_reset(struct TextNarrativeState * state)
     state->finished = 0x00;
 }
 
+int next_word_length(unsigned char * str)
+{
+    unsigned char position = 0;
+    unsigned char character = str[position];
+    while(character != ' ' && character != '\n' && character != '\0'){
+        position++;
+        character = str[position];
+    }
+    return position;
+}
+
 int handle_text(struct ExternalText * text)
 {
     if(text_narrative_state->finished && joypad() & J_A)
@@ -55,6 +66,7 @@ int handle_text(struct ExternalText * text)
         dialogue_box_clear_screen(dialogue_box);
         return 1;
     }
+    //TODO: on blank space, lookahead to see
     text_narrative_state->vblank_waited++;
     if(text_narrative_state->awaiting_press)
     {
@@ -83,6 +95,13 @@ int handle_text(struct ExternalText * text)
             }
             if(dialogue_box_cursor_increment(dialogue_box))
             {
+                if(character == ' ')
+                {
+                    unsigned char * offseted_str = text->text + text_narrative_state->text_offset + 1;
+                    if(next_word_length(offseted_str) > dialogue_box_chars_left_on_row(dialogue_box)){
+                        dialogue_box_new_line(dialogue_box);
+                    }
+                }
                 text_narrative_state->text_offset++;
                 dialogue_box_print_char(dialogue_box, character);
                 return 0;

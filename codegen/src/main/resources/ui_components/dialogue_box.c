@@ -26,6 +26,11 @@ short dialogue_box_cursor_x(struct DialogueBox * box)
     return box->cursor % DIALOGUE_BOX_WIDTH;
 }
 
+unsigned short dialogue_box_chars_left_on_row(struct DialogueBox * box)
+{
+    return (DIALOGUE_BOX_WIDTH - 1) - dialogue_box_cursor_x(box);
+}
+
 short dialogue_box_cursor_y(struct DialogueBox * box)
 {
     return (box->cursor / DIALOGUE_BOX_WIDTH) + 12;
@@ -44,7 +49,9 @@ int dialogue_box_cursor_increment(struct DialogueBox * box)
 
 int dialogue_box_new_line(struct DialogueBox * box)
 {
-    int new_cursor = box->cursor + DIALOGUE_BOX_WIDTH;
+
+// BUG, doesn't start from beginning of line
+    int new_cursor = (((box->cursor / DIALOGUE_BOX_WIDTH) + 1) * DIALOGUE_BOX_WIDTH);
     if(new_cursor < DIALOGUE_BOX_CHAR_SPACE)
     {
         box->cursor = new_cursor;
