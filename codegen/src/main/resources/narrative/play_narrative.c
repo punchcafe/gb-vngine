@@ -3,6 +3,9 @@
 
 #include <gb/gb.h>
 
+struct PlayNarrativeDependencies {
+    struct DialogueBox * box;
+};
 
 struct NarrativeState {
     unsigned short current_element_index;
@@ -12,6 +15,9 @@ struct NarrativeState {
     int narrative_finished;
 };
 
+struct TextNarrativeState text_narrative_state_base = {0x00, 0, 0};
+struct TextNarrativeState * text_narrative_state = &text_narrative_state_base;
+
 void narrative_state_on_new_node(struct NarrativeState * state, struct Node * node)
 {
     state->current_element_index = 0;
@@ -19,22 +25,12 @@ void narrative_state_on_new_node(struct NarrativeState * state, struct Node * no
     state->current_narrative = node->narrative;
 }
 
-struct TextState {
-    unsigned int current_character;
-};
-
-// TODO: extract to clean context/binding pair
 struct TextNarrativeState {
     unsigned char awaiting_press;
     unsigned char finished;
     unsigned int text_offset;
     unsigned short vblank_waited;
 };
-
-struct TextNarrativeState text_narrative_state_base = {0x00, 0, 0};
-struct TextNarrativeState * text_narrative_state = &text_narrative_state_base;
-struct DialogueBox dialogue_box_base = {0,0};
-struct DialogueBox * dialogue_box = &dialogue_box_base;
 
 #define TEXT_NARRATIVE_STATE_VBLANKS_PER_CHAR 3
 #define TEXT_NARRATIVE_STATE_VBLANKS_PER_A_PRESS 25
@@ -58,7 +54,7 @@ int next_word_length(unsigned char * str)
     return position;
 }
 
-int handle_text(struct ExternalText * text)
+int handle_text(struct ExternalText * text, struct DialogueBox * dialogue_box)
 {
     if(text_narrative_state->finished && joypad() & J_A)
     {
@@ -131,18 +127,18 @@ int handle_play_music(struct ExternalMusicAsset * element){
 }
 
 // TODO: Returns boolean
-int play_narrative_element(struct NarrativeElement *element)
+int play_narrative_element(struct NarrativeElement *element, struct PlayNarrativeDependencies * dependencies)
 {
     switch (element->type)
     {
     case TEXT:
-        return handle_text((struct ExternalText*)element->content);
+        return handle_text((struct ExternalText*)element->content, dependencies->box);
         /*
     case FOREGROUND:
         return handle_foreground((struct ForegroundElement*)element->content);
         */
     case CLEAR_TEXT:
-        dialogue_box_clear_screen(dialogue_box);
+        dialogue_box_clear_screen(dependencies->box);
         return 0x01;
 /*
     case PAUSE:
@@ -168,6 +164,7 @@ void play_narrative_on_node_change(struct NarrativeState *narrative_state, struc
 }
 
 void play_narrative(struct NarrativeState *narrative_state,
+                    struct PlayNarrativeDependencies * dependencies,
                     void (*observers[])(void),
                     unsigned short num_observers){
 // TODO: this doesn't allow for setting of the narrative, since that has to happen in reaction
@@ -178,7 +175,7 @@ void play_narrative(struct NarrativeState *narrative_state,
     }
 
     struct NarrativeElement * current_element = narrative_state->current_narrative->element_array[narrative_state->current_element_index];
-    int element_finished = play_narrative_element(current_element);
+    int element_finished = play_narrative_element(current_element, dependencies);
     if(element_finished)
     {
         int narrative_finished = narrative_state->current_narrative->number_of_elements <= (narrative_state->current_element_index + 1);

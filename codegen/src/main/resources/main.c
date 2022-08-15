@@ -26,9 +26,6 @@ void modify_game_state()
 // PLAY_NARRATIVE_SECTION
 
 
-struct NarrativeState narrative_state;
-
-
 
 
 unsigned char _get_next_node_awaiting_narrative = 0x01;
@@ -48,18 +45,12 @@ void get_next_node_bound()
      // TODO: extract to observer pattern
     _modify_game_state_done = 0x00;
     _get_next_node_awaiting_narrative = 0x01;
-    narrative_state.narrative_finished = 0x00;
-    narrative_state_on_new_node(&narrative_state, current_node);
+    _play_narrative_narrative_state.narrative_finished = 0x00;
+    narrative_state_on_new_node(&_play_narrative_narrative_state, current_node);
     // TODO: update observers
 }
 
 void (*_play_narrative_observers[])(void) = {&_get_next_node_on_narrative_finish};
-void play_narrative_bound()
-{
-    // TODO: add observers here
-    // TODO: check if I can use size
-    play_narrative(&narrative_state, _play_narrative_observers, 1);
-}
 
 void play_music_inc()
 {
@@ -69,7 +60,7 @@ void play_music_inc()
 void game_mode_loop()
 {
      modify_game_state();
-     play_narrative_bound();
+     play_narrative_bound(_play_narrative_observers, 1);
      play_music_inc();
      get_next_node_bound();
 }
@@ -77,7 +68,7 @@ void game_mode_loop()
 int main()
 {
      setup();
-     narrative_state_on_new_node(&narrative_state, current_node);
+     narrative_state_on_new_node(&_play_narrative_narrative_state, current_node);
      SPRITES_8x16;
      SHOW_SPRITES;
      SHOW_BKG;

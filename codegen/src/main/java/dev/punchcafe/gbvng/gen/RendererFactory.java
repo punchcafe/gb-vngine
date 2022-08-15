@@ -317,6 +317,14 @@ public class RendererFactory {
     }
 
     @RendererSupplier
+    public ComponentRenderer playNarrativeBoundFunctionRenderer() throws IOException {
+        return FixtureRender.fromFile("/narrative/play_narrative_bindings.c")
+                .componentName(PLAY_NARRATIVE_BINDINGS_RENDERER_NAME)
+                .dependencies(List.of(PLAY_NARRATIVE_RENDERER_NAME))
+                .build();
+    }
+
+    @RendererSupplier
     public ComponentRenderer foregroundRendererRenderer() throws IOException {
         return FixtureRender.fromFile("/narrative/render_foreground.c")
                 .componentName(ComponentRendererNames.FOREGROUND_RENDERER_RENDERER_NAME)
@@ -410,7 +418,7 @@ public class RendererFactory {
                         ComponentRendererNames.IMAGE_ASSET_RENDERER_NAME,
                         ComponentRendererNames.NODE_RENDERER_NAME,
                         ComponentRendererNames.GET_NEXT_NODE_FUNCTION_RENDERER_NAME,
-                        ComponentRendererNames.PLAY_NARRATIVE_RENDERER_NAME,
+                        ComponentRendererNames.PLAY_NARRATIVE_BINDINGS_RENDERER_NAME,
                         ComponentRendererNames.CURRENT_NODE_RENDERER_NAME,
                         ComponentRendererNames.NARRATIVE_STRUCT_RENDERER_NAME))
                 .build();
