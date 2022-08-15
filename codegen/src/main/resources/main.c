@@ -28,24 +28,37 @@ void modify_game_state()
 
 struct NarrativeState narrative_state;
 
-void play_narrative_bound()
+
+
+
+unsigned char _get_next_node_awaiting_narrative = 0x01;
+// TODO: ensure this is set even on empty narrative
+
+void _get_next_node_on_narrative_finish()
 {
-    play_narrative(&narrative_state);
+    _get_next_node_awaiting_narrative = 0x00;
 }
-
-
-
 void get_next_node_bound()
 {
-    if(narrative_state.narrative_finished){
-        // TODO: extract with proper binding
-        current_node = get_next_node(current_node, &GAME_STATE);
-         // TODO: extract to observer pattern
-        _modify_game_state_done = 0x00;
-        narrative_state.narrative_finished = 0x00;
-        narrative_state_on_new_node(&narrative_state, current_node);
+    if(_get_next_node_awaiting_narrative){
+    return;
     }
+    // TODO: extract with proper binding
+    current_node = get_next_node(current_node, &GAME_STATE);
+     // TODO: extract to observer pattern
+    _modify_game_state_done = 0x00;
+    _get_next_node_awaiting_narrative = 0x01;
+    narrative_state.narrative_finished = 0x00;
+    narrative_state_on_new_node(&narrative_state, current_node);
     // TODO: update observers
+}
+
+void (*_play_narrative_observers[])(void) = {&_get_next_node_on_narrative_finish};
+void play_narrative_bound()
+{
+    // TODO: add observers here
+    // TODO: check if I can use size
+    play_narrative(&narrative_state, _play_narrative_observers, 1);
 }
 
 void play_music_inc()

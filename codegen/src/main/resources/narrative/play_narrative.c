@@ -167,7 +167,9 @@ void play_narrative_on_node_change(struct NarrativeState *narrative_state, struc
     */
 }
 
-void play_narrative(struct NarrativeState *narrative_state){
+void play_narrative(struct NarrativeState *narrative_state,
+                    void (*observers[])(void),
+                    unsigned short num_observers){
 // TODO: this doesn't allow for setting of the narrative, since that has to happen in reaction
 // TODO: possibly have 'handle node change' callbacks?
     if (narrative_state->narrative_finished)
@@ -182,6 +184,10 @@ void play_narrative(struct NarrativeState *narrative_state){
         int narrative_finished = narrative_state->current_narrative->number_of_elements <= (narrative_state->current_element_index + 1);
         if(narrative_finished){
             narrative_state->narrative_finished = 0x01;
+            for(int i = 0; i < num_observers; i++)
+            {
+                observers[i]();
+            }
         } else {
             narrative_state->current_element_index += 1;
             // potentially set fresh state here on the narrative_state element

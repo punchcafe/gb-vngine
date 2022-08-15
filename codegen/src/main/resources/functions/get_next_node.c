@@ -13,6 +13,7 @@ const void (*special_char_renderers[4])()  = {&text_box_print_special_char_up,
 
 void print_choices(char ** prompts, short * available_choices, short number_of_available_choices){
     clear_text_box();
+    // TODO: make this async
     for(int i = 0; i < number_of_available_choices; i++)
     {
         text_box_print("\n", 1);
@@ -75,12 +76,43 @@ struct Node * get_predicate_based_node(struct PredicateBasedTransition * transit
     return GAME_OVER_NODE_ID;
 }
 
-struct Node * get_next_node(struct Node * node, struct GameState * game_state){
+// TODO: module namespacing.
+
+struct GetNextNodeResult {
+    unsigned char finished;
+    struct Node * next_node;
+};
+
+void _set_node_result(struct Node * node, struct GetNextNodeResult * result)
+{
+    result->next_node = node;
+    result->finished = 0x01;
+}
+
+void _set_node_result_unfinished(struct GetNextNodeResult * result)
+{
+    result->next_node = 0x00;
+    result->finished = 0x00;
+}
+
+
+struct Node * get_next_node(struct Node * node,
+                            struct GameState * game_state
+                            /*struct GetNextNodeResult * out*/){
     if(node->node_transition_type == PLAYER_BASED_TRANSITION){
         return get_player_based_node((struct PlayerBasedTransition *)node->node_transition_object, game_state);
     } else if(node->node_transition_type == PREDICATE_BASED_TRANSITION){
         return get_predicate_based_node((struct PredicateBasedTransition *)(node->node_transition_object), game_state);
     };
     return GAME_OVER_NODE_ID;
+}
+
+
+void maybe_set_next_node(struct Node ** current_node_ptr,
+                                struct GameState * gs,
+                                void (*observers)(void),
+                                unsigned short num_observers)
+{
+//
 }
 #endif
