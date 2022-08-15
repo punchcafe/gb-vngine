@@ -19,4 +19,9 @@ void play_narrative_bound(void (*observers[])(void),
                             observers,
                             num_observers);
 }
+
+void play_narrative_node_change_observer(struct Node * node)
+{
+    play_narrative_on_node_change(&_play_narrative_narrative_state, node);
+}
 #endif

@@ -35,7 +35,16 @@ void _get_next_node_on_narrative_finish()
 {
     _get_next_node_awaiting_narrative = 0x00;
 }
-void get_next_node_bound()
+
+void _modify_game_state_on_next_node(struct Node * _node)
+{
+    _modify_game_state_done = 0x00;
+}
+
+void (*_play_narrative_observers[])(void) = {&_get_next_node_on_narrative_finish};
+void (*_node_change_observers[])(struct Node * node) = {&play_narrative_node_change_observer, &_modify_game_state_on_next_node};
+
+void get_next_node_bound(void (*observers[])(struct Node *), unsigned short num_observers)
 {
     if(_get_next_node_awaiting_narrative){
     return;
@@ -43,14 +52,13 @@ void get_next_node_bound()
     // TODO: extract with proper binding
     current_node = get_next_node(current_node, &GAME_STATE);
      // TODO: extract to observer pattern
-    _modify_game_state_done = 0x00;
     _get_next_node_awaiting_narrative = 0x01;
-    _play_narrative_narrative_state.narrative_finished = 0x00;
-    narrative_state_on_new_node(&_play_narrative_narrative_state, current_node);
-    // TODO: update observers
+    for(int i = 0; i < num_observers; i++)
+    {
+        _node_change_observers[i](current_node);
+    }
 }
 
-void (*_play_narrative_observers[])(void) = {&_get_next_node_on_narrative_finish};
 
 void play_music_inc()
 {
@@ -62,13 +70,13 @@ void game_mode_loop()
      modify_game_state();
      play_narrative_bound(_play_narrative_observers, 1);
      play_music_inc();
-     get_next_node_bound();
+     get_next_node_bound(_node_change_observers, 2);
 }
 
 int main()
 {
      setup();
-     narrative_state_on_new_node(&_play_narrative_narrative_state, current_node);
+     play_narrative_on_node_change(&_play_narrative_narrative_state, current_node);
      SPRITES_8x16;
      SHOW_SPRITES;
      SHOW_BKG;

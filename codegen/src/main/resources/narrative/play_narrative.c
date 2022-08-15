@@ -16,13 +16,6 @@ struct NarrativeState {
     int narrative_finished;
 };
 
-void narrative_state_on_new_node(struct NarrativeState * state, struct Node * node)
-{
-    state->current_element_index = 0;
-    state->narrative_finished = 0;
-    state->current_narrative = node->narrative;
-}
-
 struct TextNarrativeState {
     unsigned char awaiting_press;
     unsigned char finished;
@@ -158,11 +151,9 @@ int play_narrative_element(struct NarrativeElement *element, struct PlayNarrativ
 // NOT implementing observer function. This will be bound by a function in main.c
 void play_narrative_on_node_change(struct NarrativeState *narrative_state, struct Node * node)
 {
-    // TODO:
-    /*
-    1. check if non-null narrative
-    2. if non-null, set _narrative_finished to false, and set the narrative state
-    */
+    narrative_state->current_element_index = 0;
+    narrative_state->narrative_finished = 0;
+    narrative_state->current_narrative = node->narrative;
 }
 
 void play_narrative(struct NarrativeState *narrative_state,
