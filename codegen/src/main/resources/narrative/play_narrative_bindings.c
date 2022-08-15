@@ -3,7 +3,11 @@
 struct DialogueBox _dialogue_box_base = {0,0};
 struct DialogueBox * dialogue_box = &_dialogue_box_base;
 
-struct PlayNarrativeDependencies _play_narrative_deps = {&_dialogue_box_base};
+
+struct TextNarrativeState text_narrative_state_base = {0x00, 0, 0};
+struct TextNarrativeState * text_narrative_state = &text_narrative_state_base;
+
+struct PlayNarrativeDependencies _play_narrative_deps = {&_dialogue_box_base, &text_narrative_state_base};
 struct NarrativeState _play_narrative_narrative_state;
 
 

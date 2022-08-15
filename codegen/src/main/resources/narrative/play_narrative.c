@@ -5,6 +5,7 @@
 
 struct PlayNarrativeDependencies {
     struct DialogueBox * box;
+    struct TextNarrativeState * text_narrative_state;
 };
 
 struct NarrativeState {
@@ -14,9 +15,6 @@ struct NarrativeState {
     // void pointer current element state
     int narrative_finished;
 };
-
-struct TextNarrativeState text_narrative_state_base = {0x00, 0, 0};
-struct TextNarrativeState * text_narrative_state = &text_narrative_state_base;
 
 void narrative_state_on_new_node(struct NarrativeState * state, struct Node * node)
 {
@@ -54,7 +52,9 @@ int next_word_length(unsigned char * str)
     return position;
 }
 
-int handle_text(struct ExternalText * text, struct DialogueBox * dialogue_box)
+int handle_text(struct ExternalText * text,
+                struct DialogueBox * dialogue_box,
+                struct TextNarrativeState * text_narrative_state)
 {
     if(text_narrative_state->finished && joypad() & J_A)
     {
@@ -132,7 +132,9 @@ int play_narrative_element(struct NarrativeElement *element, struct PlayNarrativ
     switch (element->type)
     {
     case TEXT:
-        return handle_text((struct ExternalText*)element->content, dependencies->box);
+        return handle_text((struct ExternalText*)element->content,
+                            dependencies->box,
+                            dependencies->text_narrative_state);
         /*
     case FOREGROUND:
         return handle_foreground((struct ForegroundElement*)element->content);
