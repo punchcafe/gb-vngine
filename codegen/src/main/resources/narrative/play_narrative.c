@@ -6,15 +6,79 @@
 struct PlayNarrativeDependencies {
     struct DialogueBox * box;
     struct TextNarrativeState * text_narrative_state;
+    struct BackgroundNarrativeState * background_narrative_state;
 };
 
 struct NarrativeState {
     unsigned short current_element_index;
     struct Narrative * current_narrative;
+    unsigned char element_is_initialised;
     void * playing_element_state;
     // void pointer current element state
     int narrative_finished;
 };
+
+// ####### BACKGROUND_RENDERING_START
+
+#define BACKGROUND_WIDTH 20
+#define BACKGROUND_HEIGHT 12
+#define BACKGROUND_TILE_AREA BACKGROUND_HEIGHT * BACKGROUND_WIDTH
+#define BACKGROUND_START_Y_INDEX 0
+#define BACKGROUND_START_X_INDEX 0
+
+struct BackgroundNarrativeState {
+    unsigned int render_offset;
+};
+
+// TURN OFF EVERYTHING UNTIL REDNDER IS DONE
+
+#define BKG_TILES_PER_VBLANK 50
+
+unsigned int val_or_clamp(unsigned int value, unsigned int clamp)
+{
+    if(value > clamp)
+    {
+        return clamp;
+    }
+    return value;
+}
+
+int play_narrative_render_background(struct ExternalBackgroundAsset * current_asset,
+                                              struct BackgroundNarrativeState * state)
+{
+    SWITCH_ROM_MBC1(current_asset->bank);
+    struct BackgroundAsset * element = current_asset->asset;
+    unsigned int i = state->render_offset;
+    unsigned int limit = val_or_clamp(i + BKG_TILES_PER_VBLANK, BACKGROUND_TILE_AREA);
+    while(i < limit)
+    {
+        unsigned int x = i % BACKGROUND_WIDTH;
+        unsigned int y = i / BACKGROUND_WIDTH;
+        unsigned char assignment_block [] = {element->tile_assignements[i] + TEXT_PATTERNS_END_INDEX + 1};
+        set_bkg_tiles(x, y, 1, 1, assignment_block);
+        i++;
+    }
+    state->render_offset = limit;
+    if(limit >= BACKGROUND_TILE_AREA)
+    {
+        SHOW_BKG;
+        SHOW_SPRITES;
+        return 1;
+    }
+    return 0;
+}
+
+void play_narrative_init_background(struct ExternalBackgroundAsset * asset,
+                                    struct PlayNarrativeDependencies * dependencies)
+{
+    HIDE_BKG;
+    HIDE_SPRITES;
+    SWITCH_ROM_MBC1(asset->bank);
+    set_bkg_data(TEXT_PATTERNS_END_INDEX + 1, asset->asset->number_of_tiles, asset->asset->background_tiles);
+    dependencies->background_narrative_state->render_offset = 0;
+}
+
+// ####### BACKGROUND_RENDERING_END
 
 struct TextNarrativeState {
     unsigned char awaiting_press;
@@ -138,13 +202,25 @@ int play_narrative_element(struct NarrativeElement *element, struct PlayNarrativ
 /*
     case PAUSE:
         return handle_pause((struct Pause*)element->content);
-    case BACKGROUND:
-        return handle_background((struct ExternalBackgroundAsset*)element->content);
         */
+    case BACKGROUND:
+        return play_narrative_render_background((struct ExternalBackgroundAsset*)element->content,
+                                                dependencies->background_narrative_state);
     case PLAY_MUSIC:
         return handle_play_music((struct ExternalMusicAsset*)element->content);
     default:
         return 0x01;
+    }
+}
+
+void init_narrative_element(struct NarrativeElement *element, struct PlayNarrativeDependencies * dependencies)
+{
+    switch (element->type)
+    {
+    case BACKGROUND:
+        play_narrative_init_background((struct ExternalBackgroundAsset*)element->content, dependencies);
+    default:
+        return;
     }
 }
 
@@ -160,17 +236,21 @@ void play_narrative(struct NarrativeState *narrative_state,
                     struct PlayNarrativeDependencies * dependencies,
                     void (*observers[])(void),
                     unsigned short num_observers){
-// TODO: this doesn't allow for setting of the narrative, since that has to happen in reaction
-// TODO: possibly have 'handle node change' callbacks?
     if (narrative_state->narrative_finished)
     {
         return;
     }
 
     struct NarrativeElement * current_element = narrative_state->current_narrative->element_array[narrative_state->current_element_index];
+    if(!narrative_state->element_is_initialised)
+    {
+        init_narrative_element(current_element, dependencies);
+        narrative_state->element_is_initialised = 0x01;
+    }
     int element_finished = play_narrative_element(current_element, dependencies);
     if(element_finished)
     {
+        narrative_state->element_is_initialised = 0x00;
         int narrative_finished = narrative_state->current_narrative->number_of_elements <= (narrative_state->current_element_index + 1);
         if(narrative_finished){
             narrative_state->narrative_finished = 0x01;
@@ -180,7 +260,6 @@ void play_narrative(struct NarrativeState *narrative_state,
             }
         } else {
             narrative_state->current_element_index += 1;
-            // potentially set fresh state here on the narrative_state element
         }
     }
 }
