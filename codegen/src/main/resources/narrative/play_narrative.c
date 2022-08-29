@@ -32,7 +32,7 @@ struct BackgroundNarrativeState {
 
 // TURN OFF EVERYTHING UNTIL REDNDER IS DONE
 
-#define BKG_TILES_PER_VBLANK 50
+#define BKG_TILES_PER_VBLANK 7
 
 unsigned int val_or_clamp(unsigned int value, unsigned int clamp)
 {
@@ -52,6 +52,8 @@ int play_narrative_render_background(struct ExternalBackgroundAsset * current_as
     unsigned int limit = val_or_clamp(i + BKG_TILES_PER_VBLANK, BACKGROUND_TILE_AREA);
     while(i < limit)
     {
+        // TODO: optimise so that we build the full ref array in the state
+        // and then set_bkg_tiles only once.
         unsigned int x = i % BACKGROUND_WIDTH;
         unsigned int y = i / BACKGROUND_WIDTH;
         unsigned char assignment_block [] = {element->tile_assignements[i] + TEXT_PATTERNS_END_INDEX + 1};
@@ -192,10 +194,8 @@ int play_narrative_element(struct NarrativeElement *element, struct PlayNarrativ
         return handle_text((struct ExternalText*)element->content,
                             dependencies->box,
                             dependencies->text_narrative_state);
-        /*
     case FOREGROUND:
-        return handle_foreground((struct ForegroundElement*)element->content);
-        */
+         handle_foreground((struct ForegroundElement*)element->content);
     case CLEAR_TEXT:
         dialogue_box_clear_screen(dependencies->box);
         return 0x01;

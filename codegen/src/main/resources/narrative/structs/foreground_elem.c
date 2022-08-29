@@ -102,14 +102,9 @@ void set_focus_tile(struct ExternalForegroundAsset * external_asset)
   set_pattern_block(asset->block);
   for(int i = 0; i < 40; i++)
   {
-      if(i % 5 == 0)
-      {
-          delay_with_music(1);
-      }
     set_sprite_tile(i, asset->pattern_block_references[i]);
     move_sprite(i,(i%10)*8 + FOCUS_MODE_X_OFFSET, (i/10)*16 + FOCUS_MODE_Y_OFFSET);
   }
-  delay_with_music(4);
   SHOW_SPRITES;
 }
 
@@ -127,7 +122,6 @@ void set_character_tile(unsigned short left_offset, struct ExternalForegroundAss
         set_sprite_tile(i_a, asset->pattern_block_references[i_a]);
     }
 
-    delay_with_music(1);
     if(left_offset != current_foreground_offset){
         // ensure we don't move sprites unless needed
 
@@ -140,14 +134,9 @@ void set_character_tile(unsigned short left_offset, struct ExternalForegroundAss
 
         }
 
-        delay_with_music(1);
         for(unsigned short i = 7; i < 42; i++)
         {
             // accomodate for missing two tiles in first row, also adjusts sprite num
-            if(i % 7 == 0)
-            {
-                delay_with_music(1);
-            }
             unsigned int sprite_number = i - 2;
             unsigned short x = (i%7) * 8 + 8 + left_offset;
             unsigned short y = (i/7) * 16 + PORTRAIT_MODE_Y_OFFSET;
@@ -155,7 +144,6 @@ void set_character_tile(unsigned short left_offset, struct ExternalForegroundAss
         }
         current_foreground_offset = left_offset;
     }
-    delay_with_music(4);
     SHOW_SPRITES;
 }
 
