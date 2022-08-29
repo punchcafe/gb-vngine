@@ -89,7 +89,7 @@ struct ForegroundElement {
     struct ExternalForegroundAsset * asset;
 };
 
-#define SPRITES_PER_VBLANK 10
+#define SPRITES_PER_VBLANK 5
 
 struct ForegroundNarrativeState {
     // offset tracker, used during tile assignment and moving
@@ -148,9 +148,22 @@ unsigned int set_character_tile(unsigned short left_offset,
                                 struct ExternalForegroundAsset * external_asset,
                                 struct ForegroundNarrativeState * render_state)
 {
+    // TODO: extract to method above so handled homogeounsly for all visual types
+    if(render_state->awaiting_screen)
+    {
+        // This state is reached at the end, when everything has been moved and set,
+        // we are just waiting for the screen to finish rendering
+        render_state->await_screen_acc++;
+        if(render_state->await_screen_acc > 20)
+        {
+            SHOW_SPRITES;
+            return 0x01;
+        };
+        return 0x00;
+    }
     SWITCH_ROM_MBC1(external_asset->bank_number);
     struct ForegroundAsset * asset = external_asset->asset;
-    set_pattern_block(asset->block);
+    //set_pattern_block(asset->block);
     int limit = val_or_clamp(render_state->tile_offset + SPRITES_PER_VBLANK, 40);
 
     if(render_state->must_move_sprites){
@@ -191,12 +204,11 @@ unsigned int set_character_tile(unsigned short left_offset,
     }
     if(limit >= 40)
     {
-        SHOW_SPRITES;
-        return 0x01;
+        render_state->awaiting_screen = 0x01;
     } else {
         render_state->tile_offset = limit;
-        return 0x00;
     }
+    return 0x00;
 }
 
 unsigned int set_character_tile_left(struct ExternalForegroundAsset * asset,

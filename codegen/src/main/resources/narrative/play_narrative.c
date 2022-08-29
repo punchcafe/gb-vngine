@@ -213,6 +213,7 @@ struct ForegroundNarrativeState * render_state)
     render_state->awaiting_screen = 0x00;
     HIDE_SPRITES;
     SWITCH_ROM_MBC1(foreground_element->asset->bank_number);
+    set_pattern_block(foreground_element->asset->asset->block);
     enum ForegroundElementPosition next_position = foreground_element->position;
     render_state->must_move_sprites = next_position != render_state->previous_sprite_position;
     render_state->previous_sprite_position = next_position;
@@ -224,10 +225,12 @@ void init_narrative_element(struct NarrativeElement *element, struct PlayNarrati
     {
     case BACKGROUND:
         play_narrative_init_background((struct ExternalBackgroundAsset*)element->content, dependencies);
+        return;
     case FOREGROUND:
         play_narrative_init_render_foreground(
                 (struct ForegroundElement*)element->content,
                 dependencies->foreground_narrative_state);
+        return;
     default:
         return;
     }
