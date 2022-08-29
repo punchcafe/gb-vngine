@@ -7,6 +7,7 @@ struct PlayNarrativeDependencies {
     struct DialogueBox * box;
     struct TextNarrativeState * text_narrative_state;
     struct BackgroundNarrativeState * background_narrative_state;
+    struct ForegroundNarrativeState * foreground_narrative_state;
 };
 
 struct NarrativeState {
@@ -33,15 +34,6 @@ struct BackgroundNarrativeState {
 // TURN OFF EVERYTHING UNTIL REDNDER IS DONE
 
 #define BKG_TILES_PER_VBLANK 7
-
-unsigned int val_or_clamp(unsigned int value, unsigned int clamp)
-{
-    if(value > clamp)
-    {
-        return clamp;
-    }
-    return value;
-}
 
 int play_narrative_render_background(struct ExternalBackgroundAsset * current_asset,
                                               struct BackgroundNarrativeState * state)
@@ -195,7 +187,7 @@ int play_narrative_element(struct NarrativeElement *element, struct PlayNarrativ
                             dependencies->box,
                             dependencies->text_narrative_state);
     case FOREGROUND:
-         handle_foreground((struct ForegroundElement*)element->content);
+         return handle_foreground((struct ForegroundElement*)element->content, dependencies->foreground_narrative_state);
     case CLEAR_TEXT:
         dialogue_box_clear_screen(dependencies->box);
         return 0x01;
@@ -213,12 +205,29 @@ int play_narrative_element(struct NarrativeElement *element, struct PlayNarrativ
     }
 }
 
+void play_narrative_init_render_foreground(struct ForegroundElement* foreground_element,
+struct ForegroundNarrativeState * render_state)
+{
+    render_state->tile_offset = 0;
+    render_state->await_screen_acc = 0;
+    render_state->awaiting_screen = 0x00;
+    HIDE_SPRITES;
+    SWITCH_ROM_MBC1(foreground_element->asset->bank_number);
+    enum ForegroundElementPosition next_position = foreground_element->position;
+    render_state->must_move_sprites = next_position != render_state->previous_sprite_position;
+    render_state->previous_sprite_position = next_position;
+}
+
 void init_narrative_element(struct NarrativeElement *element, struct PlayNarrativeDependencies * dependencies)
 {
     switch (element->type)
     {
     case BACKGROUND:
         play_narrative_init_background((struct ExternalBackgroundAsset*)element->content, dependencies);
+    case FOREGROUND:
+        play_narrative_init_render_foreground(
+                (struct ForegroundElement*)element->content,
+                dependencies->foreground_narrative_state);
     default:
         return;
     }
