@@ -19,13 +19,14 @@ public class BackgroundConverter implements ImageAssetConverter {
 
     @Override
     public String convert(final BufferedImage image, final String assetName) {
-        SquareTile[] tiles = new SquareTile[240];
-        for (int i = 0; i < 240; i++) {
+        final int num_tiles = (image.getWidth()/8) * (image.getHeight()/8);
+        SquareTile[] tiles = new SquareTile[num_tiles];
+        for (int i = 0; i < num_tiles; i++) {
             tiles[i] = new SquareTile();
         }
-        if (image.getWidth() != 160 || image.getHeight() != 96) {
-            throw new IllegalArgumentException();
-        }
+        //if (image.getWidth() != 160 || image.getHeight() != 96) {
+        //    throw new IllegalArgumentException();
+        //}
 
         for (int i = 0; i < image.getWidth(); i++) {
             for (int j = 0; j < image.getHeight(); j++) {
