@@ -5,9 +5,9 @@
 - Character limit on prompts to fit in one line
 
 ## Dev notes TODO
-- get compile working for current
-- reimplement text box for async, with context/bindings pattern
-
+- Implement callback pattern for `play_narrative` so it updates gamestate
+- Separate `play_narrative` file into `play_narrative` utility functions and `play_narrative_bound`
+- Implement get_next_node methods
 
 # Roadmap
 
