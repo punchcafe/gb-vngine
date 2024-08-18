@@ -3,9 +3,12 @@
  */
 package dev.punchcafe.gbvng.gen;
 
+import dev.punchcafe.gbvng.gen.config.ColorConfig;
+import dev.punchcafe.gbvng.gen.config.ImageConfig;
+import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
+import dev.punchcafe.gbvng.gen.graphics.PixelValue;
 import dev.punchcafe.gbvng.gen.mbanks.BankableAsset;
 import dev.punchcafe.gbvng.gen.mbanks.MemoryBanks;
-import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.mbanks.factory.MemoryBankFactory;
 import dev.punchcafe.gbvng.gen.mbanks.renderers.BankRenderer;
@@ -15,18 +18,15 @@ import dev.punchcafe.gbvng.gen.mbanks.utility.MusicAssetExtractor;
 import dev.punchcafe.gbvng.gen.mbanks.utility.TextAssetExtractor;
 import dev.punchcafe.gbvng.gen.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.narrative.NarrativeReader;
-import dev.punchcafe.gbvng.gen.config.ColorConfig;
-import dev.punchcafe.gbvng.gen.config.ImageConfig;
-import dev.punchcafe.gbvng.gen.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.narrative.PlayMusic;
 import dev.punchcafe.gbvng.gen.predicate.PredicateService;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.graphics.PixelValue;
 import dev.punchcafe.vngine.pom.PomLoader;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Getter;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.core.ValueRequiredException;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,7 +36,6 @@ import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -240,8 +239,21 @@ public class CodeGenerator {
         try {
             return serializer.read(NarrativeConfig.class, file);
         } catch (Exception e) {
-            throw new RuntimeException();
+            return handleXmlError(e);
         }
+    }
+
+    private <T> T handleXmlError(final Exception exception){
+        String message;
+        if(exception instanceof ValueRequiredException){
+            final var castException = (ValueRequiredException) exception;
+            message = String.format("Narrative Config missing value exception: %s", castException.getMessage());
+        } else {
+            message = String.format("Failed to parse Narrative Config: %s", exception.toString());
+        }
+        System.out.println(message);
+        System.exit(1);
+        return null;
     }
 
     private ComponentRenderer getFromMethod(final Method method, final RendererFactory factory) {

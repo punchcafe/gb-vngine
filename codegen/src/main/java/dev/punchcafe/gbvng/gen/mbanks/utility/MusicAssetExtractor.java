@@ -10,6 +10,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * TODO: Add documentation on how this relies on the Asset rendering to put all shipped stuff in /build/music.
+ * Tackle how this is part of the make file itself currently (per project)
+ */
 @Builder
 public class MusicAssetExtractor {
 

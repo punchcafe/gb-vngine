@@ -31,8 +31,12 @@ public class BackgroundMusicAsset extends BankableAssetBase {
         List<String> allLines;
         try {
             allLines = Files.lines(songFile.toPath()).collect(Collectors.toList());
-        } catch (IOException ex){
-            throw new RuntimeException();
+        } catch (IOException ex) {
+            System.out.println(String.format("error: %s", ex.toString()));
+            System.out.println(songFile.getName());
+            System.exit(1);
+            // Todo: clean this up
+            allLines = List.of();
         }
         final var bodyList = allLines.subList(5, allLines.size());
         final var pattern = Pattern.compile(String.format("const unsigned char %s0\\[] = \\{", this.id));
