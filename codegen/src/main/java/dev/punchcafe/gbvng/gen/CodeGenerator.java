@@ -19,7 +19,7 @@ import dev.punchcafe.gbvng.gen.mbanks.utility.TextAssetExtractor;
 import dev.punchcafe.gbvng.gen.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.narrative.NarrativeReader;
 import dev.punchcafe.gbvng.gen.narrative.PlayMusic;
-import dev.punchcafe.gbvng.gen.predicate.PredicateService;
+import dev.punchcafe.gbvng.gen.predicate.PredicateRegistry;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.vngine.pom.PomLoader;
@@ -157,7 +157,7 @@ public class CodeGenerator {
         final var bankWriteLocation = Path.of(scriptDestination).getParent().toFile();
         renderAllMemoryBanks(bankWriteLocation, allAssets, narrativeConfig);
 
-        final var predicateService = PredicateService.from(gameConfig);
+        final var predicateService = PredicateRegistry.from(gameConfig);
 
         final var rendererFactory = new RendererFactory(gameConfig,
                 predicateService,

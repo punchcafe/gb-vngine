@@ -5,7 +5,7 @@ import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundImageAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
-import dev.punchcafe.gbvng.gen.predicate.PredicateService;
+import dev.punchcafe.gbvng.gen.predicate.PredicateRegistry;
 import dev.punchcafe.gbvng.gen.render.external.ExternalBackgroundAssetRenderer;
 import dev.punchcafe.gbvng.gen.render.external.ExternalForegroundAssetSetRenderer;
 import dev.punchcafe.gbvng.gen.render.*;
@@ -40,7 +40,7 @@ public class RendererFactory {
     // TODO: split renderer factory into relevant isolated sub factories
 
     private final ProjectObjectModel<Narrative> gameConfig;
-    private final PredicateService predicateService;
+    private final PredicateRegistry predicateRegistry;
     private final File assetDirectory;
     private final NarrativeConfig narrativeConfig;
     private final HexValueConfig hexValueConfig;
@@ -154,7 +154,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer predicatesRenderer() {
         return PredicatesRenderer.builder()
-                .predicateService(this.predicateService)
+                .predicateRegistry(this.predicateRegistry)
                 .build();
     }
 
@@ -242,7 +242,7 @@ public class RendererFactory {
     @RendererSupplier
     public ComponentRenderer branchRenderer() {
         return BranchRenderer.builder()
-                .predicateService(this.predicateService)
+                .predicateRegistry(this.predicateRegistry)
                 .gameConfig(this.gameConfig)
                 .build();
     }

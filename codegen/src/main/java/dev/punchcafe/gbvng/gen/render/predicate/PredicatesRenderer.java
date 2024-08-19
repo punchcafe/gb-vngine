@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.predicate;
 
-import dev.punchcafe.gbvng.gen.predicate.PredicateService;
+import dev.punchcafe.gbvng.gen.predicate.PredicateRegistry;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;
@@ -17,11 +17,11 @@ public class PredicatesRenderer implements ComponentRenderer {
 
     public static String PREDICATES_RENDERER_NAME = "PREDICATES_RENDERER";
 
-    private final PredicateService predicateService;
+    private final PredicateRegistry predicateRegistry;
 
     @Override
     public String render() {
-        return predicateService
+        return predicateRegistry
                 .allPredicateFunctions()
                 .map(this::renderPredicateMethod)
                 .collect(Collectors.joining("\n"));

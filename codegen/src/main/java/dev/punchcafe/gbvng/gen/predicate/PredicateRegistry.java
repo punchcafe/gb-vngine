@@ -19,15 +19,15 @@ import java.util.stream.Stream;
 /**
  * Acts as a registry for all found unique predicate expressions in a project.
  */
-public class PredicateService {
+public class PredicateRegistry {
 
     private final Map<SourceName, PredicateExpression> predicateExpressions;
 
-    public static PredicateService from(final ProjectObjectModel<?> gameConfig) {
-        return new PredicateService(gameConfig);
+    public static PredicateRegistry from(final ProjectObjectModel<?> gameConfig) {
+        return new PredicateRegistry(gameConfig);
     }
 
-    private PredicateService(final ProjectObjectModel<?> gameConfig) {
+    private PredicateRegistry(final ProjectObjectModel<?> gameConfig) {
         final var predicateParser = PredicateParser.defaultParser();
         predicateExpressions = gameConfig.getChapterConfigs().stream()
                 .map(ChapterConfig::getNodes)
