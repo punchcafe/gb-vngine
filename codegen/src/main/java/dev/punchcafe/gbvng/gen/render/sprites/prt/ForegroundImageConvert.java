@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
-import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.PortraitAssetNameVariableSanitiser;
 
 import java.io.File;
 import java.util.regex.Pattern;

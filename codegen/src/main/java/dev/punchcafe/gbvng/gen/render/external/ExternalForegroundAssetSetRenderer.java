@@ -1,7 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.external;
 
-import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAsset;
-import dev.punchcafe.gbvng.gen.mbanks.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.project.assets.ForegroundAsset;
+import dev.punchcafe.gbvng.gen.project.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import lombok.Builder;
 

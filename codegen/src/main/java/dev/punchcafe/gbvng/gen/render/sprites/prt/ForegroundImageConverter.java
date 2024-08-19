@@ -1,8 +1,8 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
-import dev.punchcafe.gbvng.gen.graphics.CompositeSprite;
+import dev.punchcafe.gbvng.gen.adapter.graphics.CompositeSprite;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
-import dev.punchcafe.gbvng.gen.graphics.TallTile;
+import dev.punchcafe.gbvng.gen.adapter.graphics.TallTile;
 import lombok.AllArgsConstructor;
 
 import javax.imageio.ImageIO;

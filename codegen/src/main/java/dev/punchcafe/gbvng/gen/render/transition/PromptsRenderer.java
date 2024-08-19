@@ -1,7 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.transition;
 
-import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
-import dev.punchcafe.gbvng.gen.csan.PromptName;
+import dev.punchcafe.gbvng.gen.adapter.NodeIdSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.PromptName;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import dev.punchcafe.vngine.pom.model.Branch;

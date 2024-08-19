@@ -1,10 +1,10 @@
 package dev.punchcafe.gbvng.gen.render;
 
-import dev.punchcafe.gbvng.gen.config.FontConfig;
+import dev.punchcafe.gbvng.gen.project.config.FontConfig;
 import dev.punchcafe.gbvng.gen.render.mutate.GameStateMutationRenderer;
-import dev.punchcafe.gbvng.gen.csan.BranchName;
-import dev.punchcafe.gbvng.gen.csan.NodeTransitionName;
-import dev.punchcafe.gbvng.gen.csan.PromptName;
+import dev.punchcafe.gbvng.gen.adapter.BranchName;
+import dev.punchcafe.gbvng.gen.adapter.NodeTransitionName;
+import dev.punchcafe.gbvng.gen.adapter.PromptName;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;

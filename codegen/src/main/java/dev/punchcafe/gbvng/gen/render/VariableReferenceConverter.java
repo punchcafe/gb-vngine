@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render;
 
-import dev.punchcafe.gbvng.gen.csan.CNameSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.CNameSanitiser;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import dev.punchcafe.vngine.pom.model.vngpl.VariableVisitor;
 import dev.punchcafe.vngine.pom.model.vngpl.variable.bool.BoolGameVariable;

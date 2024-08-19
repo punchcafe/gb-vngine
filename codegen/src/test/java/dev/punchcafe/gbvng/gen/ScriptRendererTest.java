@@ -1,6 +1,7 @@
 package dev.punchcafe.gbvng.gen;
 
 import dev.punchcafe.gbvng.gen.render.FixtureRender;
+import dev.punchcafe.gbvng.gen.render.ScriptRenderer;
 
 import java.util.List;
 

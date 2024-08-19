@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.mutate;
 
-import dev.punchcafe.gbvng.gen.csan.NodeMutationsArrayName;
+import dev.punchcafe.gbvng.gen.adapter.NodeMutationsArrayName;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;

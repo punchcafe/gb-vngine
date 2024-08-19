@@ -1,11 +1,11 @@
 package dev.punchcafe.gbvng.gen.render.node;
 
-import dev.punchcafe.gbvng.gen.csan.NodeMutationsArrayName;
+import dev.punchcafe.gbvng.gen.adapter.NodeMutationsArrayName;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
-import dev.punchcafe.gbvng.gen.csan.NarrativeName;
-import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
-import dev.punchcafe.gbvng.gen.csan.NodeTransitionName;
-import dev.punchcafe.gbvng.gen.narrative.Narrative;
+import dev.punchcafe.gbvng.gen.adapter.NarrativeName;
+import dev.punchcafe.gbvng.gen.adapter.NodeIdSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.NodeTransitionName;
+import dev.punchcafe.gbvng.gen.project.narrative.Narrative;
 import dev.punchcafe.vngine.pom.model.Node;
 import dev.punchcafe.vngine.pom.model.NodeType;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;

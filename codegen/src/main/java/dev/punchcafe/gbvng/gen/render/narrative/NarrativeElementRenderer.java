@@ -1,14 +1,13 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
-import dev.punchcafe.gbvng.gen.csan.MusicAssetName;
-import dev.punchcafe.gbvng.gen.csan.NarrativeName;
-import dev.punchcafe.gbvng.gen.csan.PortraitAssetNameVariableSanitiser;
-import dev.punchcafe.gbvng.gen.mbanks.assets.TextAsset;
-import dev.punchcafe.gbvng.gen.narrative.*;
+import dev.punchcafe.gbvng.gen.adapter.MusicAssetName;
+import dev.punchcafe.gbvng.gen.adapter.NarrativeName;
+import dev.punchcafe.gbvng.gen.adapter.PortraitAssetNameVariableSanitiser;
+import dev.punchcafe.gbvng.gen.project.assets.TextAsset;
+import dev.punchcafe.gbvng.gen.project.narrative.*;
 import lombok.Builder;
 
 import java.util.Map;
-import java.util.Optional;
 
 @Builder
 public class NarrativeElementRenderer implements NarrativeElementVisitor<String> {

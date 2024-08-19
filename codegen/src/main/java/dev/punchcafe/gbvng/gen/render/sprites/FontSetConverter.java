@@ -1,12 +1,12 @@
 package dev.punchcafe.gbvng.gen.render.sprites;
 
-import dev.punchcafe.gbvng.gen.graphics.Tile;
-import dev.punchcafe.gbvng.gen.config.FontConfig;
+import dev.punchcafe.gbvng.gen.adapter.graphics.Tile;
+import dev.punchcafe.gbvng.gen.project.config.FontConfig;
 import lombok.Builder;
 
 import java.awt.image.BufferedImage;
 
-import static dev.punchcafe.gbvng.gen.graphics.TileConverters.extractTilesFromImage;
+import static dev.punchcafe.gbvng.gen.adapter.graphics.TileConverters.extractTilesFromImage;
 import static java.util.stream.Collectors.joining;
 
 @Builder

@@ -1,8 +1,8 @@
 package dev.punchcafe.gbvng.gen.render.transition;
 
-import dev.punchcafe.gbvng.gen.csan.BranchName;
-import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
-import dev.punchcafe.gbvng.gen.predicate.PredicateRegistry;
+import dev.punchcafe.gbvng.gen.adapter.BranchName;
+import dev.punchcafe.gbvng.gen.adapter.NodeIdSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.predicate.PredicateRegistry;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.Branch;
 import dev.punchcafe.vngine.pom.model.Node;

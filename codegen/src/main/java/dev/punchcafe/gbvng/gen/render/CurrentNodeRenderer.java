@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render;
 
-import dev.punchcafe.gbvng.gen.csan.NodeIdSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.NodeIdSanitiser;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;
 import lombok.Builder;
 

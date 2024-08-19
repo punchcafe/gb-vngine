@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.transition;
 
-import dev.punchcafe.gbvng.gen.csan.NodeTransitionName;
+import dev.punchcafe.gbvng.gen.adapter.NodeTransitionName;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import dev.punchcafe.vngine.pom.model.Node;

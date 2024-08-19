@@ -1,7 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.external;
 
-import dev.punchcafe.gbvng.gen.csan.MusicAssetName;
-import dev.punchcafe.gbvng.gen.mbanks.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.adapter.MusicAssetName;
+import dev.punchcafe.gbvng.gen.project.assets.BackgroundMusicAsset;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import lombok.Builder;
 

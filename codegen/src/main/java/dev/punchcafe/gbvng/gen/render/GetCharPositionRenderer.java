@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render;
 
-import dev.punchcafe.gbvng.gen.config.FontConfig;
+import dev.punchcafe.gbvng.gen.project.config.FontConfig;
 import lombok.Builder;
 
 import java.util.List;

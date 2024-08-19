@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.gs;
 
-import dev.punchcafe.gbvng.gen.csan.CNameSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.CNameSanitiser;
 import dev.punchcafe.gbvng.gen.render.RenderUtils;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.GameStateVariableConfig;

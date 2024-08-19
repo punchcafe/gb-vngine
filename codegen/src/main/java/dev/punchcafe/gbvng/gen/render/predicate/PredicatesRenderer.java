@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.predicate;
 
-import dev.punchcafe.gbvng.gen.predicate.PredicateRegistry;
+import dev.punchcafe.gbvng.gen.adapter.predicate.PredicateRegistry;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.gbvng.gen.render.ComponentRendererNames;
 import dev.punchcafe.gbvng.gen.render.gs.GameStateRenderer;

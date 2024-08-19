@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.mutate;
 
-import dev.punchcafe.gbvng.gen.csan.CNameSanitiser;
+import dev.punchcafe.gbvng.gen.adapter.CNameSanitiser;
 import dev.punchcafe.vngine.pom.model.VariableTypes;
 import dev.punchcafe.vngine.pom.model.vngml.*;
 
