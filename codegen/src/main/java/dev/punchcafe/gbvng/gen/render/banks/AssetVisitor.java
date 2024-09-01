@@ -1,9 +1,9 @@
 package dev.punchcafe.gbvng.gen.render.banks;
 
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundImageAsset;
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundMusicAsset;
-import dev.punchcafe.gbvng.gen.project.assets.ForegroundAssetSet;
-import dev.punchcafe.gbvng.gen.project.assets.TextAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundImageAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.adapter.assets.TextAsset;
 
 public interface AssetVisitor<T> {
 

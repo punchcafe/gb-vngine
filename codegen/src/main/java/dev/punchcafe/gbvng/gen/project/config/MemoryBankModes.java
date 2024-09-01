@@ -1,10 +1,12 @@
-package dev.punchcafe.gbvng.gen.adapter.banks;
+package dev.punchcafe.gbvng.gen.project.config;
+
+import dev.punchcafe.gbvng.gen.project.config.MemoryBankConfiguration;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface MemoryBanks {
+public interface MemoryBankModes {
 
     MemoryBankConfiguration NONE = MemoryBankConfiguration.builder()
             .numberOfBanks(1)

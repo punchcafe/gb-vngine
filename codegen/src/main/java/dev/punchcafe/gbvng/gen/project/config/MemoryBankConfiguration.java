@@ -1,10 +1,11 @@
-package dev.punchcafe.gbvng.gen.adapter.banks;
+package dev.punchcafe.gbvng.gen.project.config;
 
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
+// TODO: make property of project module
 @Builder
 @Getter
 public class MemoryBankConfiguration {

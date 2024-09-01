@@ -1,6 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.external;
 
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundImageAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundImageAsset;
+import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBankAllocator;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import lombok.Builder;
 
@@ -13,6 +14,7 @@ import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
 public class ExternalBackgroundAssetRenderer implements ComponentRenderer {
 
     private List<BackgroundImageAsset> allBackgroundImageAssets;
+    private final MemoryBankAllocator memoryBankAllocator;
 
     private String renderBackgroundImageAssets(final List<BackgroundImageAsset> assets) {
         return assets.stream()
@@ -27,7 +29,7 @@ public class ExternalBackgroundAssetRenderer implements ComponentRenderer {
         final var externalAsset = String.format("struct ExternalBackgroundAsset %s = {&%s, %s};",
                 asset.getExternalAssetName(),
                 asset.getId(),
-                asset.getBank().orElseThrow());
+                memoryBankAllocator.getBank(asset));
         return forwardDeclaration + "\n" + externalAsset;
     }
 

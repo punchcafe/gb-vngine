@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.render.banks;
 
-import dev.punchcafe.gbvng.gen.project.assets.*;
+import dev.punchcafe.gbvng.gen.adapter.assets.*;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PatternBlock;
 
 import static java.util.stream.Collectors.joining;

@@ -1,10 +1,11 @@
 package dev.punchcafe.gbvng.gen.render;
 
+import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBankAllocator;
 import dev.punchcafe.gbvng.gen.project.config.NarrativeConfig;
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundImageAsset;
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundMusicAsset;
-import dev.punchcafe.gbvng.gen.project.assets.ForegroundAssetSet;
-import dev.punchcafe.gbvng.gen.project.assets.TextAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundImageAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.adapter.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.adapter.predicate.PredicateRegistry;
 import dev.punchcafe.gbvng.gen.render.external.ExternalBackgroundAssetRenderer;
 import dev.punchcafe.gbvng.gen.render.external.ExternalForegroundAssetSetRenderer;
@@ -44,6 +45,7 @@ public class RendererFactory {
     private final PredicateRegistry predicateRegistry;
     private final File assetDirectory;
     private final NarrativeConfig narrativeConfig;
+    private final MemoryBankAllocator memoryBankAllocator;
     private final HexValueConfig hexValueConfig;
     private final List<ForegroundAssetSet> allForegroundAssetSets;
     private final List<BackgroundImageAsset> allBackgroundImageAssets;
@@ -88,6 +90,7 @@ public class RendererFactory {
     public ComponentRenderer externalForegroundAssetSetsRenderer() throws IOException {
         return ExternalForegroundAssetSetRenderer.builder()
                 .allForegroundAssetSets(this.allForegroundAssetSets)
+                .memoryBankAllocator(this.memoryBankAllocator)
                 .build();
     }
 
@@ -95,6 +98,7 @@ public class RendererFactory {
     public ComponentRenderer externalBackgroundAssetSetsRenderer() throws IOException {
         return ExternalBackgroundAssetRenderer.builder()
                 .allBackgroundImageAssets(this.allBackgroundImageAssets)
+                .memoryBankAllocator(this.memoryBankAllocator)
                 .build();
     }
 
@@ -102,6 +106,7 @@ public class RendererFactory {
     public ComponentRenderer externalMusicAssetsRenderer(){
         return ExternalMusicAssetRenderer.builder()
                 .allMusicAssets(this.allBackgroundMusic)
+                .memoryBankAllocator(this.memoryBankAllocator)
                 .build();
     }
 
@@ -109,6 +114,7 @@ public class RendererFactory {
     public ComponentRenderer externalTextAssetsRenderer(){
         return ExternalTextAssetRender.builder()
                 .textAssets(this.allTextAssets)
+                .memoryBankAllocator(this.memoryBankAllocator)
                 .build();
     }
 

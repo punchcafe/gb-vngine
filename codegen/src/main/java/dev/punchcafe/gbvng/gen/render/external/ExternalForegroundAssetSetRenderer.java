@@ -1,7 +1,8 @@
 package dev.punchcafe.gbvng.gen.render.external;
 
-import dev.punchcafe.gbvng.gen.project.assets.ForegroundAsset;
-import dev.punchcafe.gbvng.gen.project.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.adapter.assets.ForegroundAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBankAllocator;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import lombok.Builder;
 
@@ -19,6 +20,7 @@ import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.FOREGROUND_E
 public class ExternalForegroundAssetSetRenderer implements ComponentRenderer {
 
     private List<ForegroundAssetSet> allForegroundAssetSets;
+    private final MemoryBankAllocator memoryBankAllocator;
 
     private String renderForegroundAssetSet(final List<ForegroundAssetSet> sets) {
         return sets.stream()
@@ -28,7 +30,7 @@ public class ExternalForegroundAssetSetRenderer implements ComponentRenderer {
     }
 
     private String renderForegroundAssetSet(final ForegroundAssetSet set) {
-        final int bank = set.getBank().orElseThrow();
+        final int bank =  memoryBankAllocator.getBank(set);
         return set.getForegroundAssets()
                 .stream()
                 .map(asset -> renderForegroundAsset(asset, bank))

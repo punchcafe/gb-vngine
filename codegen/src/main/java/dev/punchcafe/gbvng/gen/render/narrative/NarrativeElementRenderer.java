@@ -3,7 +3,7 @@ package dev.punchcafe.gbvng.gen.render.narrative;
 import dev.punchcafe.gbvng.gen.adapter.MusicAssetName;
 import dev.punchcafe.gbvng.gen.adapter.NarrativeName;
 import dev.punchcafe.gbvng.gen.adapter.PortraitAssetNameVariableSanitiser;
-import dev.punchcafe.gbvng.gen.project.assets.TextAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.project.narrative.*;
 import lombok.Builder;
 

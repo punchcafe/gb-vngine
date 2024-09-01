@@ -1,11 +1,11 @@
-package dev.punchcafe.gbvng.gen.adapter.banks.utility;
+package dev.punchcafe.gbvng.gen.adapter.assets.extractors;
 
 import dev.punchcafe.gbvng.gen.project.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.project.config.PortraitSetConfig;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PatternBlock;
 import dev.punchcafe.gbvng.gen.adapter.graphics.CompositeSprite;
-import dev.punchcafe.gbvng.gen.project.assets.ForegroundAsset;
-import dev.punchcafe.gbvng.gen.project.assets.ForegroundAssetSet;
+import dev.punchcafe.gbvng.gen.adapter.assets.ForegroundAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.ForegroundAssetSet;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.render.sprites.prt.ForegroundImageConverter;
 

@@ -1,7 +1,7 @@
-package dev.punchcafe.gbvng.gen.project.assets;
+package dev.punchcafe.gbvng.gen.adapter.assets;
 
-import dev.punchcafe.gbvng.gen.adapter.banks.BankableAssetBase;
 import dev.punchcafe.gbvng.gen.render.banks.AssetVisitor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.io.File;
@@ -18,13 +18,15 @@ import static java.util.stream.Collectors.joining;
  * Read in from a given Music file, strip the first few lines, including the pragma
  * bank, calculate the size, then store body as pure string.
  */
-public class BackgroundMusicAsset extends BankableAssetBase {
+@EqualsAndHashCode
+public class BackgroundMusicAsset implements SourceAsset {
 
     private Pattern DATA_AT_FUNCTION = Pattern.compile("(const void __at\\((.+)\\) __bank_.+_Data;)");
 
     private String id;
-    private boolean hasSwappedBankNumber = false;
     @Getter private List<String> body;
+
+    //TODO: separate the model from model rendering.
 
     public BackgroundMusicAsset(final File songFile){
         this.id = songFile.getName().substring(0, songFile.getName().length() - 2);
@@ -45,14 +47,6 @@ public class BackgroundMusicAsset extends BankableAssetBase {
             throw new RuntimeException(String.format("unexpected format for sound format file: %s", bodyList.get(0)));
         }
         this.body = bodyList;
-    }
-
-    private String mapAtFunction(final String line){
-        final var matcher = DATA_AT_FUNCTION.matcher(line);
-        if(matcher.matches()) {
-            return matcher.replaceFirst(String.format("$1%d$3", this.assignedBank));
-        }
-        return line;
     }
 
     @Override
