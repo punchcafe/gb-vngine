@@ -1,7 +1,7 @@
 package dev.punchcafe.gbvng.gen.render.narrative;
 
 import dev.punchcafe.gbvng.gen.adapter.NarrativeName;
-import dev.punchcafe.gbvng.gen.project.assets.TextAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.project.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import dev.punchcafe.vngine.pom.model.ProjectObjectModel;

@@ -1,12 +1,14 @@
-package dev.punchcafe.gbvng.gen.project.assets;
+package dev.punchcafe.gbvng.gen.adapter.assets;
 
 import dev.punchcafe.gbvng.gen.adapter.graphics.IndexArray;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PatternBlock;
-import dev.punchcafe.gbvng.gen.adapter.banks.BankableAssetBase;
 import dev.punchcafe.gbvng.gen.render.banks.AssetVisitor;
 import dev.punchcafe.gbvng.gen.shared.SourceName;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import javax.xml.transform.Source;
 
 /**
  * TODO: inlcude in documentation that the Bankable Asset model has the responsibility of
@@ -16,7 +18,8 @@ import lombok.Getter;
  * TODO: make clear distinction of language between Bankable Asset (or asset in general) and Narrative Element
  */
 @Builder
-public class BackgroundImageAsset extends BankableAssetBase {
+@EqualsAndHashCode
+public class BackgroundImageAsset implements SourceAsset {
 
     private final SourceName sourceName;
     @Getter private final IndexArray indexArray;

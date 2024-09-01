@@ -3,22 +3,22 @@
  */
 package dev.punchcafe.gbvng.gen;
 
+import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBankAllocator;
 import dev.punchcafe.gbvng.gen.project.config.ColorConfig;
 import dev.punchcafe.gbvng.gen.project.config.ImageConfig;
 import dev.punchcafe.gbvng.gen.project.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PixelValue;
-import dev.punchcafe.gbvng.gen.project.assets.BankableAsset;
-import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBanks;
-import dev.punchcafe.gbvng.gen.project.assets.TextAsset;
-import dev.punchcafe.gbvng.gen.adapter.banks.factory.MemoryBankFactory;
+import dev.punchcafe.gbvng.gen.adapter.assets.SourceAsset;
+import dev.punchcafe.gbvng.gen.project.config.MemoryBankModes;
+import dev.punchcafe.gbvng.gen.adapter.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.render.RendererFactory;
 import dev.punchcafe.gbvng.gen.render.RendererSupplier;
 import dev.punchcafe.gbvng.gen.render.ScriptRenderer;
 import dev.punchcafe.gbvng.gen.render.banks.BankRenderer;
-import dev.punchcafe.gbvng.gen.adapter.banks.utility.BackgroundAssetExtractor;
-import dev.punchcafe.gbvng.gen.adapter.banks.utility.ForegroundAssetSetExtractor;
-import dev.punchcafe.gbvng.gen.adapter.banks.utility.MusicAssetExtractor;
-import dev.punchcafe.gbvng.gen.adapter.banks.utility.TextAssetExtractor;
+import dev.punchcafe.gbvng.gen.adapter.assets.extractors.BackgroundAssetExtractor;
+import dev.punchcafe.gbvng.gen.adapter.assets.extractors.ForegroundAssetSetExtractor;
+import dev.punchcafe.gbvng.gen.adapter.assets.extractors.MusicAssetExtractor;
+import dev.punchcafe.gbvng.gen.adapter.assets.extractors.TextAssetExtractor;
 import dev.punchcafe.gbvng.gen.project.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.project.narrative.NarrativeReader;
 import dev.punchcafe.gbvng.gen.project.narrative.PlayMusic;
@@ -158,14 +158,17 @@ public class CodeGenerator {
                 .collect(toList());
 
         final var bankWriteLocation = Path.of(scriptDestination).getParent().toFile();
-        renderAllMemoryBanks(bankWriteLocation, allAssets, narrativeConfig);
 
         final var predicateService = PredicateRegistry.from(gameConfig);
+        final var memoryBankAllocator = buildMemoryBankAllocator(allAssets, narrativeConfig);
+
+        renderAllMemoryBanks(bankWriteLocation, memoryBankAllocator);
 
         final var rendererFactory = new RendererFactory(gameConfig,
                 predicateService,
                 assetsDirectory,
                 narrativeConfig,
+                memoryBankAllocator,
                 hexConfig,
                 foregroundAssetSets,
                 allBackgroundAssets,
@@ -190,22 +193,21 @@ public class CodeGenerator {
         out.close();
     }
 
-    private void renderAllMemoryBanks(final File bankWriteLocation,
-                                      final List<? extends BankableAsset> bankableAssets,
-                                      final NarrativeConfig narrativeConfig){
+    private MemoryBankAllocator buildMemoryBankAllocator(final List<? extends SourceAsset> bankableAssets,
+                                                         final NarrativeConfig narrativeConfig){
+        final var memoryBankConfig = MemoryBankModes.getConfigurationForMemoryBankString(narrativeConfig.getCartridge());
+        return MemoryBankAllocator.build(memoryBankConfig, bankableAssets);
+
+    }
+
+    private void renderAllMemoryBanks(final File bankWriteLocation, final MemoryBankAllocator memoryBankAllocator){
         final var memoryBankWriter = new BankRenderer(bankWriteLocation);
 
-        final var memoryBankConfig = MemoryBanks.getConfigurationForMemoryBankString(narrativeConfig.getCartridge());
 
-        final var memoryBankFactory = MemoryBankFactory.builder()
-                .allBankableAssets(bankableAssets)
-                .configuration(memoryBankConfig)
-                .build();
-
-        final var banks = memoryBankFactory.buildBanks();
-
-        banks.stream()
-                .filter(bank -> !bank.isEmpty())
+        memoryBankAllocator
+                .memoryBanks()
+                .stream()
+                .filter(bankAndNumber -> !bankAndNumber.getValue().isEmpty())
                 .forEach(memoryBankWriter::generateBankFile);
     }
 

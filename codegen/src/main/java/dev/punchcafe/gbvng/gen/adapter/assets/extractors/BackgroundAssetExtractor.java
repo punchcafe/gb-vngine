@@ -1,9 +1,9 @@
-package dev.punchcafe.gbvng.gen.adapter.banks.utility;
+package dev.punchcafe.gbvng.gen.adapter.assets.extractors;
 
 import dev.punchcafe.gbvng.gen.adapter.graphics.IndexArray;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PatternBlock;
 import dev.punchcafe.gbvng.gen.adapter.graphics.TileConverters;
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundImageAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundImageAsset;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.shared.SourceName;
 
@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
-
+//TODO: extract the module concepts so they extract from a declarative list provided by the project level module
 public class BackgroundAssetExtractor {
 
     private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.bkg\\.asset\\..+$");

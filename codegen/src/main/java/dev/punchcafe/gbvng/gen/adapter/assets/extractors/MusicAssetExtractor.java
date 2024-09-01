@@ -1,6 +1,6 @@
-package dev.punchcafe.gbvng.gen.adapter.banks.utility;
+package dev.punchcafe.gbvng.gen.adapter.assets.extractors;
 
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundMusicAsset;
 import lombok.Builder;
 
 import java.io.File;

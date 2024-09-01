@@ -1,12 +1,14 @@
-package dev.punchcafe.gbvng.gen.project.assets;
+package dev.punchcafe.gbvng.gen.adapter.assets;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.List;
 
 @Builder
 @Getter
+@EqualsAndHashCode
 public class ForegroundAsset {
 
     private static final int INTEGER_SIZE_BYTES = 2;

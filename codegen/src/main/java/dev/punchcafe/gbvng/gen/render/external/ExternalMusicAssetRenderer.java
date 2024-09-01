@@ -1,7 +1,8 @@
 package dev.punchcafe.gbvng.gen.render.external;
 
 import dev.punchcafe.gbvng.gen.adapter.MusicAssetName;
-import dev.punchcafe.gbvng.gen.project.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBankAllocator;
 import dev.punchcafe.gbvng.gen.render.ComponentRenderer;
 import lombok.Builder;
 
@@ -15,6 +16,7 @@ import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.EXTERNAL_MUS
 public class ExternalMusicAssetRenderer implements ComponentRenderer {
 
     private final List<BackgroundMusicAsset> allMusicAssets;
+    private final MemoryBankAllocator memoryBankAllocator;
 
     @Override
     public String render() {
@@ -29,7 +31,7 @@ public class ExternalMusicAssetRenderer implements ComponentRenderer {
         final var musicAsset = String.format("const struct ExternalMusicAsset %s = {%d, %s};",
                 MusicAssetName.getExternalMusicAssetName(music.getId()),
                 // TODO: make dynamic when working
-                music.getBank().orElse(7),
+                memoryBankAllocator.getBank(music),
                 externalDataName);
         return externalDataDeclaration + "\n" + musicAsset;
     }

@@ -1,6 +1,6 @@
 package dev.punchcafe.gbvng.gen.adapter.banks;
 
-import dev.punchcafe.gbvng.gen.project.assets.BankableAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.SourceAsset;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,10 +15,9 @@ public class MemoryBank {
         return 16_000;
     }
 
-    @Getter private final List<BankableAsset> assets = new ArrayList<>();
-    @Getter  private final int assignedBankNumber;
+    @Getter private final List<SourceAsset> assets = new ArrayList<>();
 
-    public void addAsset(final BankableAsset asset){
+    public void addAsset(final SourceAsset asset){
 
         assets.add(asset);
     }
@@ -29,7 +28,7 @@ public class MemoryBank {
 
     public long remainingBytes(){
         return assets.stream()
-                .map(BankableAsset::getSize)
+                .map(SourceAsset::getSize)
                 .reduce(Long::sum)
                 .or(() -> Optional.of(0L))
                 .map(totalBytesUsed -> bankByteSize() - totalBytesUsed)

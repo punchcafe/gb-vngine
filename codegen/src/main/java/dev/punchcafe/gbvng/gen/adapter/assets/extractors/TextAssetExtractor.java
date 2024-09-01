@@ -1,6 +1,6 @@
-package dev.punchcafe.gbvng.gen.adapter.banks.utility;
+package dev.punchcafe.gbvng.gen.adapter.assets.extractors;
 
-import dev.punchcafe.gbvng.gen.project.assets.TextAsset;
+import dev.punchcafe.gbvng.gen.adapter.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.project.narrative.Narrative;
 import dev.punchcafe.gbvng.gen.project.narrative.Text;
 import dev.punchcafe.gbvng.gen.shared.SourceName;

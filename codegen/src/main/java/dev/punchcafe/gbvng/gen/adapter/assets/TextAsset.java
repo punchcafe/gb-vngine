@@ -1,6 +1,5 @@
-package dev.punchcafe.gbvng.gen.project.assets;
+package dev.punchcafe.gbvng.gen.adapter.assets;
 
-import dev.punchcafe.gbvng.gen.adapter.banks.BankableAssetBase;
 import dev.punchcafe.gbvng.gen.render.banks.AssetVisitor;
 import dev.punchcafe.gbvng.gen.shared.SourceName;
 import lombok.Builder;
@@ -10,7 +9,7 @@ import lombok.Getter;
 @Builder
 @EqualsAndHashCode
 @Getter
-public class TextAsset extends BankableAssetBase {
+public class TextAsset implements SourceAsset {
     // TODO: implement char validation? this is dependant on the config.
     private final SourceName textAssetSourceName;
     private final String text;

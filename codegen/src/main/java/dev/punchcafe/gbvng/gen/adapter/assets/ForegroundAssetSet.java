@@ -1,9 +1,9 @@
-package dev.punchcafe.gbvng.gen.project.assets;
+package dev.punchcafe.gbvng.gen.adapter.assets;
 
-import dev.punchcafe.gbvng.gen.adapter.banks.BankableAssetBase;
 import dev.punchcafe.gbvng.gen.render.banks.AssetVisitor;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PatternBlock;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.List;
@@ -14,7 +14,8 @@ import java.util.List;
  * In the case of one not being specified, a Set will be created for a single asset.
  */
 @Builder(toBuilder = true)
-public class ForegroundAssetSet extends BankableAssetBase {
+@EqualsAndHashCode
+public class ForegroundAssetSet implements SourceAsset {
 
     /**
      * Current style to move away from:
