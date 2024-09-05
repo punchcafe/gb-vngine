@@ -12,7 +12,6 @@ import dev.punchcafe.gbvng.gen.adapter.assets.SourceAsset;
 import dev.punchcafe.gbvng.gen.project.config.MemoryBankModes;
 import dev.punchcafe.gbvng.gen.adapter.assets.TextAsset;
 import dev.punchcafe.gbvng.gen.render.RendererFactory;
-import dev.punchcafe.gbvng.gen.render.RendererSupplier;
 import dev.punchcafe.gbvng.gen.render.ScriptRenderer;
 import dev.punchcafe.gbvng.gen.render.banks.BankRenderer;
 import dev.punchcafe.gbvng.gen.adapter.assets.extractors.BackgroundAssetExtractor;
@@ -177,10 +176,7 @@ public class CodeGenerator {
                 textAssetsByBody,
                 hasMusic);
 
-        final var allComponents = Arrays.stream(rendererFactory.getClass().getDeclaredMethods())
-                .filter(method -> method.isAnnotationPresent(RendererSupplier.class))
-                .map(supplierMethod -> getFromMethod(supplierMethod, rendererFactory))
-                .collect(toList());
+        final var allComponents = rendererFactory.createAllComponentRenderers();
 
         final var scriptRenderer = ScriptRenderer.builder()
                 .componentRenderers(allComponents)
