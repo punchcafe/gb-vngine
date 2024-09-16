@@ -100,6 +100,14 @@ public class CodeGenerator {
     }
 
     public static void main(String[] args) throws IOException {
+         new HelloWorld();
+         try {
+             new HelloWorld().print();
+         } catch (UnsatisfiedLinkError ex){
+
+             System.out.println(ex.getMessage());
+             throw new RuntimeException("hello");
+         }
          new CodeGenerator().run(args);
     }
 

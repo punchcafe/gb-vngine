@@ -9,6 +9,7 @@
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
+    id 'c'
 
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
@@ -49,9 +50,45 @@ dependencies {
 }
 
 application {
+    applicationDefaultJvmArgs = ["-Djava.library.path=" + file("${buildDir}/libs/hello/shared").absolutePath]
     // Define the main class for the application.
-    mainClassName = 'dev.punchcafe.vngine.gb.codegen.App'
+    mainClassName = 'dev.punchcafe.gbvng.gen.CodeGenerator'
 }
+
+model {
+    platforms {
+        x64 {
+            architecture "x86_64"
+        }
+    }
+
+    components {
+        hello(NativeLibrarySpec) {
+            targetPlatform "x64"
+            binaries.all {
+                def jvmHome = "C:/Program Files/Java/jdk-11"
+                if (targetPlatform.operatingSystem.macOsX) {
+                    cCompiler.args '-I', "${jvmHome}/include"
+                    cCompiler.args '-I', "${jvmHome}/include/darwin"
+                    cCompiler.args '-mmacosx-version-min=10.4'
+                    linker.args '-mmacosx-version-min=10.4'
+                } else if (targetPlatform.operatingSystem.linux) {
+                    cCompiler.args '-I', "${jvmHome}/include"
+                    cCompiler.args '-I', "${jvmHome}/include/linux"
+                    cCompiler.args '-D_FILE_OFFSET_BITS=64'
+                } else if (targetPlatform.operatingSystem.windows) {
+                    cCompiler.args "-I${jvmHome}/include"
+                    cCompiler.args "-I${jvmHome}/include/win32"
+                } else if (targetPlatform.operatingSystem.freeBSD) {
+                    cCompiler.args '-I', "${jvmHome}/include"
+                    cCompiler.args '-I', "${jvmHome}/include/freebsd"
+                }
+            }
+        }
+    }
+}
+
+classes.dependsOn 'helloSharedLibrary'
 
 test {
     // Use junit platform for unit tests
