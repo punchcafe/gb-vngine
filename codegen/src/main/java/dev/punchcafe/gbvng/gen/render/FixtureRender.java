@@ -7,9 +7,6 @@ import lombok.Getter;
 import java.io.*;
 import java.util.List;
 
-import static dev.punchcafe.commons.functional.ExceptionFnWrapper.wrapEx;
-import static java.util.stream.Collectors.joining;
-
 @Builder
 @Getter
 public class FixtureRender implements ComponentRenderer {

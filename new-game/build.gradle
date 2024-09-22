@@ -37,7 +37,6 @@ dependencies {
     compile 'commons-io:commons-io:2.8.0'
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.1-jre'
-    compile 'dev.punchcafe:commons:0.1'
 
     // Use JUnit Jupiter API for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'

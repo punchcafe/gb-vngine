@@ -1,14 +1,10 @@
 package dev.punchcafe.gbvng.newgame;
 
-import dev.punchcafe.commons.functional.ExceptionFnWrapper;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static dev.punchcafe.commons.functional.ExceptionFnWrapper.wrapEx;
 
 public class ProjectBuilder {
 
@@ -24,7 +20,13 @@ public class ProjectBuilder {
                 .map(BufferedReader::new)
                 .flatMap(BufferedReader::lines)
                 .filter(str -> !str.isBlank())
-                .forEach(wrapEx(this::copyFileToCorrespondingDirectory));
+                .forEach(fileName -> {
+                    try {
+                        copyFileToCorrespondingDirectory(fileName);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
     }
 
     private void copyFileToCorrespondingDirectory(final String copyDirLocation) throws IOException {
@@ -34,9 +36,23 @@ public class ProjectBuilder {
 
         Optional.of(newFileLocation)
                 .map(File::new)
-                .filter(wrapEx(File::createNewFile))
-                .map(ExceptionFnWrapper.<File,FileOutputStream>wrapEx(FileOutputStream::new))
-                .ifPresent(wrapEx((FileOutputStream fileOutputStream) -> this.transferFiles(file, fileOutputStream)));
+                .filter(newFile -> {
+                    try {
+                        return newFile.createNewFile();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .ifPresent(newFile ->
+                    {
+                        try {
+                            final var fileOutputStream = new FileOutputStream(newFile);
+                            this.transferFiles(file, fileOutputStream);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                );
     }
 
     private void transferFiles(final InputStream fileToCopy, final FileOutputStream fileOutputStream) throws IOException {

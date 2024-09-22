@@ -39,8 +39,7 @@ dependencies {
     testImplementation 'org.projectlombok:lombok:1.18.12'
 
     compile 'org.simpleframework:simple-xml:2.7.1'
-    compile 'dev.punchcafe:commons:0.1'
-    // Use JUnit Jupiter API for testing.
+    // Use JUnit Jupiter API for testig.
     compile 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     compile 'io.github.json-snapshot:json-snapshot:1.0.17'
     // Use JUnit Jupiter Engine for testing.
