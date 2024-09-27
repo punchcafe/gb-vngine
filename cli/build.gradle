@@ -9,6 +9,7 @@
 plugins {
     // Apply the java plugin to add support for Java
     id 'java'
+    id 'java-library'
 
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
@@ -22,12 +23,16 @@ repositories {
 }
 
 jar {
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+
     manifest {
         attributes["Main-Class"] = "dev.punchcafe.gbvng.cli.App"
     }
 
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { 
+            it.isDirectory() ? it : zipTree(it)
+         }
     }
 }
 
@@ -36,8 +41,9 @@ sourceCompatibility = 1.11
 dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:28.1-jre'
-    compile project(":new-game")
-    compile project(":codegen")
+    implementation project(':codegen')
+    implementation project(':new-game')
+    implementation project(':project-model')
 
     // Use JUnit Jupiter API for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
