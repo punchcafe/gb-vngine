@@ -4,6 +4,8 @@ import dev.punchcafe.gbvng.gen.adapter.graphics.IndexArray;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PatternBlock;
 import dev.punchcafe.gbvng.gen.adapter.graphics.TileConverters;
 import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundImageAsset;
+import dev.punchcafe.gbvng.gen.project.assets.AssetFile;
+import dev.punchcafe.gbvng.gen.project.assets.AssetsIndex;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.shared.SourceName;
 
@@ -30,9 +32,11 @@ public class BackgroundAssetExtractor {
     private final Map<SourceName, BufferedImage> backgroundAssets;
     private final HexValueConfig hexValueConfig;
 
-    public BackgroundAssetExtractor(final File assetDirectory,
+    public BackgroundAssetExtractor(final AssetsIndex assetsIndex,
                                     final HexValueConfig hexValueConfig) {
-        this.backgroundAssets = allBackgroundFiles(assetDirectory)
+        this.backgroundAssets =
+                assetsIndex.allBackgroundImageFiles().stream()
+                .map(this::asEntry)
                 .map(this::openImage)
                 .map(this::convertSourceNames)
                 .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -75,22 +79,7 @@ public class BackgroundAssetExtractor {
         }
     }
 
-    private Stream<Map.Entry<String, File>> allBackgroundFiles(final File file) {
-        if (file.isDirectory()) {
-            final var files = file.listFiles();
-            if (files != null) {
-                return Arrays.stream(files)
-                        .flatMap(this::allBackgroundFiles);
-            } else {
-                return Stream.empty();
-            }
-        } else {
-            final var matcher = IMAGE_ASSET_EXTENSION.matcher(file.getName());
-            if (matcher.matches()) {
-                return Stream.of(Map.entry(matcher.group(1), file));
-            } else {
-                return Stream.empty();
-            }
-        }
+    private Map.Entry<String, File> asEntry(final AssetFile file){
+        return Map.entry(file.getAssetName(), file.getFile());
     }
 }

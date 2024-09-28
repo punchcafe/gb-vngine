@@ -1,6 +1,8 @@
 package dev.punchcafe.gbvng.gen.render.sprites.prt;
 
 import dev.punchcafe.gbvng.gen.adapter.graphics.CompositeSprite;
+import dev.punchcafe.gbvng.gen.project.assets.AssetFile;
+import dev.punchcafe.gbvng.gen.project.assets.AssetType;
 import dev.punchcafe.gbvng.gen.render.sprites.HexValueConfig;
 import dev.punchcafe.gbvng.gen.adapter.graphics.TallTile;
 import lombok.AllArgsConstructor;
@@ -22,55 +24,17 @@ import java.util.stream.Stream;
 @AllArgsConstructor()
 public class ForegroundImageConverter {
 
-    private static Map<String, TileExtractionStrategy> TILE_EXTRACTION_STRATEGY_MAP = Map.of(
-            "prt", new PortraitTileExtractionStrategy(),
-            "fcs", new FocusTileExtractionStrategy());
-
-    private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(prt|fcs)\\.asset\\..+$");
+    private static Map<AssetType, TileExtractionStrategy> TILE_EXTRACTION_STRATEGY_MAP = Map.of(
+            AssetType.PORTRAIT_IMAGE, new PortraitTileExtractionStrategy(),
+            AssetType.FOCUS_IMAGE, new FocusTileExtractionStrategy());
 
     private HexValueConfig hexValueConfig;
 
-    public List<CompositeSprite> extractAllAssetsFromDirectory(final File dir) {
-        return allAssetFilesInDirectory(dir)
-                .map(this::convertFileToAsset)
-                .collect(Collectors.toList());
-    }
-
-    private Stream<File> allAssetFilesInDirectory(final File assetDirectory) {
-        final var streamBuilder = Stream.<File>builder();
-        allAssetFilesInDirectoryRecursive(assetDirectory, streamBuilder);
-        return streamBuilder.build();
-    }
-
-    private void allAssetFilesInDirectoryRecursive(final File assetDirectory,
-                                                   final Stream.Builder<File> streamBuilder) {
-        final var allAssets = assetDirectory.listFiles(this::isAsset);
-        if (allAssets != null) {
-            for (final var asset : allAssets) {
-                streamBuilder.add(asset);
-            }
-        }
-        final var allDirectories = assetDirectory.list((dir, name) -> dir.isDirectory());
-        if (allDirectories != null) {
-            for (final var dir : allDirectories) {
-                allAssetFilesInDirectoryRecursive(new File(dir), streamBuilder);
-            }
-        }
-    }
-
-    private boolean isAsset(final File dir, final String fileName) {
-        return IMAGE_ASSET_EXTENSION.matcher(fileName).matches();
-    }
-
-    private CompositeSprite convertFileToAsset(final File assetFile) {
-        final var matcher = IMAGE_ASSET_EXTENSION.matcher(assetFile.getName());
-        matcher.matches();
-        final var assetName = matcher.group(1);
-        final var imageType = matcher.group(2);
-        return Optional.of(assetFile)
+    public CompositeSprite convertFileToAsset(final AssetFile assetFile) {
+        return Optional.of(assetFile.getFile())
                 .map(this::openImage)
-                .map(image -> this.extractTallTilesFromImage(image, imageType))
-                .map(tiles -> CompositeSprite.builder().imageData(tiles).name(assetName).build())
+                .map(image -> this.extractTallTilesFromImage(image, assetFile.getType()))
+                .map(tiles -> CompositeSprite.builder().imageData(tiles).name(assetFile.getAssetName()).build())
                 .get();
     }
 
@@ -83,7 +47,7 @@ public class ForegroundImageConverter {
     }
 
 
-    private List<TallTile> extractTallTilesFromImage(final BufferedImage image, final String imageType) {
+    private List<TallTile> extractTallTilesFromImage(final BufferedImage image, final AssetType imageType) {
         return Optional.of(imageType)
                 .map(TILE_EXTRACTION_STRATEGY_MAP::get)
                 .map(strategy -> strategy.extractTallTilesFromImage(image, this.hexValueConfig))

@@ -4,6 +4,7 @@
 package dev.punchcafe.gbvng.gen;
 
 import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBankAllocator;
+import dev.punchcafe.gbvng.gen.project.assets.AssetsIndex;
 import dev.punchcafe.gbvng.gen.project.config.ColorConfig;
 import dev.punchcafe.gbvng.gen.project.config.ImageConfig;
 import dev.punchcafe.gbvng.gen.project.config.NarrativeConfig;
@@ -125,13 +126,14 @@ public class CodeGenerator {
                 .findAny()
                 .orElseThrow();
 
+        final var assetsIndex = new AssetsIndex(vngProjectRoot);
 
         final HexValueConfig hexConfig = extractHexConfig(narrativeConfig.getImageConfig());
 
-        final var foregroundAssetSets = new ForegroundAssetSetExtractor(assetsDirectory, hexConfig, narrativeConfig)
+        final var foregroundAssetSets = new ForegroundAssetSetExtractor(assetsIndex, hexConfig, narrativeConfig)
                 .convertAllForegroundAssetSets();
 
-        final var allBackgroundAssets = new BackgroundAssetExtractor(assetsDirectory, hexConfig)
+        final var allBackgroundAssets = new BackgroundAssetExtractor(assetsIndex, hexConfig)
                 .extract();
 
         final ProjectObjectModel<Narrative> gameConfig = PomLoader.<Narrative>forGame(vngProjectRoot, narrativeReader).loadGameConfiguration();

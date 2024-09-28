@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.adapter.assets.extractors;
 
+import dev.punchcafe.gbvng.gen.project.assets.AssetsIndex;
 import dev.punchcafe.gbvng.gen.project.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.project.config.PortraitSetConfig;
 import dev.punchcafe.gbvng.gen.adapter.graphics.PatternBlock;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static dev.punchcafe.gbvng.gen.adapter.PortraitAssetNameVariableSanitiser.getForegroundAssetName;
 import static dev.punchcafe.gbvng.gen.adapter.PortraitAssetNameVariableSanitiser.getForegroundAssetPatternReferenceName;
@@ -23,13 +25,17 @@ public class ForegroundAssetSetExtractor {
     private final Map<String, CompositeSprite> allAssetsByName;
     private final List<PortraitSetConfig> foregroundAssetSets;
 
-    public ForegroundAssetSetExtractor(final File assetDirectory,
+    public ForegroundAssetSetExtractor(final AssetsIndex assetsIndex,
                                        final HexValueConfig hexValueConfig,
                                        final NarrativeConfig narrativeConfig) {
         try {
             final var imageConverter = new ForegroundImageConverter(hexValueConfig);
-            this.allAssetsByName = imageConverter.extractAllAssetsFromDirectory(assetDirectory)
-                    .stream()
+
+            this.allAssetsByName = Stream.concat(
+                        assetsIndex.allFocusImageFiles().stream(),
+                        assetsIndex.allPortraitImageFiles().stream()
+                    )
+                    .map(imageConverter::convertFileToAsset)
                     .collect(Collectors.toUnmodifiableMap(CompositeSprite::getName, Function.identity()));
             this.foregroundAssetSets = narrativeConfig.getImageConfig().getPortraitSets();
         } catch (RuntimeException ex) {
