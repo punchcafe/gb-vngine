@@ -15,68 +15,68 @@ import static java.util.stream.Collectors.toList;
 public class AssetsIndex {
 
 
+    // TODO: probably good to introduce a type, AssetFile, to ease handling of assets
+
     // TODO: this class could actually infer the type of asset in future, based on dimensions / type
     // which would save the user having to define it each time
     private static final Pattern MUSIC_EXTENSION_ASSET = Pattern.compile("^(.+)\\.mod$");
     private static final Pattern IMAGE_ASSET_EXTENSION = Pattern.compile("^(.+)\\.(bkg|prt|fcs|fnt)\\.asset\\..+$");
 
-    private static final String MUSIC_KEY = "music";
-    private static final String PORTRAIT_IMAGE_KEY = "portrait";
-    private static final String FOCUS_IMAGE_KEY = "focus";
-    private static final String BACKGROUND_IMAGE_KEY = "background";
-    private static final String FONT_IMAGE_KEY = "font";
+    private static final Map<String, AssetType> FILE_NAME_TYPES = Map.of("prt", AssetType.PORTRAIT_IMAGE, "bkg", AssetType.BACKGROUND_IMAGE, "fcs", AssetType.FOCUS_IMAGE, "fnt", AssetType.FONT);
 
+    // TODO: add unit tests
     // TODO: this can eventually just all sit in the asset directory and be structured to user discretion
 
-    private Map<String, List<File>> assetsByType;
+    private Map<AssetType, List<AssetFile>> assetsByType;
 
     public AssetsIndex(final File projectRoot) {
         final var assetDirectory = new File(projectRoot.getPath().concat("/assets"));
         this.assetsByType = allAssetFilesInDirectory(assetDirectory);
     }
 
-    public List<File> allMusicAssetFiles() {
+    public List<AssetFile> allMusicAssetFiles() {
         // Probably overkill but hey.. should do this at init time?
-        return List.copyOf(this.assetsByType.get(MUSIC_KEY));
+        return List.copyOf(this.assetsByType.get(AssetType.MUSIC));
     }
 
-    public List<File> allPortraitImageFiles() {
-        return List.copyOf(this.assetsByType.get(PORTRAIT_IMAGE_KEY));
+    public List<AssetFile> allPortraitImageFiles() {
+        return List.copyOf(this.assetsByType.get(AssetType.PORTRAIT_IMAGE));
     }
 
-    public List<File> allFocusImageFiles() {
-        return List.copyOf(this.assetsByType.get(FOCUS_IMAGE_KEY));
+    public List<AssetFile> allFocusImageFiles() {
+        return List.copyOf(this.assetsByType.get(AssetType.FOCUS_IMAGE));
     }
 
-    public List<File> allBackgroundImageFiles() {
-        return List.copyOf(this.assetsByType.get(BACKGROUND_IMAGE_KEY));
+    public List<AssetFile> allBackgroundImageFiles() {
+        return List.copyOf(this.assetsByType.get(AssetType.BACKGROUND_IMAGE));
     }
 
-    public List<File> allFontAssetFiles() {
-        return List.copyOf(this.assetsByType.get(FONT_IMAGE_KEY));
+    public List<AssetFile> allFontAssetFiles() {
+        return List.copyOf(this.assetsByType.get(AssetType.FONT));
     }
 
 
-    private Map<String, List<File>> allAssetFilesInDirectory(final File assetDirectory) {
-        final Map<String, List<File>> assetAccumulator = Map.of(
-                MUSIC_KEY, new ArrayList<>(),
-                PORTRAIT_IMAGE_KEY, new ArrayList<>(),
-                BACKGROUND_IMAGE_KEY, new ArrayList<>(),
-                FONT_IMAGE_KEY, new ArrayList<>(),
-                FOCUS_IMAGE_KEY, new ArrayList<>());
+    private Map<AssetType, List<AssetFile>> allAssetFilesInDirectory(final File assetDirectory) {
+        final Map<AssetType, List<AssetFile>> assetAccumulator = Map.of(
+                AssetType.MUSIC, new ArrayList<>(),
+                AssetType.FONT, new ArrayList<>(),
+                AssetType.BACKGROUND_IMAGE, new ArrayList<>(),
+                AssetType.FOCUS_IMAGE, new ArrayList<>(),
+                AssetType.PORTRAIT_IMAGE, new ArrayList<>());
         allAssetFilesInDirectoryRecursive(assetDirectory, assetAccumulator);
         return assetAccumulator;
     }
 
     private void allAssetFilesInDirectoryRecursive(final File assetDirectory,
-                                                   final Map<String, List<File>> assetAccumulator) {
+                                                   final Map<AssetType, List<AssetFile>> assetAccumulator) {
         final var allAssets = Optional.ofNullable(assetDirectory.listFiles(this::isAsset))
                         .map(List::of)
                         .orElse(List.of());
 
         for(final File asset : allAssets){
-            var existing_list = assetAccumulator.get(assetType(asset));
-            existing_list.add(asset);
+            final var assetFile = convertFile(asset);
+            var existing_list = assetAccumulator.get(assetFile.getType());
+            existing_list.add(assetFile);
         }
 
         final var allDirectories = Optional.ofNullable(assetDirectory.listFiles())
@@ -96,24 +96,23 @@ public class AssetsIndex {
         return IMAGE_ASSET_EXTENSION.matcher(fileName).matches() || MUSIC_EXTENSION_ASSET.matcher(fileName).matches();
     }
 
-    private String assetType(final File file) {
-        final var fileName = file.getName();
-        if(MUSIC_EXTENSION_ASSET.matcher(fileName).matches()){
-            return MUSIC_KEY;
+    private AssetFile convertFile(final File file){
+        final var assetFileBuilder = AssetFile.builder().file(file);
+        final var musicMatcher = MUSIC_EXTENSION_ASSET.matcher(file.getName());
+        if(musicMatcher.matches()){
+            return assetFileBuilder
+                    .type(AssetType.MUSIC)
+                    .assetName(musicMatcher.group(1))
+                    .build();
         }
-        final var matcher = IMAGE_ASSET_EXTENSION.matcher(fileName);
+        final var matcher = IMAGE_ASSET_EXTENSION.matcher(file.getName());
         matcher.find();
-        switch (matcher.group(2)) {
-            case "bkg":
-                return BACKGROUND_IMAGE_KEY;
-            case "prt":
-                return PORTRAIT_IMAGE_KEY;
-            case "fcs":
-                return FOCUS_IMAGE_KEY;
-            case "fnt":
-                return FONT_IMAGE_KEY;
-        }
-        throw new RuntimeException(String.format("Unexpected asset type: %s", file.toPath()));
+        final var assetType = FILE_NAME_TYPES.get(matcher.group(2));
+        if(assetType == null) throw new RuntimeException(String.format("Unexpected asset type found %s", file.toPath()));
+
+        return assetFileBuilder.assetName(matcher.group(1))
+                .type(assetType)
+                .build();
     }
 
 }
