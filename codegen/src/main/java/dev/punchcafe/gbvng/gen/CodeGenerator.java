@@ -168,6 +168,7 @@ public class CodeGenerator {
         final var rendererFactory = new RendererFactory(gameConfig,
                 predicateService,
                 assetsDirectory,
+                assetsIndex,
                 narrativeConfig,
                 memoryBankAllocator,
                 hexConfig,

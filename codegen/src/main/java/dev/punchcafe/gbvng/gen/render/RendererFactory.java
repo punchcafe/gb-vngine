@@ -1,6 +1,7 @@
 package dev.punchcafe.gbvng.gen.render;
 
 import dev.punchcafe.gbvng.gen.adapter.banks.MemoryBankAllocator;
+import dev.punchcafe.gbvng.gen.project.assets.AssetsIndex;
 import dev.punchcafe.gbvng.gen.project.config.NarrativeConfig;
 import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundImageAsset;
 import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundMusicAsset;
@@ -30,16 +31,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static dev.punchcafe.gbvng.gen.render.ComponentRendererNames.*;
-import static java.util.stream.Collectors.toList;
 
 @Builder
 @AllArgsConstructor
@@ -49,6 +47,7 @@ public class RendererFactory {
     private final ProjectObjectModel<Narrative> gameConfig;
     private final PredicateRegistry predicateRegistry;
     private final File assetDirectory;
+    private final AssetsIndex assetsIndex;
     private final NarrativeConfig narrativeConfig;
     private final MemoryBankAllocator memoryBankAllocator;
     private final HexValueConfig hexValueConfig;
@@ -86,7 +85,7 @@ public class RendererFactory {
                 this::branchRenderer,
                 this::promptRenderer,
                 this::currentNodeRenderer,
-                this::imageAssetRenderer,
+                this::fontAssetRenderer,
                 this::buttonTilesetRenderer,
                 this::playNarrativeFunctionRenderer,
                 this::foregroundRendererRenderer,
@@ -291,14 +290,8 @@ public class RendererFactory {
     NARRATIVE RENDERERS
      */
 
-    public ComponentRenderer imageAssetRenderer() {
-        final var converters = List.of(
-                new BackgroundConverter(this.hexValueConfig),
-                FontSetConverter.builder()
-                        .config(this.narrativeConfig.getFontConfig())
-                        .hexValueConfig(this.hexValueConfig)
-                        .build());
-        return new ImageAssetsGenerator(converters, this.assetDirectory);
+    public ComponentRenderer fontAssetRenderer() {
+        return new FontAssetRenderer(this.assetsIndex, this.narrativeConfig.getFontConfig(), this.hexValueConfig);
     }
 
 
@@ -402,7 +395,7 @@ public class RendererFactory {
                         ComponentRendererNames.NODE_DEFINITION_RENDERER_NAME,
                         ComponentRendererNames.NODE_MUTATION_RENDERER_NAME,
                         ComponentRendererNames.NARRATIVE_RENDERER_NAME,
-                        ComponentRendererNames.IMAGE_ASSET_RENDERER_NAME,
+                        ComponentRendererNames.FONT_ASSET_RENDERER_NAME,
                         ComponentRendererNames.NODE_RENDERER_NAME,
                         ComponentRendererNames.GET_NEXT_NODE_FUNCTION_RENDERER_NAME,
                         ComponentRendererNames.PLAY_NARRATIVE_RENDERER_NAME,

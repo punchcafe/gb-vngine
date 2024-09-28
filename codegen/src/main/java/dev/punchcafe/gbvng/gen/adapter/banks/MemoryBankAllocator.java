@@ -39,7 +39,6 @@ public class MemoryBankAllocator {
         var currentBankNumber = bankNumberIterator.next();
 
         for (SourceAsset asset : allBankableAssets) {
-            System.out.println(String.format("Asset is: %s", asset.getId()));
             var currentBank = banks.get(currentBankNumber);
             if(asset.getSize() < currentBank.remainingBytes()){
                 sourceMapping.put(asset, currentBankNumber);
@@ -64,12 +63,6 @@ public class MemoryBankAllocator {
     }
 
     public int getBank(final SourceAsset asset) {
-        System.out.println("Failed to find:");
-        System.out.println(asset.getId());
-        for(var assett: this.mapping.entrySet()){
-            System.out.println(assett.getValue());
-            System.out.println(assett.getKey().getId());
-        }
         return this.mapping.get(asset);
     }
 }

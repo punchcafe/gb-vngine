@@ -15,7 +15,6 @@ public class PortraitAssetNameVariableSanitiser {
     }
 
     public static String getForegroundAssetName(final File asset){
-        System.out.println(asset.getName());
         final var fileNameMatcher = PORTRAIT_FILE_PATTERN.matcher(asset.getName());
         fileNameMatcher.find();
         return String.format("portrait_asset_%s", fileNameMatcher.group(1));
