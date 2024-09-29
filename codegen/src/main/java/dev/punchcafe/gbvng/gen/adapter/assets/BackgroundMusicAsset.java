@@ -1,5 +1,6 @@
 package dev.punchcafe.gbvng.gen.adapter.assets;
 
+import dev.punchcafe.gbvng.gen.project.assets.AssetFile;
 import dev.punchcafe.gbvng.gen.render.banks.AssetVisitor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,14 +29,14 @@ public class BackgroundMusicAsset implements SourceAsset {
 
     //TODO: separate the model from model rendering.
 
-    public BackgroundMusicAsset(final File songFile){
-        this.id = songFile.getName().substring(0, songFile.getName().length() - 2);
+    public BackgroundMusicAsset(final File tmpGbtOutput, final AssetFile assetFile){
+        this.id = assetFile.getAssetName();
         List<String> allLines;
         try {
-            allLines = Files.lines(songFile.toPath()).collect(Collectors.toList());
+            allLines = Files.lines(tmpGbtOutput.toPath()).collect(Collectors.toList());
         } catch (IOException ex) {
             System.out.println(String.format("error: %s", ex.toString()));
-            System.out.println(songFile.getName());
+            System.out.println(assetFile.getAssetName());
             System.exit(1);
             // Todo: clean this up
             allLines = List.of();

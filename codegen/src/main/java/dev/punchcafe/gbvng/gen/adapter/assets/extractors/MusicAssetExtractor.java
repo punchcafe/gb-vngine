@@ -1,43 +1,49 @@
 package dev.punchcafe.gbvng.gen.adapter.assets.extractors;
 
 import dev.punchcafe.gbvng.gen.adapter.assets.BackgroundMusicAsset;
+import dev.punchcafe.gbvng.gen.project.assets.AssetFile;
+import dev.punchcafe.gbvng.gen.project.assets.AssetsIndex;
 import lombok.Builder;
 
 import java.io.File;
-import java.nio.file.Path;
+import java.io.IOException;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-/**
- * TODO: Add documentation on how this relies on the Asset rendering to put all shipped stuff in /build/music.
- * Tackle how this is part of the make file itself currently (per project)
- */
+import static java.lang.Runtime.getRuntime;
+
 @Builder
 public class MusicAssetExtractor {
 
-    private File vngProjectRoot;
+    private AssetsIndex assetsIndex;
+    private File buildDirectory;
+    private File mod2Gbt;
 
-    public List<BackgroundMusicAsset> allShippedMusicAssets(){
-        // This requires this stage to be executed after music assets have been built.
-        // Assumes only files in build/music will be music files.
-        final var buildShipDirectory = Path.of(this.vngProjectRoot.toString() + "/build/music").toFile();
-        return recursiveFileFinder(buildShipDirectory)
-                .map(BackgroundMusicAsset::new)
+    public List<BackgroundMusicAsset> allMusicAssets(){
+        return assetsIndex.allMusicAssetFiles().stream()
+                .map(this::generateAsset)
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    private Stream<File> recursiveFileFinder(final File file){
-        if(file.isDirectory() && file.listFiles() != null){
-            final var stream = Stream.<Stream<File>>builder();
-            for(final var childFile : file.listFiles()){
-                stream.add(recursiveFileFinder(childFile));
+    private BackgroundMusicAsset generateAsset(final AssetFile musicFile) {
+        try {
+            final var command = String.format("%s %s %s",
+                    mod2Gbt.getAbsolutePath(),
+                    musicFile.getFile().getAbsolutePath(),
+                    musicFile.getAssetName());
+            final var result = getRuntime().exec(command, null, buildDirectory);
+            result.waitFor();
+            if(result.exitValue() != 0){
+                result.getErrorStream().transferTo(System.err);
+                throw new RuntimeException(String.format("Something went wrong generating the GBT file %s", musicFile.getFile().getAbsolutePath()));
             }
-            return stream.build()
-                    .flatMap(Function.identity());
+        } catch (IOException | InterruptedException ex){
+            throw new RuntimeException(String.format("Something went wrong generating music files: \n%s", ex.getMessage()));
         }
-        return Stream.of(file);
-    }
 
+        final var gbtOutputFile = new File(buildDirectory.getAbsolutePath() + "/output.c");
+        final var asset =  new BackgroundMusicAsset(gbtOutputFile, musicFile);
+        gbtOutputFile.delete();
+        return asset;
+    }
 }

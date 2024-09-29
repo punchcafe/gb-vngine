@@ -148,22 +148,26 @@ public class CodeGenerator {
                 .flatMap(List::stream)
                 .anyMatch(elem -> elem.getClass().equals(PlayMusic.class));
 
+        // TODO: extract to a build config object?
+        final var buildDirectory = Path.of(scriptDestination).getParent().toFile();
+
 
         final var allMusicAssets = MusicAssetExtractor.builder()
-                .vngProjectRoot(vngProjectRoot)
+                .assetsIndex(assetsIndex)
+                .buildDirectory(buildDirectory)
+                .mod2Gbt(mod2GbtLocation(assetsIndex))
                 .build()
-                .allShippedMusicAssets();
+                .allMusicAssets();
 
         final var allAssets = Stream.of(allMusicAssets, foregroundAssetSets, allTextAssets, allBackgroundAssets)
                 .flatMap(List::stream)
                 .collect(toList());
 
-        final var bankWriteLocation = Path.of(scriptDestination).getParent().toFile();
 
         final var predicateService = PredicateRegistry.from(gameConfig);
         final var memoryBankAllocator = buildMemoryBankAllocator(allAssets, narrativeConfig);
 
-        renderAllMemoryBanks(bankWriteLocation, memoryBankAllocator);
+        renderAllMemoryBanks(buildDirectory, memoryBankAllocator);
 
         final var rendererFactory = new RendererFactory(gameConfig,
                 predicateService,
@@ -190,6 +194,16 @@ public class CodeGenerator {
 
         out.write(renderedScript);
         out.close();
+    }
+
+    private File mod2GbtLocation(final AssetsIndex assetsIndex){
+        final var needsGbt = assetsIndex.allMusicAssetFiles().size() > 0;
+        final var location = System.getenv("GBVNGINE_GBT_BIN_LOCATION");
+        if(location == null && needsGbt){
+            throw new RuntimeException("Missing dependency: GBVNGINE_GBT_BIN_LOCATION must be specified when including music.");
+        }
+        // TODO: Ensure exists
+        return Path.of(location).toFile();
     }
 
     private MemoryBankAllocator buildMemoryBankAllocator(final List<? extends SourceAsset> bankableAssets,
