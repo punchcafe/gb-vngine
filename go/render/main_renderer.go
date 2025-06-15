@@ -2,8 +2,9 @@ package render
 
 func RenderMain() string {
 	return `
-	int main()
-	{
-	}
-	`
+int main()
+{
+	return 0;
+}
+`
 }

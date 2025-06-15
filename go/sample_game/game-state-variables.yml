@@ -1,0 +1,3 @@
+counter: INT
+a-string: STRING
+aBool: BOOL
