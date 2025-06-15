@@ -9,14 +9,24 @@ type GameStateVariableName string
 type GameStateVariableType int
 
 const (
-	INT GameStateVariableType = iota
+	UNDEFINED GameStateVariableType = iota
+	INT
 	STRING
 	BOOL
 )
 
 type GameState map[GameStateVariableName]GameStateVariableType
 
-func ParseGameState(rawMap map[string]string) (*GameState, error) {
+func (gs GameState) VariableType(name GameStateVariableName) (GameStateVariableType, error) {
+	gsMap := map[GameStateVariableName]GameStateVariableType(gs)
+	result := gsMap[name]
+	if result == UNDEFINED {
+		return UNDEFINED, fmt.Errorf("no type found for variable: %s", name)
+	}
+	return result, nil
+}
+
+func ParseGameState(rawMap map[string]string) (GameState, error) {
 	result := map[GameStateVariableName]GameStateVariableType{}
 	for k, v := range rawMap {
 		gsvt, err := fromName(v)
@@ -26,7 +36,7 @@ func ParseGameState(rawMap map[string]string) (*GameState, error) {
 		result[GameStateVariableName(k)] = gsvt
 	}
 	castResult := GameState(result)
-	return &castResult, nil
+	return castResult, nil
 }
 
 func fromName(yamlName string) (GameStateVariableType, error) {

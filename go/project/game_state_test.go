@@ -30,7 +30,7 @@ func TestParseGameState(t *testing.T) {
 		)
 
 		assert.NoError(t, err)
-		assert.Equal(t, *result, expected)
+		assert.Equal(t, result, expected)
 	})
 
 	t.Run("it detects invalid variable types and returns errors", func(t *testing.T) {
