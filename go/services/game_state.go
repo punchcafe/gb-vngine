@@ -27,13 +27,11 @@ func NewGameStateService(gameState project.GameState) (*GameStateService, error)
 func (gss *GameStateService) AllVariables() []project.GameStateVariableName {
 	arr := make([]project.GameStateVariableName, 0)
 	for k := range maps.Keys(gss.gameState) {
-		fmt.Printf("\nHere's a key: %s", k)
 		arr = append(arr, k)
 	}
 	sort.Slice(arr, func(i, j int) bool {
 		return arr[i] < arr[j]
 	})
-	fmt.Printf("\nfinished: %v", arr)
 	return arr
 }
 
