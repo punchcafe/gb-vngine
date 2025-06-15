@@ -1,0 +1,34 @@
+chapter-id: ch-01
+chapter-variables:
+nodes:
+  - id: 0
+    type: PLAYER
+    narrative-id: nar_01
+    game-state-modifiers:
+    branches:
+      - prompt: take a sip
+        node-id: sip_1
+      - prompt: explore the kitchen
+        node-id: explore_kitchen
+  - id: sip_1
+    type: AUTOMATIC
+    narrative-id: sip_1
+    game-state-modifiers:
+      - "increase $int.sips by 1"
+    branches:
+      - predicate-expression: "1 equals 1"
+        node-id: 0_after_sip
+  - id: 0_after_sip
+    type: PLAYER
+    narrative-id: empty_nar
+    game-state-modifiers:
+    branches:
+      - prompt: explore the kitchen
+        node-id: explore_kitchen
+  - id: explore_kitchen
+    type: PLAYER
+    narrative-id: explore_kitchen
+    game-state-modifiers:
+    branches:
+      - prompt: take sip
+        node-id: 0
