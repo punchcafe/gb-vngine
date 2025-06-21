@@ -27,6 +27,7 @@ func tokenize(input string) ([]string, error) {
 			// need to check if escaped
 			prevInString := inString
 			inString = !inString
+			stringBuilder.WriteRune('"')
 			if prevInString {
 				tokens = append(tokens, stringBuilder.String())
 				stringBuilder.Reset()
