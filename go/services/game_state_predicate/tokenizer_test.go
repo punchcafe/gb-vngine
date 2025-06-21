@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestParseGameState(t *testing.T) {
+func TestTokenizer(t *testing.T) {
 	t.Run("Can correctly parse string maps", func(t *testing.T) {
 		result, _ := tokenize("hello, world \"i'm in a string\"")
 		assert.Equal(t, []string{"hello,", "world", "i'm in a string"}, result)
@@ -23,5 +23,22 @@ func TestParseGameState(t *testing.T) {
 		result, _ = tokenize("\"\\\"hello, world\\\"\" shouldn't break the token")
 		assert.Equal(t, []string{"\\\"hello, world\\\"", "shouldn't", "break", "the", "token"}, result)
 
+	})
+
+	t.Run("unterminated string returns an error", func(t *testing.T) {
+		_, err := tokenize("hello, world \"i'm unterminated")
+		assert.Error(t, err)
+		assert.Equal(t, "unterminated string", err.Error())
+	})
+
+	t.Run("it splits brackets", func(t *testing.T) {
+		for input, expectedOutput := range map[string][]string{
+			"hello(, )world (\"i'm a \\\"text quote\\\"\"":     {"hello", "(", ",", ")", "world", "(", "i'm a \\\"text quote\\\""},
+			"(var_1 less_than 4 ) or (bool_var is_equal true)": {"(", "var_1", "less_than", "4", ")", "or", "(", "bool_var", "is_equal", "true", ")"},
+		} {
+			result, err := tokenize(input)
+			assert.NoError(t, err)
+			assert.Equal(t, expectedOutput, result)
+		}
 	})
 }

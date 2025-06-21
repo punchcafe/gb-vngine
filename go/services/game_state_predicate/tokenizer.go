@@ -5,6 +5,14 @@ import (
 	"strings"
 )
 
+/*
+tokenize takes an initial predicate string and splits it into tokens.
+This function is responsible for enforcing the token separation syntax rules.
+
+Once this function has been run, the resulting string slice will only contain meaningful
+tokens to the predicate language itself. It will remove all whitespacing, and normalize spacing
+between variable names and brackets.
+*/
 func tokenize(input string) ([]string, error) {
 
 	stringBuilder := strings.Builder{}
@@ -40,10 +48,18 @@ func tokenize(input string) ([]string, error) {
 				continue
 			}
 		}
+		if !inString && (char == '(' || char == ')') {
+			if stringBuilder.Len() != 0 {
+				tokens = append(tokens, stringBuilder.String())
+				stringBuilder.Reset()
+			}
+			tokens = append(tokens, string(char))
+			continue
+		}
 		stringBuilder.WriteRune(char)
 	}
 	if inString {
-		return nil, fmt.Errorf("Unterminated string")
+		return nil, fmt.Errorf("unterminated string")
 	}
 
 	if stringBuilder.Len() > 0 {
