@@ -2,8 +2,70 @@ package gamestatepredicate
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
+
+type PredicateStringTokenType int
+type PredicateStringToken struct {
+	tokenType PredicateStringTokenType
+	val       string
+}
+
+const (
+	UNDEFINED PredicateStringTokenType = iota
+	VARIABLE
+	BOOL_LITERAL
+	INT_LITERAL
+	STRING_LITERAL
+	EXPRESSION_OPEN
+	EXPRESSION_CLOSE
+	OPERATOR
+)
+
+func ParseTokens(expression string) ([]PredicateStringToken, error) {
+	tokens, err := tokenize(expression)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]PredicateStringToken, 0)
+	for _, token := range tokens {
+		parsedToken, err := parseToken(token)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, parsedToken)
+	}
+	return result, nil
+}
+
+func parseToken(token string) (PredicateStringToken, error) {
+	predicateType, err := identifyTokenType(token)
+	return PredicateStringToken{predicateType, token}, err
+}
+
+func identifyTokenType(token string) (PredicateStringTokenType, error) {
+	switch token[0] {
+	case '$':
+		return VARIABLE, nil
+	case '"':
+		return STRING_LITERAL, nil
+	case '(':
+		return EXPRESSION_OPEN, nil
+	case ')':
+		return EXPRESSION_CLOSE, nil
+	}
+
+	if token == "true" || token == "false" {
+		return BOOL_LITERAL, nil
+	}
+
+	_, err := strconv.Atoi(token)
+	if err == nil {
+		return INT_LITERAL, nil
+	}
+	return OPERATOR, nil
+}
 
 /*
 tokenize takes an initial predicate string and splits it into tokens.
