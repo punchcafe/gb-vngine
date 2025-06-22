@@ -8,27 +8,50 @@ import (
 
 func TestParseTokens(t *testing.T) {
 	t.Run("Can correctly parse a valid expressions", func(t *testing.T) {
-		result, err := ParseTokens("$my_var")
-		assert.NoError(t, err)
-		assert.Equal(t, []PredicateStringToken{{VARIABLE, "$my_var"}}, result)
-
-		result, err = ParseTokens("($my_var is_equal \"thats right\") and (10 less_than $other_var)")
-		assert.NoError(t, err)
-		// TODO: remove delimiters from model.
-		assert.Equal(t, []PredicateStringToken{
-			{EXPRESSION_OPEN, "("},
-			{VARIABLE, "$my_var"},
-			{OPERATOR, "is_equal"},
-			{STRING_LITERAL, "\"thats right\""},
-			{EXPRESSION_CLOSE, ")"},
-			{OPERATOR, "and"},
-			{EXPRESSION_OPEN, "("},
-			{INT_LITERAL, "10"},
-			{OPERATOR, "less_than"},
-			{VARIABLE, "$other_var"},
-			{EXPRESSION_CLOSE, ")"},
-		}, result)
+		testParseTokensTable(t, map[string][]PredicateStringToken{
+			"$my_var": []PredicateStringToken{{VARIABLE, "$my_var"}},
+			"($my_var is_equal \"thats right\") and (10 less_than $other_var)": []PredicateStringToken{
+				{EXPRESSION_OPEN, "("},
+				{VARIABLE, "$my_var"},
+				{OPERATOR, "is_equal"},
+				{STRING_LITERAL, "\"thats right\""},
+				{EXPRESSION_CLOSE, ")"},
+				{OPERATOR, "and"},
+				{EXPRESSION_OPEN, "("},
+				{INT_LITERAL, "10"},
+				{OPERATOR, "less_than"},
+				{VARIABLE, "$other_var"},
+				{EXPRESSION_CLOSE, ")"},
+			},
+			"10 less_than $max_count and (($int_var equals 10) or ($bool_var equals true))": []PredicateStringToken{
+				{INT_LITERAL, "10"},
+				{OPERATOR, "less_than"},
+				{VARIABLE, "$max_count"},
+				{OPERATOR, "and"},
+				{EXPRESSION_OPEN, "("},
+				{EXPRESSION_OPEN, "("},
+				{VARIABLE, "$int_var"},
+				{OPERATOR, "equals"},
+				{INT_LITERAL, "10"},
+				{EXPRESSION_CLOSE, ")"},
+				{OPERATOR, "or"},
+				{EXPRESSION_OPEN, "("},
+				{VARIABLE, "$bool_var"},
+				{OPERATOR, "equals"},
+				{BOOL_LITERAL, "true"},
+				{EXPRESSION_CLOSE, ")"},
+				{EXPRESSION_CLOSE, ")"},
+			},
+		})
 	})
+}
+
+func testParseTokensTable(t *testing.T, table map[string][]PredicateStringToken) {
+	for input, expected := range table {
+		result, err := ParseTokens(input)
+		assert.NoError(t, err)
+		assert.Equal(t, expected, result)
+	}
 }
 
 // TODO: add more unit tests
