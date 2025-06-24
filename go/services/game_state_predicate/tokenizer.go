@@ -40,31 +40,44 @@ func ParseTokens(expression string) ([]PredicateStringToken, error) {
 }
 
 func parseToken(token string) (PredicateStringToken, error) {
-	predicateType, err := identifyTokenType(token)
-	return PredicateStringToken{predicateType, token}, err
-}
-
-func identifyTokenType(token string) (PredicateStringTokenType, error) {
+	predicateStringToken := PredicateStringToken{}
 	switch token[0] {
 	case '$':
-		return VARIABLE, nil
+		predicateStringToken.tokenType = VARIABLE
+		predicateStringToken.val = token[1:]
+		return predicateStringToken, nil
 	case '"':
-		return STRING_LITERAL, nil
+		predicateStringToken.tokenType = STRING_LITERAL
+		predicateStringToken.val = token[1 : len(token)-1]
+		return predicateStringToken, nil
+
 	case '(':
-		return EXPRESSION_OPEN, nil
+		predicateStringToken.tokenType = EXPRESSION_OPEN
+		return predicateStringToken, nil
+
 	case ')':
-		return EXPRESSION_CLOSE, nil
+		predicateStringToken.tokenType = EXPRESSION_CLOSE
+		return predicateStringToken, nil
+
 	}
 
 	if token == "true" || token == "false" {
-		return BOOL_LITERAL, nil
+		predicateStringToken.tokenType = BOOL_LITERAL
+		predicateStringToken.val = token
+		return predicateStringToken, nil
+
 	}
 
 	_, err := strconv.Atoi(token)
 	if err == nil {
-		return INT_LITERAL, nil
+		predicateStringToken.tokenType = INT_LITERAL
+		predicateStringToken.val = token
+		return predicateStringToken, nil
 	}
-	return OPERATOR, nil
+
+	predicateStringToken.tokenType = OPERATOR
+	predicateStringToken.val = token
+	return predicateStringToken, nil
 }
 
 /*
