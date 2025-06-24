@@ -34,7 +34,11 @@ type And struct {
 }
 
 type Brackets struct {
-	operands []any
+	operands Expression
+}
+
+func (b Brackets) ExpressionType() string {
+	return "brackets"
 }
 
 type BoolLiteral bool
@@ -77,11 +81,13 @@ func (pps *PredicateParserStrategies) GetStrategy(tokens []PredicateStringToken)
 
 var parserStrategies PredicateParserStrategies = PredicateParserStrategies{[]ParseStrategy{
 	// Note that ordering in this configuration is crucial
+	BracketsParseStrategy(1),
 	BooleanParseStrategy(1),
 	NumberParseStrategy(1),
 }}
 
 func ParsePredicate(tokens []PredicateStringToken) (Expression, error) {
+	// TODO: extract to configurable object
 	strategy, err := parserStrategies.GetStrategy(tokens)
 	if err != nil {
 		return nil, err

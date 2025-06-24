@@ -27,6 +27,20 @@ func TestParsePredicate(t *testing.T) {
 		assert.Equal(t, NumberLiteral(1), new_result)
 	})
 
+	t.Run("Can correctly parse a valid expression with brackets", func(t *testing.T) {
+		result, err := ParseTokens("(1)")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, Brackets{NumberLiteral(1)}, new_result)
+
+		result, err = ParseTokens("(false)")
+		assert.NoError(t, err)
+		new_result, err = ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, Brackets{BoolLiteral(false)}, new_result)
+	})
+
 	t.Run("Returns error if root predicate contains multiple expressions", func(t *testing.T) {
 		tokens, _ := ParseTokens("true false")
 		_, err := ParsePredicate(tokens)
