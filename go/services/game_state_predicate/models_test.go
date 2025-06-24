@@ -26,4 +26,11 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(t, NumberLiteral(1), new_result)
 	})
+
+	t.Run("Returns error if root predicate contains multiple expressions", func(t *testing.T) {
+		tokens, _ := ParseTokens("true false")
+		_, err := ParsePredicate(tokens)
+		assert.Error(t, err)
+		assert.Equal(t, err.Error(), "unexpected tokens remaining after parsing")
+	})
 }
