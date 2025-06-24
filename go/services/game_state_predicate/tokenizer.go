@@ -8,8 +8,8 @@ import (
 
 type PredicateStringTokenType int
 type PredicateStringToken struct {
-	tokenType PredicateStringTokenType
-	val       string
+	TokenType PredicateStringTokenType
+	Val       string
 }
 
 const (
@@ -43,40 +43,40 @@ func parseToken(token string) (PredicateStringToken, error) {
 	predicateStringToken := PredicateStringToken{}
 	switch token[0] {
 	case '$':
-		predicateStringToken.tokenType = VARIABLE
-		predicateStringToken.val = token[1:]
+		predicateStringToken.TokenType = VARIABLE
+		predicateStringToken.Val = token[1:]
 		return predicateStringToken, nil
 	case '"':
-		predicateStringToken.tokenType = STRING_LITERAL
-		predicateStringToken.val = token[1 : len(token)-1]
+		predicateStringToken.TokenType = STRING_LITERAL
+		predicateStringToken.Val = token[1 : len(token)-1]
 		return predicateStringToken, nil
 
 	case '(':
-		predicateStringToken.tokenType = EXPRESSION_OPEN
+		predicateStringToken.TokenType = EXPRESSION_OPEN
 		return predicateStringToken, nil
 
 	case ')':
-		predicateStringToken.tokenType = EXPRESSION_CLOSE
+		predicateStringToken.TokenType = EXPRESSION_CLOSE
 		return predicateStringToken, nil
 
 	}
 
 	if token == "true" || token == "false" {
-		predicateStringToken.tokenType = BOOL_LITERAL
-		predicateStringToken.val = token
+		predicateStringToken.TokenType = BOOL_LITERAL
+		predicateStringToken.Val = token
 		return predicateStringToken, nil
 
 	}
 
 	_, err := strconv.Atoi(token)
 	if err == nil {
-		predicateStringToken.tokenType = INT_LITERAL
-		predicateStringToken.val = token
+		predicateStringToken.TokenType = INT_LITERAL
+		predicateStringToken.Val = token
 		return predicateStringToken, nil
 	}
 
-	predicateStringToken.tokenType = OPERATOR
-	predicateStringToken.val = token
+	predicateStringToken.TokenType = OPERATOR
+	predicateStringToken.Val = token
 	return predicateStringToken, nil
 }
 
