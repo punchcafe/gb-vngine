@@ -62,7 +62,17 @@ func (b Brackets) ExpressionType() string {
 }
 
 type BoolLiteral bool
+
+func (bl BoolLiteral) ExpressionType() string {
+	return "bool"
+}
+
 type StringLiteral string
+
+func (nl StringLiteral) ExpressionType() string {
+	return "string"
+}
+
 type NumberLiteral int
 
 func (nl NumberLiteral) ExpressionType() string {
@@ -71,8 +81,8 @@ func (nl NumberLiteral) ExpressionType() string {
 
 type VariableReference string
 
-func (bl BoolLiteral) ExpressionType() string {
-	return "bool"
+func (bl VariableReference) ExpressionType() string {
+	return "variable"
 }
 
 type Expression interface {
@@ -105,6 +115,7 @@ var parserStrategies PredicateParserStrategies = PredicateParserStrategies{[]Par
 	BooleanParseStrategy(1),
 	NumberParseStrategy(1),
 	BiOperatorParseStrategy(1),
+	ValueParserStrategy(1),
 }}
 
 func ParsePredicate(tokens []PredicateStringToken) (Expression, error) {

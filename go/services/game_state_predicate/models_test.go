@@ -87,6 +87,22 @@ func TestParsePredicate(t *testing.T) {
 		assert.Equal(t, MoreThan{NumberLiteral(1), NumberLiteral(2)}, new_result)
 	})
 
+	t.Run("Can correctly parse a reference expression", func(t *testing.T) {
+		result, err := ParseTokens("1 more_than $int_var")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, MoreThan{NumberLiteral(1), VariableReference("int_var")}, new_result)
+	})
+
+	t.Run("Can correctly parse a string expression", func(t *testing.T) {
+		result, err := ParseTokens("\"hello\" equals $my_string")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, Equal{StringLiteral("hello"), VariableReference("my_string")}, new_result)
+	})
+
 	t.Run("Returns error if root predicate contains multiple expressions", func(t *testing.T) {
 		tokens, _ := ParseTokens("true false")
 		_, err := ParsePredicate(tokens)

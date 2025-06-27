@@ -6,6 +6,27 @@ import (
 	"strconv"
 )
 
+type ValueParserStrategy int
+
+func (bps ValueParserStrategy) CanHandle(tokens []PredicateStringToken) bool {
+	tokenType := tokens[0].TokenType
+	return tokenType == STRING_LITERAL || tokenType == VARIABLE
+}
+
+func (bps ValueParserStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
+	Expression,
+	[]PredicateStringToken,
+	error) {
+	val := tokens[0].Val
+	switch tokens[0].TokenType {
+	case STRING_LITERAL:
+		return StringLiteral(val), tokens[1:], nil
+	case VARIABLE:
+		return VariableReference(val), tokens[1:], nil
+	}
+	panic("unexpected token type when trying to parse")
+}
+
 type BooleanParseStrategy int
 
 func (bps BooleanParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
