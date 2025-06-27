@@ -12,10 +12,15 @@ func (bps BooleanParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
 }
 
 // TODO: should I make this generic?
-func (bps BooleanParseStrategy) Parse(tokens []PredicateStringToken) (
+func (bps BooleanParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
 	Expression,
 	[]PredicateStringToken,
 	error) {
+
+	if previousExpression != nil {
+		return nil, nil, fmt.Errorf("unexpected token before literal")
+	}
+
 	switch tokens[0].Val {
 	case "false":
 		return BoolLiteral(false), tokens[1:], nil
@@ -32,10 +37,14 @@ func (nps NumberParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
 }
 
 // TODO: should I make this generic?
-func (nps NumberParseStrategy) Parse(tokens []PredicateStringToken) (
+func (nps NumberParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
 	Expression,
 	[]PredicateStringToken,
 	error) {
+
+	if previousExpression != nil {
+		return nil, nil, fmt.Errorf("unexpected token before literal")
+	}
 	num, err := strconv.Atoi(tokens[0].Val)
 	if err != nil {
 		panic("Failed to parse integer token when expected.")
@@ -51,10 +60,14 @@ func (bps BracketsParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
 }
 
 // TODO: should I make this generic?
-func (bps BracketsParseStrategy) Parse(tokens []PredicateStringToken) (
+func (bps BracketsParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
 	Expression,
 	[]PredicateStringToken,
 	error) {
+
+	if previousExpression != nil {
+		return nil, nil, fmt.Errorf("unexpected token before literal")
+	}
 
 	bracketScope := 1
 	endIndex := 0
@@ -80,4 +93,19 @@ func (bps BracketsParseStrategy) Parse(tokens []PredicateStringToken) (
 
 	return Brackets{res}, restOfTokens, err
 
+}
+
+type AndParseStrategy int
+
+func (bps AndParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
+	return tokens[0].TokenType == OPERATOR && tokens[0].Val == "and"
+}
+func (bps AndParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (Expression,
+	[]PredicateStringToken,
+	error) {
+	nextExpression, remainder, err := ParseExpression(tokens[1:], nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	return And{previousExpression, nextExpression}, remainder, nil
 }

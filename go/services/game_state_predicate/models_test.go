@@ -41,10 +41,24 @@ func TestParsePredicate(t *testing.T) {
 		assert.Equal(t, Brackets{BoolLiteral(false)}, new_result)
 	})
 
+	t.Run("Can correctly parse an and expression", func(t *testing.T) {
+		result, err := ParseTokens("true and false")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, And{BoolLiteral(true), BoolLiteral(false)}, new_result)
+
+		result, err = ParseTokens("true and (true and false)")
+		assert.NoError(t, err)
+		new_result, err = ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, And{BoolLiteral(true), Brackets{And{BoolLiteral(true), BoolLiteral(false)}}}, new_result)
+	})
+
 	t.Run("Returns error if root predicate contains multiple expressions", func(t *testing.T) {
 		tokens, _ := ParseTokens("true false")
 		_, err := ParsePredicate(tokens)
 		assert.Error(t, err)
-		assert.Equal(t, err.Error(), "unexpected tokens remaining after parsing")
+		assert.Equal(t, err.Error(), "unexpected token before literal")
 	})
 }

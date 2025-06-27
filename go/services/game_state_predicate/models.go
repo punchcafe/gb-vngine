@@ -33,6 +33,10 @@ type And struct {
 	rhs any
 }
 
+func (b And) ExpressionType() string {
+	return "and"
+}
+
 type Brackets struct {
 	operands Expression
 }
@@ -63,7 +67,7 @@ type Expression interface {
 type ParseStrategy interface {
 	CanHandle(tokens []PredicateStringToken) bool
 	// TODO: should I make this generic?
-	Parse(tokens []PredicateStringToken) (Expression, []PredicateStringToken, error)
+	Parse(tokens []PredicateStringToken, previousExpression Expression) (Expression, []PredicateStringToken, error)
 }
 
 type PredicateParserStrategies struct {
@@ -84,18 +88,31 @@ var parserStrategies PredicateParserStrategies = PredicateParserStrategies{[]Par
 	BracketsParseStrategy(1),
 	BooleanParseStrategy(1),
 	NumberParseStrategy(1),
+	AndParseStrategy(1),
 }}
 
 func ParsePredicate(tokens []PredicateStringToken) (Expression, error) {
-	// TODO: extract to configurable object
-	strategy, err := parserStrategies.GetStrategy(tokens)
-	if err != nil {
-		return nil, err
+	var err error
+	var previousExpression Expression
+	remainder := tokens
+
+	for {
+		previousExpression, remainder, err = ParseExpression(remainder, previousExpression)
+		if err != nil || len(remainder) == 0 {
+			break
+		}
 	}
 
-	result, remainder, err := strategy.Parse(tokens)
-	if len(remainder) != 0 {
-		return nil, fmt.Errorf("unexpected tokens remaining after parsing")
+	return previousExpression, err
+}
+
+func ParseExpression(tokens []PredicateStringToken, previousExpression Expression) (Expression, []PredicateStringToken, error) {
+	// TODO: extract to configurable object
+
+	strategy, strategyErr := parserStrategies.GetStrategy(tokens)
+	if strategyErr != nil {
+		return nil, nil, strategyErr
 	}
-	return result, err
+
+	return strategy.Parse(tokens, previousExpression)
 }
