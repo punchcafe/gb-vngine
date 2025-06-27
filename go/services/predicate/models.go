@@ -5,8 +5,8 @@ type Equal struct {
 	Rhs any
 }
 
-func (b Equal) ExpressionType() string {
-	return "equals"
+func (e Equal) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitEqual(e)
 }
 
 type MoreThan struct {
@@ -14,8 +14,8 @@ type MoreThan struct {
 	Rhs any
 }
 
-func (b MoreThan) ExpressionType() string {
-	return "more_than"
+func (mt MoreThan) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitMoreThan(mt)
 }
 
 type LessThan struct {
@@ -23,8 +23,8 @@ type LessThan struct {
 	Rhs any
 }
 
-func (b LessThan) ExpressionType() string {
-	return "less_than"
+func (lt LessThan) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitLessThan(lt)
 }
 
 type Or struct {
@@ -32,8 +32,8 @@ type Or struct {
 	Rhs any
 }
 
-func (b Or) ExpressionType() string {
-	return "or"
+func (o Or) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitOr(o)
 }
 
 type And struct {
@@ -41,43 +41,55 @@ type And struct {
 	Rhs any
 }
 
-func (b And) ExpressionType() string {
-	return "and"
+func (a And) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitAnd(a)
 }
 
 type Brackets struct {
 	InnerExpression Expression
 }
 
-func (b Brackets) ExpressionType() string {
-	return "brackets"
+func (b Brackets) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitBrackets(b)
 }
 
 type BoolLiteral bool
 
-func (bl BoolLiteral) ExpressionType() string {
-	return "bool"
+func (bl BoolLiteral) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitBoolLiteral(bl)
 }
 
 type StringLiteral string
 
-func (nl StringLiteral) ExpressionType() string {
-	return "string"
+func (sl StringLiteral) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitStringLiteral(sl)
 }
 
 type NumberLiteral int
 
-func (nl NumberLiteral) ExpressionType() string {
-	return "number"
+func (nl NumberLiteral) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitNumberLiteral(nl)
 }
 
 type VariableReference string
 
-func (bl VariableReference) ExpressionType() string {
-	return "variable"
+func (vr VariableReference) AcceptVisitor(ev ExpressionVisitor) {
+	ev.VisitVariableReference(vr)
+}
+
+type ExpressionVisitor interface {
+	VisitVariableReference(VariableReference)
+	VisitNumberLiteral(NumberLiteral)
+	VisitBoolLiteral(BoolLiteral)
+	VisitStringLiteral(StringLiteral)
+	VisitBrackets(Brackets)
+	VisitAnd(And)
+	VisitOr(Or)
+	VisitLessThan(LessThan)
+	VisitMoreThan(MoreThan)
+	VisitEqual(Equal)
 }
 
 type Expression interface {
-	ExpressionType() string
-	// TODO: implement
+	AcceptVisitor(ExpressionVisitor)
 }
