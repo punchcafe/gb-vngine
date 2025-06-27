@@ -2,6 +2,7 @@ package gamestatepredicate
 
 import (
 	"fmt"
+	"slices"
 	"strconv"
 )
 
@@ -95,17 +96,32 @@ func (bps BracketsParseStrategy) Parse(tokens []PredicateStringToken, previousEx
 
 }
 
-type AndParseStrategy int
+type BiOperatorParseStrategy int
 
-func (bps AndParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
-	return tokens[0].TokenType == OPERATOR && tokens[0].Val == "and"
+var biOperators = []string{"and", "or", "less_than", "more_than", "equals"}
+
+func (bps BiOperatorParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
+	return tokens[0].TokenType == OPERATOR && slices.Contains(biOperators, tokens[0].Val)
 }
-func (bps AndParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (Expression,
+
+func (bps BiOperatorParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (Expression,
 	[]PredicateStringToken,
 	error) {
 	nextExpression, remainder, err := ParseExpression(tokens[1:], nil)
 	if err != nil {
 		return nil, nil, err
 	}
-	return And{previousExpression, nextExpression}, remainder, nil
+	switch tokens[0].Val {
+	case "and":
+		return And{previousExpression, nextExpression}, remainder, nil
+	case "or":
+		return Or{previousExpression, nextExpression}, remainder, nil
+	case "less_than":
+		return LessThan{previousExpression, nextExpression}, remainder, nil
+	case "more_than":
+		return MoreThan{previousExpression, nextExpression}, remainder, nil
+	case "equals":
+		return Equal{previousExpression, nextExpression}, remainder, nil
+	}
+	panic("unexpected error: couldn't resolve operator type")
 }

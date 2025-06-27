@@ -55,6 +55,38 @@ func TestParsePredicate(t *testing.T) {
 		assert.Equal(t, And{BoolLiteral(true), Brackets{And{BoolLiteral(true), BoolLiteral(false)}}}, new_result)
 	})
 
+	t.Run("Can correctly parse an or expression", func(t *testing.T) {
+		result, err := ParseTokens("(1 less_than 2) or false")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, Or{Brackets{LessThan{NumberLiteral(1), NumberLiteral(2)}}, BoolLiteral(false)}, new_result)
+	})
+
+	t.Run("Can correctly parse an equals expression", func(t *testing.T) {
+		result, err := ParseTokens("(1 less_than 2) equals 10")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, Equal{Brackets{LessThan{NumberLiteral(1), NumberLiteral(2)}}, NumberLiteral(10)}, new_result)
+	})
+
+	t.Run("Can correctly parse a less_than expression", func(t *testing.T) {
+		result, err := ParseTokens("1 less_than 2")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, LessThan{NumberLiteral(1), NumberLiteral(2)}, new_result)
+	})
+
+	t.Run("Can correctly parse a more_than expression", func(t *testing.T) {
+		result, err := ParseTokens("1 more_than 2")
+		assert.NoError(t, err)
+		new_result, err := ParsePredicate(result)
+		assert.NoError(t, err)
+		assert.Equal(t, MoreThan{NumberLiteral(1), NumberLiteral(2)}, new_result)
+	})
+
 	t.Run("Returns error if root predicate contains multiple expressions", func(t *testing.T) {
 		tokens, _ := ParseTokens("true false")
 		_, err := ParsePredicate(tokens)

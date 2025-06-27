@@ -13,9 +13,17 @@ type Equal struct {
 	rhs any
 }
 
+func (b Equal) ExpressionType() string {
+	return "equals"
+}
+
 type MoreThan struct {
 	lhs any
 	rhs any
+}
+
+func (b MoreThan) ExpressionType() string {
+	return "more_than"
 }
 
 type LessThan struct {
@@ -23,9 +31,17 @@ type LessThan struct {
 	rhs any
 }
 
+func (b LessThan) ExpressionType() string {
+	return "less_than"
+}
+
 type Or struct {
 	lhs any
 	rhs any
+}
+
+func (b Or) ExpressionType() string {
+	return "or"
 }
 
 type And struct {
@@ -88,7 +104,7 @@ var parserStrategies PredicateParserStrategies = PredicateParserStrategies{[]Par
 	BracketsParseStrategy(1),
 	BooleanParseStrategy(1),
 	NumberParseStrategy(1),
-	AndParseStrategy(1),
+	BiOperatorParseStrategy(1),
 }}
 
 func ParsePredicate(tokens []PredicateStringToken) (Expression, error) {
