@@ -1,8 +1,8 @@
 package predicate
 
 type Equal struct {
-	Lhs any
-	Rhs any
+	Lhs Expression
+	Rhs Expression
 }
 
 func (e Equal) AcceptVisitor(ev ExpressionVisitor) {
@@ -10,8 +10,8 @@ func (e Equal) AcceptVisitor(ev ExpressionVisitor) {
 }
 
 type MoreThan struct {
-	Lhs any
-	Rhs any
+	Lhs Expression
+	Rhs Expression
 }
 
 func (mt MoreThan) AcceptVisitor(ev ExpressionVisitor) {
@@ -19,8 +19,8 @@ func (mt MoreThan) AcceptVisitor(ev ExpressionVisitor) {
 }
 
 type LessThan struct {
-	Lhs any
-	Rhs any
+	Lhs Expression
+	Rhs Expression
 }
 
 func (lt LessThan) AcceptVisitor(ev ExpressionVisitor) {
@@ -28,8 +28,8 @@ func (lt LessThan) AcceptVisitor(ev ExpressionVisitor) {
 }
 
 type Or struct {
-	Lhs any
-	Rhs any
+	Lhs Expression
+	Rhs Expression
 }
 
 func (o Or) AcceptVisitor(ev ExpressionVisitor) {
@@ -37,8 +37,8 @@ func (o Or) AcceptVisitor(ev ExpressionVisitor) {
 }
 
 type And struct {
-	Lhs any
-	Rhs any
+	Lhs Expression
+	Rhs Expression
 }
 
 func (a And) AcceptVisitor(ev ExpressionVisitor) {
