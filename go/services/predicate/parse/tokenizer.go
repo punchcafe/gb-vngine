@@ -1,4 +1,4 @@
-package gamestatepredicate
+package parse
 
 import (
 	"fmt"
