@@ -40,6 +40,7 @@ func main() {
 		panic(err.Error())
 	}
 
-	main_code := render.RenderMain()
-	os.WriteFile(*outputFile, []byte(fmt.Sprintf("%s\n%s", gameStateCode, main_code)), 0644) // todo: undestand this
+	mainCode := render.RenderMain()
+	typeDefs := render.RenderTypes()
+	os.WriteFile(*outputFile, []byte(fmt.Sprintf("%s\n%s\n%s", gameStateCode, typeDefs, mainCode)), 0644) // todo: undestand this
 }
