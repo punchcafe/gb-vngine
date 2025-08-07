@@ -6,33 +6,42 @@ import (
 	p "punchcafe.dev/gb-vngine/services/predicate"
 )
 
-type SourceNameConverter struct {
+func ExpressionToSourceName(e p.Expression) (string, error) {
+	snc := sourceNameConverter{}
+	e.AcceptVisitor(&snc)
+	if snc.lastError != nil {
+		return "", snc.lastError
+	}
+	return fmt.Sprintf("is_%s", snc.sourceName), nil
+}
+
+type sourceNameConverter struct {
 	sourceName string
 	lastError  error
 }
 
-func (nc *SourceNameConverter) VisitVariableReference(vr p.VariableReference) {
+func (nc *sourceNameConverter) VisitVariableReference(vr p.VariableReference) {
 	nc.lastError = nil
 	nc.sourceName = fmt.Sprintf("VAR_%v", vr)
 }
 
-func (nc *SourceNameConverter) VisitNumberLiteral(nl p.NumberLiteral) {
+func (nc *sourceNameConverter) VisitNumberLiteral(nl p.NumberLiteral) {
 	nc.lastError = nil
 	nc.sourceName = fmt.Sprintf("%v", nl)
 }
 
-func (nc *SourceNameConverter) VisitBoolLiteral(bl p.BoolLiteral) {
+func (nc *sourceNameConverter) VisitBoolLiteral(bl p.BoolLiteral) {
 	nc.lastError = nil
 	nc.sourceName = fmt.Sprintf("%v", bl)
 }
 
-func (nc *SourceNameConverter) VisitStringLiteral(sl p.StringLiteral) {
+func (nc *sourceNameConverter) VisitStringLiteral(sl p.StringLiteral) {
 	nc.lastError = nil
 	nc.sourceName = fmt.Sprintf("%v", sl)
 }
 
-func (nc *SourceNameConverter) VisitBrackets(b p.Brackets) {
-	v := SourceNameConverter{}
+func (nc *sourceNameConverter) VisitBrackets(b p.Brackets) {
+	v := sourceNameConverter{}
 	b.InnerExpression.AcceptVisitor(&v)
 	if v.lastError != nil {
 		nc.lastError = v.lastError
@@ -40,7 +49,7 @@ func (nc *SourceNameConverter) VisitBrackets(b p.Brackets) {
 	nc.sourceName = fmt.Sprintf("BO_%v_BC", v.sourceName)
 }
 
-func (nc *SourceNameConverter) VisitAnd(a p.And) {
+func (nc *sourceNameConverter) VisitAnd(a p.And) {
 	res, err := renderBinaryOperatorName("AND", a.Lhs, a.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -49,7 +58,7 @@ func (nc *SourceNameConverter) VisitAnd(a p.And) {
 	nc.sourceName = res
 }
 
-func (nc *SourceNameConverter) VisitOr(o p.Or) {
+func (nc *sourceNameConverter) VisitOr(o p.Or) {
 	res, err := renderBinaryOperatorName("OR", o.Lhs, o.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -58,7 +67,7 @@ func (nc *SourceNameConverter) VisitOr(o p.Or) {
 	nc.sourceName = res
 }
 
-func (nc *SourceNameConverter) VisitEqual(e p.Equal) {
+func (nc *sourceNameConverter) VisitEqual(e p.Equal) {
 	res, err := renderBinaryOperatorName("EQUALS", e.Lhs, e.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -67,7 +76,7 @@ func (nc *SourceNameConverter) VisitEqual(e p.Equal) {
 	nc.sourceName = res
 }
 
-func (nc *SourceNameConverter) VisitLessThan(lt p.LessThan) {
+func (nc *sourceNameConverter) VisitLessThan(lt p.LessThan) {
 	res, err := renderBinaryOperatorName("LESS_THAN", lt.Lhs, lt.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -76,7 +85,7 @@ func (nc *SourceNameConverter) VisitLessThan(lt p.LessThan) {
 	nc.sourceName = res
 }
 
-func (nc *SourceNameConverter) VisitMoreThan(mt p.MoreThan) {
+func (nc *sourceNameConverter) VisitMoreThan(mt p.MoreThan) {
 	res, err := renderBinaryOperatorName("MORE_THAN", mt.Lhs, mt.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -85,18 +94,9 @@ func (nc *SourceNameConverter) VisitMoreThan(mt p.MoreThan) {
 	nc.sourceName = res
 }
 
-func ExpressionToSourceName(e p.Expression) (string, error) {
-	snc := SourceNameConverter{}
-	e.AcceptVisitor(&snc)
-	if snc.lastError != nil {
-		return "", snc.lastError
-	}
-	return fmt.Sprintf("is_%s", snc.sourceName), nil
-}
-
 func renderBinaryOperatorName(joinToken string, lhs p.Expression, rhs p.Expression) (string, error) {
-	lhsVisitor := SourceNameConverter{}
-	rhsVisitor := SourceNameConverter{}
+	lhsVisitor := sourceNameConverter{}
+	rhsVisitor := sourceNameConverter{}
 	lhs.AcceptVisitor(&lhsVisitor)
 	rhs.AcceptVisitor(&rhsVisitor)
 	if lhsVisitor.lastError != nil {
