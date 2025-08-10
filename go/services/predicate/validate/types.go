@@ -8,12 +8,27 @@ import (
 )
 
 type TypeResolver struct {
+	gs project.GameState
+}
+
+func (tr *TypeResolver) ResolveType(e p.Expression) (project.GameStateVariableType, error) {
+	resolver := typeResolverVisitor{gs: tr.gs}
+	e.AcceptVisitor(&resolver)
+	if resolver.lastError != nil {
+		return project.UNDEFINED, resolver.lastError
+	}
+	return resolver.lastType, nil
+}
+
+// Private structs and functions
+
+type typeResolverVisitor struct {
 	gs        project.GameState
 	lastType  project.GameStateVariableType
 	lastError error
 }
 
-func (tr *TypeResolver) VisitVariableReference(vr p.VariableReference) {
+func (tr *typeResolverVisitor) VisitVariableReference(vr p.VariableReference) {
 	lookedUpType := tr.gs[project.GameStateVariableName(vr)]
 	if lookedUpType != project.UNDEFINED {
 		tr.lastType = lookedUpType
@@ -22,56 +37,56 @@ func (tr *TypeResolver) VisitVariableReference(vr p.VariableReference) {
 	tr.lastError = fmt.Errorf("undefined game state variable referenced: %v", vr)
 }
 
-func (tr *TypeResolver) VisitNumberLiteral(p.NumberLiteral) {
+func (tr *typeResolverVisitor) VisitNumberLiteral(p.NumberLiteral) {
 	tr.lastType = project.INT
 	tr.lastError = nil
 }
 
-func (tr *TypeResolver) VisitBoolLiteral(p.BoolLiteral) {
+func (tr *typeResolverVisitor) VisitBoolLiteral(p.BoolLiteral) {
 	tr.lastType = project.BOOL
 	tr.lastError = nil
 }
 
-func (tr *TypeResolver) VisitStringLiteral(p.StringLiteral) {
+func (tr *typeResolverVisitor) VisitStringLiteral(p.StringLiteral) {
 	tr.lastType = project.STRING
 	tr.lastError = nil
 }
 
-func (tr *TypeResolver) VisitBrackets(b p.Brackets) {
-	newResolver := TypeResolver{gs: tr.gs}
+func (tr *typeResolverVisitor) VisitBrackets(b p.Brackets) {
+	newResolver := typeResolverVisitor{gs: tr.gs}
 	b.InnerExpression.AcceptVisitor(&newResolver)
 	tr.lastType = newResolver.lastType
 	tr.lastError = newResolver.lastError
 }
 
-func (tr *TypeResolver) VisitAnd(a p.And) {
+func (tr *typeResolverVisitor) VisitAnd(a p.And) {
 	tr.validateMatchingPair(a.Lhs, a.Rhs, "and", project.BOOL)
 }
 
-func (tr *TypeResolver) VisitOr(o p.Or) {
+func (tr *typeResolverVisitor) VisitOr(o p.Or) {
 	tr.validateMatchingPair(o.Lhs, o.Rhs, "or", project.BOOL)
 }
 
-func (tr *TypeResolver) VisitEqual(e p.Equal) {
+func (tr *typeResolverVisitor) VisitEqual(e p.Equal) {
 	// incorrect implementation
 	tr.validateMatchingPair(e.Lhs, e.Rhs, "equal", project.STRING)
 }
 
-func (tr *TypeResolver) VisitLessThan(lt p.LessThan) {
+func (tr *typeResolverVisitor) VisitLessThan(lt p.LessThan) {
 	tr.validateMatchingPair(lt.Lhs, lt.Rhs, "less_than", project.INT)
 }
 
-func (tr *TypeResolver) VisitMoreThan(mt p.MoreThan) {
+func (tr *typeResolverVisitor) VisitMoreThan(mt p.MoreThan) {
 	tr.validateMatchingPair(mt.Lhs, mt.Rhs, "more_than", project.INT)
 }
 
-func (tr *TypeResolver) validateMatchingPair(lhs p.Expression,
+func (tr *typeResolverVisitor) validateMatchingPair(lhs p.Expression,
 	rhs p.Expression,
 	operand string,
 	varType project.GameStateVariableType) {
 
-	lhsResolver := TypeResolver{gs: tr.gs}
-	rhsResolver := TypeResolver{gs: tr.gs}
+	lhsResolver := typeResolverVisitor{gs: tr.gs}
+	rhsResolver := typeResolverVisitor{gs: tr.gs}
 	lhs.AcceptVisitor(&lhsResolver)
 	rhs.AcceptVisitor(&rhsResolver)
 

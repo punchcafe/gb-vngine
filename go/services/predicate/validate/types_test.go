@@ -114,16 +114,16 @@ func TestTypeResolver(t *testing.T) {
 
 func assertError(t *testing.T, gs project.GameState, expectedErrorMessage string, e predicate.Expression) {
 	tr := newTypeResolver(gs)
-	e.AcceptVisitor(tr)
-	assert.Error(t, tr.lastError)
-	assert.Equal(t, tr.lastError.Error(), expectedErrorMessage)
+	_, err := tr.ResolveType(e)
+	assert.Error(t, err)
+	assert.Equal(t, err.Error(), expectedErrorMessage)
 }
 
 func validateTypeCheck(t *testing.T, gs project.GameState, gsvt project.GameStateVariableType, e predicate.Expression) {
 	tr := newTypeResolver(gs)
-	e.AcceptVisitor(tr)
-	assert.NoError(t, tr.lastError)
-	assert.Equal(t, tr.lastType, gsvt)
+	typ, err := tr.ResolveType(e)
+	assert.NoError(t, err)
+	assert.Equal(t, typ, gsvt)
 }
 
 func newTypeResolver(gs project.GameState) *TypeResolver {
