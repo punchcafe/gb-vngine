@@ -3,18 +3,25 @@ package predicate
 import (
 	"fmt"
 
+	"punchcafe.dev/gb-vngine/project"
 	service "punchcafe.dev/gb-vngine/services/predicate"
+
+	// TODO: I think we need a better namespace for this
+	"punchcafe.dev/gb-vngine/services/predicate/validate"
 )
 
-func ConvertExpressionToSource(e service.Expression) (string, error) {
+func ConvertExpressionToSource(e service.Expression, gs project.GameState) (string, error) {
 	v := expressionVisitor{}
+	tr := validate.NewTypeResolver(gs)
+	v.typeResolver = tr
 	e.AcceptVisitor(&v)
 	return v.bodyCode, v.lastError
 }
 
 type expressionVisitor struct {
-	bodyCode  string
-	lastError error
+	typeResolver *validate.TypeResolver
+	bodyCode     string
+	lastError    error
 }
 
 func (ev *expressionVisitor) VisitVariableReference(vr service.VariableReference) {
@@ -57,7 +64,29 @@ func (ev *expressionVisitor) VisitOr(o service.Or) {
 }
 
 func (ev *expressionVisitor) VisitEqual(e service.Equal) {
-	renderBinaryOperator("==", e.Lhs, e.Rhs, ev)
+	typ, err := ev.typeResolver.ResolveType(e.Lhs)
+	if err != nil {
+		panic("unexpected error: invalid type in equals operator")
+	}
+	if typ == project.STRING {
+		// We don't need to check both sides, as this part of the code
+		// assumes that all operator type resolution validation has passed.
+		lhs, err := renderExpressionCode(e.Lhs)
+		if err != nil {
+			ev.lastError = err
+			return
+		}
+		rhs, err := renderExpressionCode(e.Rhs)
+		if err != nil {
+			ev.lastError = err
+			return
+		}
+
+		ev.lastError = nil
+		ev.bodyCode = fmt.Sprintf("str_compare(%s, %s)", lhs, rhs)
+	} else {
+		renderBinaryOperator("==", e.Lhs, e.Rhs, ev)
+	}
 }
 
 func (ev *expressionVisitor) VisitLessThan(lt service.LessThan) {
@@ -73,20 +102,27 @@ func renderBinaryOperator(operatorName string,
 	rhsExpression service.Expression,
 	out *expressionVisitor,
 ) {
-	lhs := expressionVisitor{}
-	rhs := expressionVisitor{}
-
-	lhsExpression.AcceptVisitor(&lhs)
-	if lhs.lastError != nil {
-		out.lastError = lhs.lastError
+	lhs, err := renderExpressionCode(lhsExpression)
+	if err != nil {
+		out.lastError = err
 		return
 	}
-	rhsExpression.AcceptVisitor(&rhs)
-	if rhs.lastError != nil {
-		out.lastError = rhs.lastError
+	rhs, err := renderExpressionCode(rhsExpression)
+	if err != nil {
+		out.lastError = err
 		return
 	}
 
-	out.bodyCode = fmt.Sprintf("%s %s %s", lhs.bodyCode, operatorName, rhs.bodyCode)
+	out.bodyCode = fmt.Sprintf("%s %s %s", lhs, operatorName, rhs)
 	out.lastError = nil
+}
+
+func renderExpressionCode(e service.Expression) (string, error) {
+	v := expressionVisitor{}
+
+	e.AcceptVisitor(&v)
+	if v.lastError != nil {
+		return "", v.lastError
+	}
+	return v.bodyCode, nil
 }

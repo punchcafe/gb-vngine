@@ -7,10 +7,15 @@ import (
 	p "punchcafe.dev/gb-vngine/services/predicate"
 )
 
+func NewTypeResolver(gs project.GameState) *TypeResolver {
+	return &TypeResolver{gs}
+}
+
 type TypeResolver struct {
 	gs project.GameState
 }
 
+// TODO: consider naming here, as well as whether to separate resolving from validating.
 func (tr *TypeResolver) ResolveType(e p.Expression) (project.GameStateVariableType, error) {
 	resolver := typeResolverVisitor{gs: tr.gs}
 	e.AcceptVisitor(&resolver)
