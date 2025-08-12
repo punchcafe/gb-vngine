@@ -4,24 +4,30 @@ import (
 	"fmt"
 
 	"punchcafe.dev/gb-vngine/project"
+	"punchcafe.dev/gb-vngine/services"
 	service "punchcafe.dev/gb-vngine/services/predicate"
 
 	// TODO: I think we need a better namespace for this
 	"punchcafe.dev/gb-vngine/services/predicate/validate"
 )
 
-func ConvertExpressionToSource(e service.Expression, gs project.GameState) (string, error) {
-	v := expressionVisitor{}
-	tr := validate.NewTypeResolver(gs)
-	v.typeResolver = tr
+func ConvertExpressionToSource(
+	e service.Expression,
+	gs project.GameState,
+	sr *services.StringRegistry,
+) (string, error) {
+	v := newVisitor(gs, sr)
 	e.AcceptVisitor(&v)
 	return v.bodyCode, v.lastError
 }
 
+// Private functions and types
+
 type expressionVisitor struct {
-	typeResolver *validate.TypeResolver
-	bodyCode     string
-	lastError    error
+	typeResolver   *validate.TypeResolver
+	stringRegistry *services.StringRegistry
+	bodyCode       string
+	lastError      error
 }
 
 func (ev *expressionVisitor) VisitVariableReference(vr service.VariableReference) {
@@ -40,7 +46,11 @@ func (ev *expressionVisitor) VisitBoolLiteral(bl service.BoolLiteral) {
 }
 
 func (ev *expressionVisitor) VisitStringLiteral(sl service.StringLiteral) {
-	ev.bodyCode = fmt.Sprintf("\"%v\"", sl)
+	ref, err := ev.stringRegistry.Reference(string(sl))
+	if err != nil {
+		panic("unexpected error: string literal not registered in String Registry.")
+	}
+	ev.bodyCode = ref
 	ev.lastError = nil
 }
 
@@ -56,11 +66,11 @@ func (ev *expressionVisitor) VisitBrackets(b service.Brackets) {
 }
 
 func (ev *expressionVisitor) VisitAnd(a service.And) {
-	renderBinaryOperator("&&", a.Lhs, a.Rhs, ev)
+	ev.renderBinaryOperator("&&", a.Lhs, a.Rhs, ev)
 }
 
 func (ev *expressionVisitor) VisitOr(o service.Or) {
-	renderBinaryOperator("||", o.Lhs, o.Rhs, ev)
+	ev.renderBinaryOperator("||", o.Lhs, o.Rhs, ev)
 }
 
 func (ev *expressionVisitor) VisitEqual(e service.Equal) {
@@ -71,12 +81,12 @@ func (ev *expressionVisitor) VisitEqual(e service.Equal) {
 	if typ == project.STRING {
 		// We don't need to check both sides, as this part of the code
 		// assumes that all operator type resolution validation has passed.
-		lhs, err := renderExpressionCode(e.Lhs)
+		lhs, err := ev.renderExpressionCode(e.Lhs)
 		if err != nil {
 			ev.lastError = err
 			return
 		}
-		rhs, err := renderExpressionCode(e.Rhs)
+		rhs, err := ev.renderExpressionCode(e.Rhs)
 		if err != nil {
 			ev.lastError = err
 			return
@@ -85,29 +95,29 @@ func (ev *expressionVisitor) VisitEqual(e service.Equal) {
 		ev.lastError = nil
 		ev.bodyCode = fmt.Sprintf("str_compare(%s, %s)", lhs, rhs)
 	} else {
-		renderBinaryOperator("==", e.Lhs, e.Rhs, ev)
+		ev.renderBinaryOperator("==", e.Lhs, e.Rhs, ev)
 	}
 }
 
 func (ev *expressionVisitor) VisitLessThan(lt service.LessThan) {
-	renderBinaryOperator("<", lt.Lhs, lt.Rhs, ev)
+	ev.renderBinaryOperator("<", lt.Lhs, lt.Rhs, ev)
 }
 
 func (ev *expressionVisitor) VisitMoreThan(mt service.MoreThan) {
-	renderBinaryOperator(">", mt.Lhs, mt.Rhs, ev)
+	ev.renderBinaryOperator(">", mt.Lhs, mt.Rhs, ev)
 }
 
-func renderBinaryOperator(operatorName string,
+func (ev *expressionVisitor) renderBinaryOperator(operatorName string,
 	lhsExpression service.Expression,
 	rhsExpression service.Expression,
 	out *expressionVisitor,
 ) {
-	lhs, err := renderExpressionCode(lhsExpression)
+	lhs, err := ev.renderExpressionCode(lhsExpression)
 	if err != nil {
 		out.lastError = err
 		return
 	}
-	rhs, err := renderExpressionCode(rhsExpression)
+	rhs, err := ev.renderExpressionCode(rhsExpression)
 	if err != nil {
 		out.lastError = err
 		return
@@ -117,12 +127,20 @@ func renderBinaryOperator(operatorName string,
 	out.lastError = nil
 }
 
-func renderExpressionCode(e service.Expression) (string, error) {
-	v := expressionVisitor{}
+func (ev *expressionVisitor) renderExpressionCode(e service.Expression) (string, error) {
+	v := expressionVisitor{typeResolver: ev.typeResolver, stringRegistry: ev.stringRegistry}
 
 	e.AcceptVisitor(&v)
 	if v.lastError != nil {
 		return "", v.lastError
 	}
 	return v.bodyCode, nil
+}
+
+func newVisitor(gs project.GameState, sr *services.StringRegistry) expressionVisitor {
+	v := expressionVisitor{}
+	tr := validate.NewTypeResolver(gs)
+	v.typeResolver = tr
+	v.stringRegistry = sr
+	return v
 }
