@@ -2,16 +2,13 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"os"
 
-	"gopkg.in/yaml.v3"
-	"punchcafe.dev/gb-vngine/project"
-	"punchcafe.dev/gb-vngine/render"
-	"punchcafe.dev/gb-vngine/services"
+	"punchcafe.dev/gb-vngine/app"
 )
 
 func main() {
+
 	var outputFile = flag.String("o", "game.c", "the output file name.")
 	var variablesDefinition = flag.String("gs", "game-state-variables.yml", "the game state variable definition yaml")
 	flag.Parse()
@@ -19,28 +16,13 @@ func main() {
 	if err != nil {
 		panic("game state variable definition not found!")
 	}
-	rawGameStateYaml := map[string]string{}
-	err = yaml.Unmarshal(data, rawGameStateYaml)
-	if err != nil {
-		panic("unable to unmarshall yaml file")
-	}
 
-	gameState, err := project.ParseGameState(rawGameStateYaml)
-	if err != nil {
-		panic(err.Error())
-	}
-	gameStateService, err := services.NewGameStateService(gameState)
-	if err != nil {
-		panic(err.Error())
-	}
-	gameStateRender := render.NewGameStateRenderer(gameStateService)
+	a := app.App{GameStateVariables: string(data), Chapter: ""}
+	result, err := a.Render()
 
-	gameStateCode, err := gameStateRender.Render()
 	if err != nil {
 		panic(err.Error())
 	}
 
-	mainCode := render.RenderMain()
-	typeDefs := render.RenderTypes()
-	os.WriteFile(*outputFile, []byte(fmt.Sprintf("%s\n%s\n%s", gameStateCode, typeDefs, mainCode)), 0644) // todo: undestand this
+	os.WriteFile(*outputFile, []byte(result), 0644) // todo: undestand this
 }
