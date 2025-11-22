@@ -1,0 +1,68 @@
+package registry
+
+import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"punchcafe.dev/gb-vngine/project"
+	"punchcafe.dev/gb-vngine/services/predicate"
+)
+
+func TestFromChapter(t *testing.T) {
+	t.Run("Correctly populates an empty chapter", func(t *testing.T) {
+		res, err := FromChapter(project.Chapter{})
+		assert.NoError(t, err)
+		assert.Equal(t, Registry{allPredicates: map[predicate.Expression]bool{}}, *res)
+	})
+
+	t.Run("Correctly populates a chapter with a single, simple branch", func(t *testing.T) {
+		res, err := FromChapter(project.Chapter{ChapterID: "sample", Nodes: []project.Node{{Branches: []project.Branch{{PredicateExpression: "true and true"}}}}})
+		assert.NoError(t, err)
+		assert.Equal(t, Registry{allPredicates: map[predicate.Expression]bool{
+			predicate.And{
+				Lhs: predicate.BoolLiteral(true),
+				Rhs: predicate.BoolLiteral(true),
+			}: true,
+		}}, *res)
+	})
+
+	t.Run("Correctly populates a chapter with a several branches and nodes", func(t *testing.T) {
+		res, err := FromChapter(project.Chapter{ChapterID: "sample", Nodes: []project.Node{
+			{
+				ID: "1",
+				Branches: []project.Branch{
+					{PredicateExpression: "true and true", NodeID: "2"},
+					{PredicateExpression: "\"hello\" equals $my_string", NodeID: "3"},
+				},
+			},
+			{
+				ID: "2",
+				Branches: []project.Branch{
+					// Already exisists in above branch, so should only appear once
+					{PredicateExpression: "\"hello\" equals $my_string", NodeID: "3"},
+				},
+			},
+			{
+				ID: "3",
+				Branches: []project.Branch{
+					{PredicateExpression: "$my_num equals 1", NodeID: "1"},
+				},
+			},
+		}})
+		assert.NoError(t, err)
+		assert.Equal(t, Registry{allPredicates: map[predicate.Expression]bool{
+			predicate.And{
+				Lhs: predicate.BoolLiteral(true),
+				Rhs: predicate.BoolLiteral(true),
+			}: true,
+			predicate.Equal{
+				Lhs: predicate.StringLiteral("hello"),
+				Rhs: predicate.VariableReference("my_string"),
+			}: true,
+			predicate.Equal{
+				Lhs: predicate.VariableReference("my_num"),
+				Rhs: predicate.NumberLiteral(1),
+			}: true,
+		}}, *res)
+	})
+}
