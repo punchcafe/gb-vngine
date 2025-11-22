@@ -66,3 +66,21 @@ func TestFromChapter(t *testing.T) {
 		}}, *res)
 	})
 }
+
+func TestLookup(t *testing.T) {
+
+	registry, err := FromChapter(project.Chapter{ChapterID: "sample", Nodes: []project.Node{{Branches: []project.Branch{{PredicateExpression: "true and true"}}}}})
+	assert.NoError(t, err)
+
+	t.Run("it returns the expression if it has been registered", func(t *testing.T) {
+		exp, err := registry.Lookup("true and true")
+		assert.NoError(t, err)
+		assert.Equal(t, predicate.And(predicate.And{Lhs: predicate.BoolLiteral(true), Rhs: predicate.BoolLiteral(true)}), exp)
+	})
+
+	t.Run("it returns an error if the expression has not been registered", func(t *testing.T) {
+		_, err := registry.Lookup("true and false")
+		assert.Error(t, err, "expression not in registry")
+	})
+
+}
