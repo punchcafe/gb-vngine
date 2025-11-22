@@ -6,6 +6,11 @@ struct GameState {
 
 };
 
+typedef unsigned char bool;
+
+typedef void (*GameStateModification)(struct GameState*);
+typedef bool (*GameStatePredicate)(struct GameState*);
+
 enum NodeTransitionType {
     PLAYER_BASED_TRANSITION,
     PREDICATE_BASED_TRANSITION
@@ -18,11 +23,6 @@ typedef struct Node {
     GameStateModification * game_state_modifications;
     short number_of_gsm;
 };
-
-typedef unsigned char bool;
-
-typedef void (*GameStateModification)(struct GameState*);
-typedef bool (*GameStatePredicate)(struct GameState*);
 int main()
 {
     return 0;
