@@ -2,6 +2,8 @@ package registry
 
 import (
 	"fmt"
+	"iter"
+	"maps"
 
 	"punchcafe.dev/gb-vngine/project"
 	p "punchcafe.dev/gb-vngine/services/predicate"
@@ -10,7 +12,8 @@ import (
 
 type Registry struct {
 	// Use a map to guarantee distinctness
-	allPredicates map[p.Expression]bool
+	// TODO: make private when able to easily create test fixtures.
+	AllPredicates map[p.Expression]bool
 }
 
 func (r *Registry) Lookup(rawExpression string) (p.Expression, error) {
@@ -18,10 +21,14 @@ func (r *Registry) Lookup(rawExpression string) (p.Expression, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !r.allPredicates[expression] {
+	if !r.AllPredicates[expression] {
 		return nil, fmt.Errorf("expression not in registry")
 	}
 	return expression, nil
+}
+
+func (r *Registry) AllRegisteredPredicates() iter.Seq[p.Expression] {
+	return maps.Keys(r.AllPredicates)
 }
 
 func (r *Registry) addRawExpression(rawExpression string) error {
@@ -29,7 +36,7 @@ func (r *Registry) addRawExpression(rawExpression string) error {
 	if err != nil {
 		return err
 	}
-	r.allPredicates[expression] = true
+	r.AllPredicates[expression] = true
 	return nil
 }
 
@@ -46,7 +53,7 @@ func parseRawExpression(rawExpression string) (p.Expression, error) {
 }
 
 func FromChapter(c project.Chapter) (*Registry, error) {
-	r := &Registry{allPredicates: map[p.Expression]bool{}}
+	r := &Registry{AllPredicates: map[p.Expression]bool{}}
 
 	for _, node := range c.Nodes {
 		for _, branch := range node.Branches {
