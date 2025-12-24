@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"punchcafe.dev/gb-vngine/services/predicate"
+	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
 func TestStringRegistry(t *testing.T) {
@@ -36,5 +38,33 @@ func TestStringRegistry(t *testing.T) {
 			{ConstantName: "STRING_REG_1", Value: "hello, world!"},
 			{ConstantName: "STRING_REG_2", Value: "other string"},
 		}), sr.AllStrings())
+	})
+}
+
+func TestBuildStringRegistry(t *testing.T) {
+	t.Run("builds a registry from a predicate registry", func(t *testing.T) {
+		pr := registry.Registry{AllPredicates: map[predicate.Expression]bool{
+			predicate.And{
+				Lhs: predicate.BoolLiteral(true),
+				Rhs: predicate.BoolLiteral(true),
+			}: true,
+			predicate.Equal{
+				Lhs: predicate.StringLiteral("hello"),
+				Rhs: predicate.VariableReference("my_string"),
+			}: true,
+			predicate.Equal{
+				Lhs: predicate.StringLiteral("another literal"),
+				Rhs: predicate.StringLiteral("a third literal"),
+			}: true,
+		}}
+
+		expectedStringRegistry := StringRegistry{registry: map[string]uint{
+			"hello":           1,
+			"another literal": 2,
+			"a third literal": 3,
+		}}
+		sr := BuildStringRegistry(&pr)
+
+		assert.Equal(t, expectedStringRegistry, *sr)
 	})
 }
