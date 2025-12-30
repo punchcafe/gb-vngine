@@ -13,6 +13,8 @@ struct GameState {
 };
 `
 
+const GAME_STATE_RENDERER_NAME = "GAME_STATE_RENDERER"
+
 type GameStateRender struct {
 	gameStateService *services.GameStateService
 }
@@ -38,4 +40,12 @@ func (r *GameStateRender) Render() (string, error) {
 		b.Write([]byte(fmt.Sprintf("    %s %s;\n", fieldType, fieldName)))
 	}
 	return fmt.Sprintf(template, b.String()), nil
+}
+
+func (r *GameStateRender) Name() string {
+	return GAME_STATE_RENDERER_NAME
+}
+
+func (r *GameStateRender) Dependencies() []string {
+	return []string{}
 }

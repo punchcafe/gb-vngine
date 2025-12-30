@@ -1,4 +1,5 @@
 
+
 struct GameState {
     char * a_string;
     unsigned char abool;

@@ -29,14 +29,17 @@ func (a App) Render() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	gameStateRender := render.NewGameStateRenderer(gameStateService)
 
-	gameStateCode, err := gameStateRender.Render()
+	// Prepare ComponentRenderers
+
+	gameStateRender := render.NewGameStateRenderer(gameStateService)
+	componentRenders := []render.ComponentRenderer{gameStateRender, render.MainRenderer, render.TypeDefinitionRenderer}
+
+	renderer, err := render.Build(componentRenders)
+
 	if err != nil {
 		return "", err
 	}
 
-	mainCode := render.RenderMain()
-	typeDefs := render.RenderTypes()
-	return fmt.Sprintf("%s\n%s\n%s", gameStateCode, typeDefs, mainCode), nil
+	return renderer.Render()
 }
