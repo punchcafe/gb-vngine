@@ -15,24 +15,22 @@ type App struct {
 }
 
 func (a App) Render() (string, error) {
-	rawGameStateYaml := map[string]string{}
-	err := yaml.Unmarshal([]byte(a.GameStateVariables), rawGameStateYaml)
-	if err != nil {
-		return "", fmt.Errorf("unable to unmarshall yaml file")
-	}
 
-	gameState, err := project.ParseGameState(rawGameStateYaml)
+	projectLayer, err := buildProjectLayer(a)
+
 	if err != nil {
 		return "", err
 	}
-	gameStateService, err := services.NewGameStateService(gameState)
+
+	servicesLayer, err := buildServicesLayer(projectLayer)
+
 	if err != nil {
 		return "", err
 	}
 
 	// Prepare ComponentRenderers
 
-	gameStateRender := render.NewGameStateRenderer(gameStateService)
+	gameStateRender := render.NewGameStateRenderer(&servicesLayer.gameState)
 	componentRenders := []render.ComponentRenderer{gameStateRender, render.MainRenderer, render.TypeDefinitionRenderer}
 
 	renderer, err := render.Build(componentRenders)
@@ -42,4 +40,37 @@ func (a App) Render() (string, error) {
 	}
 
 	return renderer.Render()
+}
+
+type projectLayer struct {
+	gameState project.GameState
+}
+
+type ServicesLayer struct {
+	gameState services.GameStateService
+}
+
+func buildProjectLayer(app App) (*projectLayer, error) {
+
+	rawGameStateYaml := map[string]string{}
+	err := yaml.Unmarshal([]byte(app.GameStateVariables), rawGameStateYaml)
+	if err != nil {
+		return nil, fmt.Errorf("unable to unmarshall yaml file")
+	}
+
+	gameState, err := project.ParseGameState(rawGameStateYaml)
+	if err != nil {
+		return nil, err
+	}
+
+	return &projectLayer{gameState: gameState}, nil
+}
+
+func buildServicesLayer(projectLayer *projectLayer) (*ServicesLayer, error) {
+	service, err := services.NewGameStateService(projectLayer.gameState)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ServicesLayer{gameState: *service}, nil
 }
