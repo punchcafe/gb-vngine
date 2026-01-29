@@ -13,21 +13,21 @@ type NodeID string
 type NarrativeID string
 
 type Branch struct {
-	Prompt              string `json:"prompt"`
-	PredicateExpression string `json:"predicate-expression"`
-	NodeID              NodeID `json:"node-id"`
+	Prompt              string `yaml:"prompt"`
+	PredicateExpression string `yaml:"predicate-expression"`
+	NodeID              NodeID `yaml:"node-id"`
 }
 
 type Node struct {
-	ID                 NodeID              `json:"id"`
-	GameStateModifiers []GameStateModifier `json:"game-state-modifiers"`
-	Branches           []Branch            `json:"branches"`
-	NarrativeID        NarrativeID         `json:"narrative-id"`
-	NodeType           string              `json:"type"`
+	ID                 NodeID              `yaml:"id"`
+	GameStateModifiers []GameStateModifier `yaml:"game-state-modifiers"`
+	Branches           []Branch            `yaml:"branches"`
+	NarrativeID        NarrativeID         `yaml:"narrative-id"`
+	NodeType           string              `yaml:"type"`
 }
 
 type Chapter struct {
-	ChapterID        string   `json:"chapter-id"`
-	ChapterVariables []string `json:"chapter-variables"`
-	Nodes            []Node   `json:"nodes"`
+	ChapterID        string   `yaml:"chapter-id"`
+	ChapterVariables []string `yaml:"chapter-variables"`
+	Nodes            []Node   `yaml:"nodes"`
 }
