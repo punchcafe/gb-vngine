@@ -3,8 +3,8 @@ package services
 import (
 	"fmt"
 	"maps"
+	"regexp"
 	"sort"
-	"strings"
 
 	"punchcafe.dev/gb-vngine/project"
 )
@@ -19,9 +19,30 @@ type GameStateService struct {
 	gameState project.GameState
 }
 
+const variableNamePattern string = "^[a-z_][A-Za-z_]*$"
+
 func NewGameStateService(gameState project.GameState) (*GameStateService, error) {
+	gss := &GameStateService{gameState: gameState}
+	err := gss.validateVariableNames()
+
+	if err != nil {
+		return nil, err
+	}
+	return gss, nil
+}
+
+func (gss *GameStateService) validateVariableNames() error {
 	// long term this will need to detect collisions
-	return &GameStateService{gameState: gameState}, nil
+	for variableName := range maps.Keys(gss.gameState) {
+		matched, err := regexp.Match(variableNamePattern, []byte(variableName))
+		if err != nil {
+			panic("Unexpected error during game state parameter validation")
+		}
+		if !matched {
+			return fmt.Errorf("invalid game state variable name: '%s', must follow the pattern: r/%s/", variableName, variableNamePattern)
+		}
+	}
+	return nil
 }
 
 func (gss *GameStateService) AllVariables() []project.GameStateVariableName {
@@ -60,7 +81,5 @@ func (gss *GameStateService) LookupFieldName(variableName project.GameStateVaria
 	if err != nil {
 		return "", fmt.Errorf("unknown game state variable: %s", variableName)
 	}
-	lower := strings.ToLower(string(variableName))
-	sanitised := strings.ReplaceAll(lower, "-", "_")
-	return SourceVariableName(sanitised), nil
+	return SourceVariableName(variableName), nil
 }

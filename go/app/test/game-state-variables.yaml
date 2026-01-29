@@ -1,3 +1,3 @@
 counter: INT
-a-string: STRING
+a_string: STRING
 aBool: BOOL

@@ -1,8 +1,8 @@
 
 
 struct GameState {
+    unsigned char aBool;
     char * a_string;
-    unsigned char abool;
     int counter;
 
 };
