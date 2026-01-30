@@ -5,11 +5,14 @@ import (
 	"strings"
 
 	"punchcafe.dev/gb-vngine/project"
+	"punchcafe.dev/gb-vngine/render"
 	"punchcafe.dev/gb-vngine/services"
 	"punchcafe.dev/gb-vngine/services/predicate"
 	"punchcafe.dev/gb-vngine/services/predicate/name"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
+
+const PREDICATE_FUNCTION_RENDERER_NAME = "PREDICATE_FUNCTION_RENDERER"
 
 // Generates a named predicate function for each distinct predicate expression
 // in the graph.
@@ -17,7 +20,16 @@ import (
 type FunctionRenderer struct {
 	ps *registry.Registry
 	sr *services.StringRegistry
+	// TODO: replace this with game state service
 	gs *project.GameState
+}
+
+func BuildFunctionRenderer(
+	predicateRegistry *registry.Registry,
+	stringRegsitry *services.StringRegistry,
+	gameState *project.GameState,
+) *FunctionRenderer {
+	return &FunctionRenderer{ps: predicateRegistry, sr: stringRegsitry, gs: gameState}
 }
 
 func (fr *FunctionRenderer) Render() (string, error) {
@@ -33,6 +45,15 @@ func (fr *FunctionRenderer) Render() (string, error) {
 	}
 
 	return builder.String(), nil
+}
+
+func (fr *FunctionRenderer) Name() string {
+	return PREDICATE_FUNCTION_RENDERER_NAME
+}
+
+func (fr *FunctionRenderer) Dependencies() []string {
+	// TODO: update with actual required dependencies
+	return []string{render.TYPE_DEFINITION_RENDERER_NAME}
 }
 
 func (fr *FunctionRenderer) renderFunction(e predicate.Expression) (string, error) {
