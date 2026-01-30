@@ -26,6 +26,13 @@ func TestFromChapter(t *testing.T) {
 		}}, *res)
 	})
 
+	t.Run("Correctly populates a chapter with a branch without a predicate", func(t *testing.T) {
+		// Will be parsed as empty string
+		res, err := FromChapter(project.Chapter{ChapterID: "sample", Nodes: []project.Node{{Branches: []project.Branch{{PredicateExpression: ""}}}}})
+		assert.NoError(t, err)
+		assert.Equal(t, Registry{AllPredicates: map[predicate.Expression]bool{}}, *res)
+	})
+
 	t.Run("Correctly populates a chapter with a several branches and nodes", func(t *testing.T) {
 		res, err := FromChapter(project.Chapter{ChapterID: "sample", Nodes: []project.Node{
 			{

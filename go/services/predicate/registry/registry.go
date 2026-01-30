@@ -52,11 +52,15 @@ func parseRawExpression(rawExpression string) (p.Expression, error) {
 	return expression, nil
 }
 
+// TODO: make this a reference
 func FromChapter(c project.Chapter) (*Registry, error) {
 	r := &Registry{AllPredicates: map[p.Expression]bool{}}
 
 	for _, node := range c.Nodes {
 		for _, branch := range node.Branches {
+			if branch.PredicateExpression == "" {
+				continue
+			}
 			err := r.addRawExpression(branch.PredicateExpression)
 			if err != nil {
 				return nil, err
