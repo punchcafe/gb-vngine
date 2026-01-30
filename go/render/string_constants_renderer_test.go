@@ -11,7 +11,7 @@ func TestStringConstantsRender(t *testing.T) {
 	t.Run("it correctly renders constant values", func(t *testing.T) {
 		// Arrange
 		sr := services.FIXTURE_StringRegistry()
-		scr := StringConstantsRenderer{stringRegistry: &sr}
+		scr := BuildStringConstantsRenderer(&sr)
 
 		// Act
 		res, err := scr.Render()

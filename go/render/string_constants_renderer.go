@@ -13,6 +13,10 @@ type StringConstantsRenderer struct {
 	stringRegistry *services.StringRegistry
 }
 
+func BuildStringConstantsRenderer(stringRegistry *services.StringRegistry) *StringConstantsRenderer {
+	return &StringConstantsRenderer{stringRegistry: stringRegistry}
+}
+
 func (scr *StringConstantsRenderer) Name() string {
 	return STRING_CONSTANTS_RENDERER_NAME
 }
