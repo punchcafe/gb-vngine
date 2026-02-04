@@ -57,7 +57,7 @@ func (fr *FunctionRenderer) Dependencies() []string {
 }
 
 func (fr *FunctionRenderer) renderFunction(e predicate.Expression) (string, error) {
-	name, err := name.ExpressionToSourceName(e)
+	name, err := name.ExpressionToSourceName(e, fr.sr)
 	if err != nil {
 		return "", err
 	}
@@ -66,7 +66,7 @@ func (fr *FunctionRenderer) renderFunction(e predicate.Expression) (string, erro
 		return "", err
 	}
 
-	functionDef := fmt.Sprintf(`bool %s {
+	functionDef := fmt.Sprintf(`bool %s(struct GameState * game_state) {
 	return %s;
 };`, name, body)
 	return functionDef, nil
