@@ -16,8 +16,12 @@ nodes:
     game-state-modifiers:
       - "increase $int.sips by 1"
     branches:
+      - predicate-expression: '$a_string equals "some constant value"'
+        node-id: 0_after_sip
+        prompt: "hello, world"
       - predicate-expression: "1 equals 1"
         node-id: 0_after_sip
+        prompt: "hello, world2"
   - id: 0_after_sip
     type: PLAYER
     narrative-id: empty_nar

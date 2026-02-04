@@ -52,8 +52,7 @@ func (fr *FunctionRenderer) Name() string {
 }
 
 func (fr *FunctionRenderer) Dependencies() []string {
-	// TODO: update with actual required dependencies
-	return []string{render.TYPE_DEFINITION_RENDERER_NAME}
+	return []string{render.TYPE_DEFINITION_RENDERER_NAME, render.STRING_CONSTANTS_RENDERER_NAME}
 }
 
 func (fr *FunctionRenderer) renderFunction(e predicate.Expression) (string, error) {
