@@ -67,6 +67,6 @@ func (fr *FunctionRenderer) renderFunction(e predicate.Expression) (string, erro
 
 	functionDef := fmt.Sprintf(`bool %s(struct GameState * game_state) {
 	return %s;
-};`, name, body)
+}`, name, body)
 	return functionDef, nil
 }

@@ -29,10 +29,10 @@ typedef struct Node {
 
 bool is_VAR_a_string_EQUALS_STRING_REG_1(struct GameState * game_state) {
 	return str_compare(game_state->a_string, STRING_REG_1);
-};
+}
 bool is_1_EQUALS_1(struct GameState * game_state) {
 	return 1 == 1;
-};
+}
 int main()
 {
     return 0;

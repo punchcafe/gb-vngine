@@ -27,13 +27,13 @@ func TestXxx(t *testing.T) {
 		expected := `
 bool is_true_AND_true(struct GameState * game_state) {
 	return true && true;
-};
+}
 bool is_STRING_REG_1_EQUALS_VAR_my_string(struct GameState * game_state) {
 	return str_compare(STRING_REG_1, game_state->my_string);
-};
+}
 bool is_VAR_my_num_EQUALS_1(struct GameState * game_state) {
 	return game_state->my_num == 1;
-};`
+}`
 		result, err := subject.Render()
 		assert.NoError(t, err)
 		assert.Equal(t, expected, result)
