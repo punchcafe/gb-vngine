@@ -13,6 +13,7 @@ import (
 type Registry struct {
 	// Use a map to guarantee distinctness
 	// TODO: make private when able to easily create test fixtures.
+	// TODO: need to guarantee ordering for testing
 	AllPredicates map[p.Expression]bool
 }
 

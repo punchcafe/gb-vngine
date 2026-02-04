@@ -4,7 +4,7 @@ run:
 	go run main.go
 
 test:
-	go test ./...
+	go clean -testcache && go test ./...
 
 regenerate_app_test:
 	go run main.go -o app/test/expected_source.c \

@@ -9,6 +9,7 @@ import (
 
 type StringRegistry struct {
 	// treat 0 uint as nil
+	// TODO: need to make ordering guaranteed
 	registry map[string]uint
 }
 
