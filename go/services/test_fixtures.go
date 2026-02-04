@@ -9,3 +9,14 @@ func FIXTURE_StringRegistry() StringRegistry {
 		},
 	}
 }
+
+func FIXTURE_StringRegistryFrom(stringNames []string) StringRegistry {
+	registry := map[string]uint{}
+	for _, s := range stringNames {
+		registry[s] = 1
+	}
+
+	return StringRegistry{
+		registry: registry,
+	}
+}
