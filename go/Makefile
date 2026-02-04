@@ -1,9 +1,13 @@
-.PHONY: test
+.PHONY: test run rengerate_app_test
 
 run:
 	go run main.go
+
 test:
 	go test ./...
+
+clean:
+	rm -rf _build
 
 _build:
 	mkdir -p _build
