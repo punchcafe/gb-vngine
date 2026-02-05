@@ -6,6 +6,9 @@ run:
 test:
 	go clean -testcache && go test ./...
 
+fmt:
+	go fmt ./...
+
 regenerate_app_test:
 	go run main.go -o app/test/expected_source.c \
 	-gs app/test/game-state-variables.yaml \
