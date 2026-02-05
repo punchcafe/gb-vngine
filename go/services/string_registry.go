@@ -10,6 +10,7 @@ import (
 
 type StringRegistry struct {
 	// TODO: improve this to use a better insertion-ordered set
+	// Alteratively, can order by string constant when retrieving all
 	entries []StringEntry
 }
 

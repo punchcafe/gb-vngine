@@ -93,7 +93,7 @@ func (ev *expressionVisitor) VisitEqual(e service.Equal) {
 		}
 
 		ev.lastError = nil
-		ev.bodyCode = fmt.Sprintf("str_compare(%s, %s)", lhs, rhs)
+		ev.bodyCode = fmt.Sprintf("(strcmp(%s, %s) == 0)", lhs, rhs)
 	} else {
 		ev.renderBinaryOperator("==", e.Lhs, e.Rhs, ev)
 	}

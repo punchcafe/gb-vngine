@@ -10,6 +10,9 @@ var mainDef string
 //go:embed static/types.c
 var typeDef string
 
+//go:embed static/includes.c
+var includes string
+
 type StaticRenderer struct {
 	content      string
 	name         string
@@ -32,14 +35,25 @@ func (sr *StaticRenderer) Dependencies() []string {
 
 var MAIN_RENDERER_NAME string = "MAIN_RENDERER"
 var MainRenderer ComponentRenderer = &StaticRenderer{
-	content:      mainDef,
-	name:         MAIN_RENDERER_NAME,
-	dependencies: []string{TYPE_DEFINITION_RENDERER_NAME, GAME_STATE_RENDERER_NAME},
+	content: mainDef,
+	name:    MAIN_RENDERER_NAME,
+	dependencies: []string{
+		TYPE_DEFINITION_RENDERER_NAME,
+		GAME_STATE_RENDERER_NAME,
+		INCLUDES_RENDERER_NAME,
+	},
 }
 
 var TYPE_DEFINITION_RENDERER_NAME string = "TYPE_DEFINITION_RENDERER"
 var TypeDefinitionRenderer ComponentRenderer = &StaticRenderer{
 	content:      typeDef,
 	name:         TYPE_DEFINITION_RENDERER_NAME,
-	dependencies: []string{GAME_STATE_RENDERER_NAME},
+	dependencies: []string{GAME_STATE_RENDERER_NAME, INCLUDES_RENDERER_NAME},
+}
+
+var INCLUDES_RENDERER_NAME string = "INCLUDES_RENDERER"
+var IncludesRenderer ComponentRenderer = &StaticRenderer{
+	content:      includes,
+	name:         INCLUDES_RENDERER_NAME,
+	dependencies: []string{},
 }

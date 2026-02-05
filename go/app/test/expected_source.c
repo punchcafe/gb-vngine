@@ -7,6 +7,7 @@ struct GameState {
 
 };
 
+#include <string.h>
 typedef unsigned char bool;
 
 typedef void (*GameStateModification)(struct GameState*);
@@ -24,16 +25,16 @@ typedef struct Node {
     GameStateModification * game_state_modifications;
     short number_of_gsm;
 };
+int main()
+{
+    return 0;
+}
 
 #define STRING_REG_1 "some constant value"
 
 bool is_VAR_a_string_EQUALS_STRING_REG_1(struct GameState * game_state) {
-	return str_compare(game_state->a_string, STRING_REG_1);
+	return (strcmp(game_state->a_string, STRING_REG_1) == 0);
 }
 bool is_1_EQUALS_1(struct GameState * game_state) {
 	return 1 == 1;
-}
-int main()
-{
-    return 0;
 }

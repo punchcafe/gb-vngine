@@ -40,7 +40,14 @@ func (a App) Render() (string, error) {
 		&projectLayer.gameState,
 	)
 
-	componentRenders := []render.ComponentRenderer{gameStateRender, predicateFunctionsRenderer, stringConstantRenderers, render.MainRenderer, render.TypeDefinitionRenderer}
+	componentRenders := []render.ComponentRenderer{
+		gameStateRender,
+		predicateFunctionsRenderer,
+		stringConstantRenderers,
+		render.MainRenderer,
+		render.TypeDefinitionRenderer,
+		render.IncludesRenderer,
+	}
 
 	renderer, err := render.Build(componentRenders)
 

@@ -77,8 +77,8 @@ func TestExpressionConverter(t *testing.T) {
 			predicate.Equal{predicate.NumberLiteral(25), predicate.NumberLiteral(25)}:                      "25 == 25",
 			predicate.Equal{predicate.VariableReference("my_num"), predicate.NumberLiteral(123)}:           "game_state->my_num == 123",
 			// String comparisons need to use the string comparator
-			predicate.Equal{predicate.StringLiteral("hello"), predicate.StringLiteral("world")}:         "str_compare(STRING_REG_1, STRING_REG_2)",
-			predicate.Equal{predicate.StringLiteral("hello"), predicate.VariableReference("my_string")}: "str_compare(STRING_REG_1, game_state->my_string)",
+			predicate.Equal{predicate.StringLiteral("hello"), predicate.StringLiteral("world")}:         "(strcmp(STRING_REG_1, STRING_REG_2) == 0)",
+			predicate.Equal{predicate.StringLiteral("hello"), predicate.VariableReference("my_string")}: "(strcmp(STRING_REG_1, game_state->my_string) == 0)",
 		} {
 			res, err := ConvertExpressionToSource(expression, gs, &sr)
 			assert.NoError(t, err)
