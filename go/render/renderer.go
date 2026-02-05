@@ -3,6 +3,8 @@ package render
 import (
 	"fmt"
 	"maps"
+	"slices"
+	"sort"
 	"strings"
 )
 
@@ -28,7 +30,11 @@ func Build(components []ComponentRenderer) (*Renderer, error) {
 }
 
 func (r *Renderer) Render() (string, error) {
-	for componentRenderer := range maps.Values(r.components) {
+	components := slices.Collect(maps.Values(r.components))
+	sort.Slice(components, func(i, j int) bool {
+		return components[i].Name() < components[j].Name()
+	})
+	for _, componentRenderer := range components {
 		err := r.recursiveRender(componentRenderer)
 		if err != nil {
 			return "", err
