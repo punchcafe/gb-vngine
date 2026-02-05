@@ -20,7 +20,7 @@ func TestStringConstantsRender(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Equal(
 			t,
-			"\n#define STRING_REG_1 \"sample_constant_1\"\n#define STRING_REG_1 \"sample_constant_2\"\n#define STRING_REG_1 \"sample_constant_3\"",
+			"\n#define STRING_REG_1 \"sample_constant_1\"\n#define STRING_REG_2 \"sample_constant_2\"\n#define STRING_REG_3 \"sample_constant_3\"",
 			res,
 		)
 

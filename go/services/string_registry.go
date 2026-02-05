@@ -2,22 +2,22 @@ package services
 
 import (
 	"fmt"
+	"slices"
 
 	p "punchcafe.dev/gb-vngine/services/predicate"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
 type StringRegistry struct {
-	// treat 0 uint as nil
-	// TODO: need to make ordering guaranteed
-	registry map[string]uint
+	// TODO: improve this to use a better insertion-ordered set
+	entries []StringEntry
 }
 
 func BuildStringRegistry(ps *registry.Registry) *StringRegistry {
 	sr := NewRegistry()
 	v := expressionStringExtractor{sr: &sr}
 
-	for e := range ps.AllRegisteredPredicates() {
+	for _, e := range ps.AllRegisteredPredicates() {
 		e.AcceptVisitor(&v)
 	}
 
@@ -25,11 +25,14 @@ func BuildStringRegistry(ps *registry.Registry) *StringRegistry {
 }
 
 func (sr *StringRegistry) Reference(value string) (string, error) {
-	lookup := sr.registry[value]
-	if lookup == 0 {
+	index := slices.IndexFunc(sr.entries, func(se StringEntry) bool {
+		return se.Value == value
+	})
+
+	if index == -1 {
 		return "", fmt.Errorf("string value not registered in string registry")
 	}
-	return constantName(sr.registry[value]), nil
+	return sr.entries[index].ConstantName, nil
 }
 
 type StringEntry struct {
@@ -38,11 +41,7 @@ type StringEntry struct {
 }
 
 func (st *StringRegistry) AllStrings() []StringEntry {
-	res := make([]StringEntry, 0)
-	for k, v := range st.registry {
-		res = append(res, StringEntry{constantName(v), k})
-	}
-	return res
+	return st.entries
 }
 
 func constantName(index uint) string {
@@ -50,17 +49,21 @@ func constantName(index uint) string {
 }
 
 func NewRegistry() StringRegistry {
-	return StringRegistry{make(map[string]uint)}
+	return StringRegistry{make([]StringEntry, 0)}
 }
 
 // Idempotent
 func (sr *StringRegistry) AddString(value string) {
-	lookup := sr.registry[value]
-	if lookup != 0 {
+	index := slices.IndexFunc(sr.entries, func(se StringEntry) bool {
+		return se.Value == value
+	})
+
+	if index != -1 {
 		// already added
 		return
 	}
-	sr.registry[value] = uint(len(sr.registry) + 1)
+	entryIndex := uint(len(sr.entries) + 1)
+	sr.entries = append(sr.entries, StringEntry{constantName(entryIndex), value})
 }
 
 // Expression traversal

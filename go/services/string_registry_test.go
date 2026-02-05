@@ -19,7 +19,7 @@ func TestStringRegistry(t *testing.T) {
 		newRef, err := sr.Reference(exampleString)
 		assert.NoError(t, err)
 		assert.Equal(t, originalRef, newRef)
-		assert.Equal(t, len(sr.registry), 1)
+		assert.Equal(t, len(sr.entries), 1)
 	})
 
 	t.Run("It adds strings correctly", func(t *testing.T) {
@@ -43,25 +43,34 @@ func TestStringRegistry(t *testing.T) {
 
 func TestBuildStringRegistry(t *testing.T) {
 	t.Run("builds a registry from a predicate registry", func(t *testing.T) {
-		pr := registry.Registry{AllPredicates: map[predicate.Expression]bool{
+		pr := registry.FIXTURE_PredicateRegistryFrom([]predicate.Expression{
 			predicate.And{
 				Lhs: predicate.BoolLiteral(true),
 				Rhs: predicate.BoolLiteral(true),
-			}: true,
+			},
 			predicate.Equal{
 				Lhs: predicate.StringLiteral("hello"),
 				Rhs: predicate.VariableReference("my_string"),
-			}: true,
+			},
 			predicate.Equal{
 				Lhs: predicate.StringLiteral("another literal"),
 				Rhs: predicate.StringLiteral("a third literal"),
-			}: true,
-		}}
+			},
+		})
 
-		expectedStringRegistry := StringRegistry{registry: map[string]uint{
-			"hello":           1,
-			"another literal": 2,
-			"a third literal": 3,
+		expectedStringRegistry := StringRegistry{entries: []StringEntry{
+			{
+				ConstantName: "STRING_REG_1",
+				Value:        "hello",
+			},
+			{
+				ConstantName: "STRING_REG_2",
+				Value:        "another literal",
+			},
+			{
+				ConstantName: "STRING_REG_3",
+				Value:        "a third literal",
+			},
 		}}
 		sr := BuildStringRegistry(&pr)
 

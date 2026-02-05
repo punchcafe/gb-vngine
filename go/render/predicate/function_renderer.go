@@ -34,7 +34,7 @@ func BuildFunctionRenderer(
 
 func (fr *FunctionRenderer) Render() (string, error) {
 	builder := strings.Builder{}
-	for e := range fr.ps.AllRegisteredPredicates() {
+	for _, e := range fr.ps.AllRegisteredPredicates() {
 		functionDefinition, err := fr.renderFunction(e)
 		if err != nil {
 			return "", err
