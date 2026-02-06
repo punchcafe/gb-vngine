@@ -1,10 +1,11 @@
 chapter-id: ch-01
-chapter-variables:
 nodes:
   - id: 0
     type: PLAYER
     narrative-id: nar_01
-    game-state-modifiers:
+    changes:
+      - add($counter, 0)
+      - set($aBool, true)
     branches:
       - prompt: take a sip
         node-id: sip_1
@@ -13,8 +14,8 @@ nodes:
   - id: sip_1
     type: AUTOMATIC
     narrative-id: sip_1
-    game-state-modifiers:
-      - "increase $int.sips by 1"
+    changes:
+      - set($a_string, "new_value")
     branches:
       - predicate-expression: '$a_string equals "some constant value"'
         node-id: 0_after_sip
@@ -25,14 +26,15 @@ nodes:
   - id: 0_after_sip
     type: PLAYER
     narrative-id: empty_nar
-    game-state-modifiers:
+    changes:
+      - set($counter, 0)
     branches:
       - prompt: explore the kitchen
         node-id: explore_kitchen
   - id: explore_kitchen
     type: PLAYER
     narrative-id: explore_kitchen
-    game-state-modifiers:
+    changes:
     branches:
       - prompt: take sip
         node-id: 0

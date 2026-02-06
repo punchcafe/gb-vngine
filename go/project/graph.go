@@ -20,7 +20,7 @@ type Branch struct {
 
 type Node struct {
 	ID                 NodeID              `yaml:"id"`
-	GameStateModifiers []GameStateModifier `yaml:"game-state-modifiers"`
+	GameStateModifiers []GameStateModifier `yaml:"changes"`
 	Branches           []Branch            `yaml:"branches"`
 	NarrativeID        NarrativeID         `yaml:"narrative-id"`
 	NodeType           string              `yaml:"type"`
