@@ -90,6 +90,7 @@ type ExpressionVisitor interface {
 	VisitEqual(Equal)
 }
 
+// TODO: extract this to a syntax module
 type Expression interface {
 	AcceptVisitor(ExpressionVisitor)
 }
