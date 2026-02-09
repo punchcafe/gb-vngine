@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"gopkg.in/yaml.v3"
+	"punchcafe.dev/gb-vngine/app/builders"
 	"punchcafe.dev/gb-vngine/project"
 	"punchcafe.dev/gb-vngine/render"
 	predicaterender "punchcafe.dev/gb-vngine/render/predicate"
@@ -103,7 +104,7 @@ func buildServicesLayer(projectLayer *projectLayer) (*ServicesLayer, error) {
 		return nil, err
 	}
 
-	stringRegistry := services.BuildStringRegistry(predicateRegistry)
+	stringRegistry := builders.BuildStringRegistry(predicateRegistry)
 
 	return &ServicesLayer{
 		gameState:         gameStateService,

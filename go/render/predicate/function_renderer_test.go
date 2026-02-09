@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"punchcafe.dev/gb-vngine/app/builders"
 	"punchcafe.dev/gb-vngine/project"
-	"punchcafe.dev/gb-vngine/services"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
@@ -15,7 +15,7 @@ func TestXxx(t *testing.T) {
 		// TODO: add more extensive cases
 		// TODO: add failure cases
 		pr := registry.FIXTURE_PredicateRegistry()
-		sr := services.BuildStringRegistry(&pr)
+		sr := builders.BuildStringRegistry(&pr)
 		gs := project.GameState{"my_string": project.STRING, "my_num": project.INT}
 
 		subject := FunctionRenderer{
