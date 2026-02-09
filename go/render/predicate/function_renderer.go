@@ -7,7 +7,7 @@ import (
 	"punchcafe.dev/gb-vngine/project"
 	"punchcafe.dev/gb-vngine/render"
 	"punchcafe.dev/gb-vngine/services"
-	"punchcafe.dev/gb-vngine/services/predicate"
+	e "punchcafe.dev/gb-vngine/services/expression"
 	"punchcafe.dev/gb-vngine/services/predicate/name"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
@@ -55,7 +55,7 @@ func (fr *FunctionRenderer) Dependencies() []string {
 	return []string{render.TYPE_DEFINITION_RENDERER_NAME, render.STRING_CONSTANTS_RENDERER_NAME}
 }
 
-func (fr *FunctionRenderer) renderFunction(e predicate.Expression) (string, error) {
+func (fr *FunctionRenderer) renderFunction(e e.Expression) (string, error) {
 	name, err := name.ExpressionToSourceName(e, fr.sr)
 	if err != nil {
 		return "", err

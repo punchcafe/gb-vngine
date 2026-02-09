@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"punchcafe.dev/gb-vngine/services/predicate"
-	"punchcafe.dev/gb-vngine/services/predicate/parse"
+	"punchcafe.dev/gb-vngine/services/expression"
 )
 
 var statementPattern, _ = regexp.Compile("^(.+)\\((.+),(.+)\\)$")
@@ -25,19 +24,19 @@ func ParseStatement(statement string) (MutationStatement, error) {
 	if err != nil {
 		return nil, err
 	}
-	castVariable, ok := variable.(predicate.VariableReference)
+	castVariable, ok := variable.(expression.VariableReference)
 	if !ok {
 		return nil, fmt.Errorf("first argument to statement not a variable")
 	}
-	expression, err := parseRawExpression(structure.expression)
+	expressionModel, err := parseRawExpression(structure.expression)
 	if err != nil {
 		return nil, err
 	}
 	switch structure.functionName {
 	case "set":
-		return SetFunction{variable: castVariable, newValue: expression}, nil
+		return SetFunction{variable: castVariable, newValue: expressionModel}, nil
 	case "add":
-		castValue, ok := expression.(predicate.NumberLiteral)
+		castValue, ok := expressionModel.(expression.NumberLiteral)
 		if !ok {
 			return nil, fmt.Errorf("Invalid argument in add() statement: second argument must be a valid number")
 		}
@@ -59,12 +58,12 @@ func parseStructure(statement string) (*statementStructure, error) {
 }
 
 // TODO: deduplicate
-func parseRawExpression(rawExpression string) (predicate.Expression, error) {
-	tokens, err := parse.ParseTokens(rawExpression)
+func parseRawExpression(rawExpression string) (expression.Expression, error) {
+	tokens, err := expression.ParseTokens(rawExpression)
 	if err != nil {
 		return nil, err
 	}
-	expression, err := parse.ParsePredicate(tokens)
+	expression, err := expression.ParsePredicate(tokens)
 	if err != nil {
 		return nil, err
 	}

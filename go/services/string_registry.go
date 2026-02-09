@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"slices"
 
-	p "punchcafe.dev/gb-vngine/services/predicate"
+	p "punchcafe.dev/gb-vngine/services/expression"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
@@ -14,6 +14,7 @@ type StringRegistry struct {
 	entries []StringEntry
 }
 
+// TODO: move to builder layer and keep more generic
 func BuildStringRegistry(ps *registry.Registry) *StringRegistry {
 	sr := NewRegistry()
 	v := expressionStringExtractor{sr: &sr}

@@ -1,10 +1,9 @@
-package parse
+package expression
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	p "punchcafe.dev/gb-vngine/services/predicate"
 )
 
 func TestParsePredicate(t *testing.T) {
@@ -13,19 +12,19 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.BoolLiteral(true), new_result)
+		assert.Equal(t, BoolLiteral(true), new_result)
 
 		result, err = ParseTokens("false")
 		assert.NoError(t, err)
 		new_result, err = ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.BoolLiteral(false), new_result)
+		assert.Equal(t, BoolLiteral(false), new_result)
 
 		result, err = ParseTokens("1")
 		assert.NoError(t, err)
 		new_result, err = ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.NumberLiteral(1), new_result)
+		assert.Equal(t, NumberLiteral(1), new_result)
 	})
 
 	t.Run("Can correctly parse a valid expression with brackets", func(t *testing.T) {
@@ -33,13 +32,13 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.Brackets{p.NumberLiteral(1)}, new_result)
+		assert.Equal(t, Brackets{NumberLiteral(1)}, new_result)
 
 		result, err = ParseTokens("(false)")
 		assert.NoError(t, err)
 		new_result, err = ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.Brackets{p.BoolLiteral(false)}, new_result)
+		assert.Equal(t, Brackets{BoolLiteral(false)}, new_result)
 	})
 
 	t.Run("Can correctly parse an and expression", func(t *testing.T) {
@@ -47,13 +46,13 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.And{p.BoolLiteral(true), p.BoolLiteral(false)}, new_result)
+		assert.Equal(t, And{BoolLiteral(true), BoolLiteral(false)}, new_result)
 
 		result, err = ParseTokens("true and (true and false)")
 		assert.NoError(t, err)
 		new_result, err = ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.And{p.BoolLiteral(true), p.Brackets{p.And{p.BoolLiteral(true), p.BoolLiteral(false)}}}, new_result)
+		assert.Equal(t, And{BoolLiteral(true), Brackets{And{BoolLiteral(true), BoolLiteral(false)}}}, new_result)
 	})
 
 	t.Run("Can correctly parse an or expression", func(t *testing.T) {
@@ -61,7 +60,7 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.Or{p.Brackets{p.LessThan{p.NumberLiteral(1), p.NumberLiteral(2)}}, p.BoolLiteral(false)}, new_result)
+		assert.Equal(t, Or{Brackets{LessThan{NumberLiteral(1), NumberLiteral(2)}}, BoolLiteral(false)}, new_result)
 	})
 
 	t.Run("Can correctly parse an equals expression", func(t *testing.T) {
@@ -69,7 +68,7 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.Equal{p.Brackets{p.LessThan{p.NumberLiteral(1), p.NumberLiteral(2)}}, p.NumberLiteral(10)}, new_result)
+		assert.Equal(t, Equal{Brackets{LessThan{NumberLiteral(1), NumberLiteral(2)}}, NumberLiteral(10)}, new_result)
 	})
 
 	t.Run("Can correctly parse a less_than expression", func(t *testing.T) {
@@ -77,7 +76,7 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.LessThan{p.NumberLiteral(1), p.NumberLiteral(2)}, new_result)
+		assert.Equal(t, LessThan{NumberLiteral(1), NumberLiteral(2)}, new_result)
 	})
 
 	t.Run("Can correctly parse a more_than expression", func(t *testing.T) {
@@ -85,7 +84,7 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.MoreThan{p.NumberLiteral(1), p.NumberLiteral(2)}, new_result)
+		assert.Equal(t, MoreThan{NumberLiteral(1), NumberLiteral(2)}, new_result)
 	})
 
 	t.Run("Can correctly parse a reference expression", func(t *testing.T) {
@@ -93,7 +92,7 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.MoreThan{p.NumberLiteral(1), p.VariableReference("int_var")}, new_result)
+		assert.Equal(t, MoreThan{NumberLiteral(1), VariableReference("int_var")}, new_result)
 	})
 
 	t.Run("Can correctly parse a string expression", func(t *testing.T) {
@@ -101,7 +100,7 @@ func TestParsePredicate(t *testing.T) {
 		assert.NoError(t, err)
 		new_result, err := ParsePredicate(result)
 		assert.NoError(t, err)
-		assert.Equal(t, p.Equal{p.StringLiteral("hello"), p.VariableReference("my_string")}, new_result)
+		assert.Equal(t, Equal{StringLiteral("hello"), VariableReference("my_string")}, new_result)
 	})
 
 	t.Run("Returns error if root predicate contains multiple expressions", func(t *testing.T) {

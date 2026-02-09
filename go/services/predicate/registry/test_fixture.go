@@ -1,24 +1,24 @@
 package registry
 
-import "punchcafe.dev/gb-vngine/services/predicate"
+import "punchcafe.dev/gb-vngine/services/expression"
 
 func FIXTURE_PredicateRegistry() Registry {
-	return Registry{AllPredicates: []predicate.Expression{
-		predicate.And{
-			Lhs: predicate.BoolLiteral(true),
-			Rhs: predicate.BoolLiteral(true),
+	return Registry{AllPredicates: []expression.Expression{
+		expression.And{
+			Lhs: expression.BoolLiteral(true),
+			Rhs: expression.BoolLiteral(true),
 		},
-		predicate.Equal{
-			Lhs: predicate.StringLiteral("hello"),
-			Rhs: predicate.VariableReference("my_string"),
+		expression.Equal{
+			Lhs: expression.StringLiteral("hello"),
+			Rhs: expression.VariableReference("my_string"),
 		},
-		predicate.Equal{
-			Lhs: predicate.VariableReference("my_num"),
-			Rhs: predicate.NumberLiteral(1),
+		expression.Equal{
+			Lhs: expression.VariableReference("my_num"),
+			Rhs: expression.NumberLiteral(1),
 		},
 	}}
 }
 
-func FIXTURE_PredicateRegistryFrom(predicates []predicate.Expression) Registry {
+func FIXTURE_PredicateRegistryFrom(predicates []expression.Expression) Registry {
 	return Registry{AllPredicates: predicates}
 }

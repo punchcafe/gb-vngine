@@ -1,4 +1,4 @@
-package predicate
+package expression
 
 type Equal struct {
 	Lhs Expression

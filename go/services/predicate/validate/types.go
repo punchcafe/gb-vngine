@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"punchcafe.dev/gb-vngine/project"
-	p "punchcafe.dev/gb-vngine/services/predicate"
+	p "punchcafe.dev/gb-vngine/services/expression"
 )
 
 func NewTypeResolver(gs project.GameState) *TypeResolver {

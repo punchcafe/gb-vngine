@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"punchcafe.dev/gb-vngine/services/predicate"
+	"punchcafe.dev/gb-vngine/services/expression"
 )
 
 func TestStatementParserWithAddStatements(t *testing.T) {
@@ -12,11 +12,11 @@ func TestStatementParserWithAddStatements(t *testing.T) {
 	t.Run("It correctly parses statments", func(t *testing.T) {
 		result, err := ParseStatement("add($someInt, 2)")
 		assert.NoError(t, err)
-		assert.Equal(t, AddFunction{variable: "someInt", amount: predicate.NumberLiteral(2)}, result)
+		assert.Equal(t, AddFunction{variable: "someInt", amount: expression.NumberLiteral(2)}, result)
 
 		result, err = ParseStatement("add($someInt, -2)")
 		assert.NoError(t, err)
-		assert.Equal(t, AddFunction{variable: "someInt", amount: predicate.NumberLiteral(-2)}, result)
+		assert.Equal(t, AddFunction{variable: "someInt", amount: expression.NumberLiteral(-2)}, result)
 	})
 
 	t.Run("It returns an error for statments when the arguments are wrong", func(t *testing.T) {
@@ -43,7 +43,7 @@ func TestStatementParserWithSetStatements(t *testing.T) {
 	t.Run("It correctly parses statments", func(t *testing.T) {
 		result, err := ParseStatement("set($someVar, 2)")
 		assert.NoError(t, err)
-		assert.Equal(t, SetFunction{variable: "someVar", newValue: predicate.NumberLiteral(2)}, result)
+		assert.Equal(t, SetFunction{variable: "someVar", newValue: expression.NumberLiteral(2)}, result)
 	})
 
 	t.Run("It returns an error when the arguments are wrong", func(t *testing.T) {

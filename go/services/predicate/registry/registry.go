@@ -5,8 +5,10 @@ import (
 	"slices"
 
 	"punchcafe.dev/gb-vngine/project"
-	p "punchcafe.dev/gb-vngine/services/predicate"
-	"punchcafe.dev/gb-vngine/services/predicate/parse"
+	p "punchcafe.dev/gb-vngine/services/expression"
+
+	// TOdo: remove duplication
+	parse "punchcafe.dev/gb-vngine/services/expression"
 )
 
 type Registry struct {

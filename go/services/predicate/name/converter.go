@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"punchcafe.dev/gb-vngine/services"
-	p "punchcafe.dev/gb-vngine/services/predicate"
+	p "punchcafe.dev/gb-vngine/services/expression"
 )
 
 func ExpressionToSourceName(e p.Expression, sr *services.StringRegistry) (string, error) {

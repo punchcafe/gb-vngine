@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"punchcafe.dev/gb-vngine/services/predicate"
+	e "punchcafe.dev/gb-vngine/services/expression"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
@@ -43,18 +43,18 @@ func TestStringRegistry(t *testing.T) {
 
 func TestBuildStringRegistry(t *testing.T) {
 	t.Run("builds a registry from a predicate registry", func(t *testing.T) {
-		pr := registry.FIXTURE_PredicateRegistryFrom([]predicate.Expression{
-			predicate.And{
-				Lhs: predicate.BoolLiteral(true),
-				Rhs: predicate.BoolLiteral(true),
+		pr := registry.FIXTURE_PredicateRegistryFrom([]e.Expression{
+			e.And{
+				Lhs: e.BoolLiteral(true),
+				Rhs: e.BoolLiteral(true),
 			},
-			predicate.Equal{
-				Lhs: predicate.StringLiteral("hello"),
-				Rhs: predicate.VariableReference("my_string"),
+			e.Equal{
+				Lhs: e.StringLiteral("hello"),
+				Rhs: e.VariableReference("my_string"),
 			},
-			predicate.Equal{
-				Lhs: predicate.StringLiteral("another literal"),
-				Rhs: predicate.StringLiteral("a third literal"),
+			e.Equal{
+				Lhs: e.StringLiteral("another literal"),
+				Rhs: e.StringLiteral("a third literal"),
 			},
 		})
 

@@ -5,24 +5,24 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"punchcafe.dev/gb-vngine/project"
-	"punchcafe.dev/gb-vngine/services/predicate"
+	e "punchcafe.dev/gb-vngine/services/expression"
 )
 
 func TestFromChapter(t *testing.T) {
 	t.Run("Correctly populates an empty chapter", func(t *testing.T) {
 		res, err := FromChapter(project.Chapter{})
 		assert.NoError(t, err)
-		assert.Equal(t, Registry{AllPredicates: []predicate.Expression{}}, *res)
+		assert.Equal(t, Registry{AllPredicates: []e.Expression{}}, *res)
 	})
 
 	t.Run("Correctly populates a chapter with a single, simple branch", func(t *testing.T) {
 		res, err := FromChapter(project.Chapter{ChapterID: "sample", Nodes: []project.Node{{Branches: []project.Branch{{PredicateExpression: "true and true"}}}}})
 		assert.NoError(t, err)
 		assert.Equal(t, Registry{
-			AllPredicates: []predicate.Expression{
-				predicate.And{
-					Lhs: predicate.BoolLiteral(true),
-					Rhs: predicate.BoolLiteral(true),
+			AllPredicates: []e.Expression{
+				e.And{
+					Lhs: e.BoolLiteral(true),
+					Rhs: e.BoolLiteral(true),
 				},
 			}}, *res)
 	})
@@ -31,7 +31,7 @@ func TestFromChapter(t *testing.T) {
 		// Will be parsed as empty string
 		res, err := FromChapter(project.Chapter{ChapterID: "sample", Nodes: []project.Node{{Branches: []project.Branch{{PredicateExpression: ""}}}}})
 		assert.NoError(t, err)
-		assert.Equal(t, Registry{AllPredicates: []predicate.Expression{}}, *res)
+		assert.Equal(t, Registry{AllPredicates: []e.Expression{}}, *res)
 	})
 
 	t.Run("Correctly populates a chapter with a several branches and nodes", func(t *testing.T) {
@@ -59,18 +59,18 @@ func TestFromChapter(t *testing.T) {
 		}})
 		assert.NoError(t, err)
 		assert.Equal(t, Registry{
-			AllPredicates: []predicate.Expression{
-				predicate.And{
-					Lhs: predicate.BoolLiteral(true),
-					Rhs: predicate.BoolLiteral(true),
+			AllPredicates: []e.Expression{
+				e.And{
+					Lhs: e.BoolLiteral(true),
+					Rhs: e.BoolLiteral(true),
 				},
-				predicate.Equal{
-					Lhs: predicate.StringLiteral("hello"),
-					Rhs: predicate.VariableReference("my_string"),
+				e.Equal{
+					Lhs: e.StringLiteral("hello"),
+					Rhs: e.VariableReference("my_string"),
 				},
-				predicate.Equal{
-					Lhs: predicate.VariableReference("my_num"),
-					Rhs: predicate.NumberLiteral(1),
+				e.Equal{
+					Lhs: e.VariableReference("my_num"),
+					Rhs: e.NumberLiteral(1),
 				},
 			}}, *res)
 	})
@@ -84,7 +84,7 @@ func TestLookup(t *testing.T) {
 	t.Run("it returns the expression if it has been registered", func(t *testing.T) {
 		exp, err := registry.Lookup("true and true")
 		assert.NoError(t, err)
-		assert.Equal(t, predicate.And(predicate.And{Lhs: predicate.BoolLiteral(true), Rhs: predicate.BoolLiteral(true)}), exp)
+		assert.Equal(t, e.And(e.And{Lhs: e.BoolLiteral(true), Rhs: e.BoolLiteral(true)}), exp)
 	})
 
 	t.Run("it returns an error if the expression has not been registered", func(t *testing.T) {
@@ -96,39 +96,39 @@ func TestLookup(t *testing.T) {
 
 func TestAllRegisteredPredicates(t *testing.T) {
 	t.Run("it returns all registered predicates", func(t *testing.T) {
-		subject := Registry{AllPredicates: []predicate.Expression{
-			predicate.And{
-				Lhs: predicate.BoolLiteral(true),
-				Rhs: predicate.BoolLiteral(true),
+		subject := Registry{AllPredicates: []e.Expression{
+			e.And{
+				Lhs: e.BoolLiteral(true),
+				Rhs: e.BoolLiteral(true),
 			},
-			predicate.Equal{
-				Lhs: predicate.StringLiteral("hello"),
-				Rhs: predicate.VariableReference("my_string"),
+			e.Equal{
+				Lhs: e.StringLiteral("hello"),
+				Rhs: e.VariableReference("my_string"),
 			},
-			predicate.Equal{
-				Lhs: predicate.VariableReference("my_num"),
-				Rhs: predicate.NumberLiteral(1),
+			e.Equal{
+				Lhs: e.VariableReference("my_num"),
+				Rhs: e.NumberLiteral(1),
 			},
 		}}
 		AllPredicates := subject.AllRegisteredPredicates()
-		AllPredicatesList := []predicate.Expression{}
+		AllPredicatesList := []e.Expression{}
 		// TODO: nicer way for doing this
 		for _, predicate := range AllPredicates {
 			AllPredicatesList = append(AllPredicatesList, predicate)
 		}
 		assert.Equal(t,
-			[]predicate.Expression{
-				predicate.And{
-					Lhs: predicate.BoolLiteral(true),
-					Rhs: predicate.BoolLiteral(true),
+			[]e.Expression{
+				e.And{
+					Lhs: e.BoolLiteral(true),
+					Rhs: e.BoolLiteral(true),
 				},
-				predicate.Equal{
-					Lhs: predicate.StringLiteral("hello"),
-					Rhs: predicate.VariableReference("my_string"),
+				e.Equal{
+					Lhs: e.StringLiteral("hello"),
+					Rhs: e.VariableReference("my_string"),
 				},
-				predicate.Equal{
-					Lhs: predicate.VariableReference("my_num"),
-					Rhs: predicate.NumberLiteral(1),
+				e.Equal{
+					Lhs: e.VariableReference("my_num"),
+					Rhs: e.NumberLiteral(1),
 				},
 			}, AllPredicatesList)
 	})

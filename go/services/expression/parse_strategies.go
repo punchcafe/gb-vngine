@@ -1,17 +1,15 @@
-package parse
+package expression
 
 import (
 	"fmt"
 	"slices"
 	"strconv"
-
-	p "punchcafe.dev/gb-vngine/services/predicate"
 )
 
 type ParseStrategy interface {
 	CanHandle(tokens []PredicateStringToken) bool
 	// TODO: should I make this generic?
-	Parse(tokens []PredicateStringToken, previousExpression p.Expression) (p.Expression, []PredicateStringToken, error)
+	Parse(tokens []PredicateStringToken, previousExpression Expression) (Expression, []PredicateStringToken, error)
 }
 
 type PredicateParserStrategies struct {
@@ -36,9 +34,9 @@ var parserStrategies PredicateParserStrategies = PredicateParserStrategies{[]Par
 	ValueParserStrategy(1),
 }}
 
-func ParsePredicate(tokens []PredicateStringToken) (p.Expression, error) {
+func ParsePredicate(tokens []PredicateStringToken) (Expression, error) {
 	var err error
-	var previousExpression p.Expression
+	var previousExpression Expression
 	remainder := tokens
 
 	for {
@@ -51,7 +49,7 @@ func ParsePredicate(tokens []PredicateStringToken) (p.Expression, error) {
 	return previousExpression, err
 }
 
-func ParseExpression(tokens []PredicateStringToken, previousExpression p.Expression) (p.Expression, []PredicateStringToken, error) {
+func ParseExpression(tokens []PredicateStringToken, previousExpression Expression) (Expression, []PredicateStringToken, error) {
 	// TODO: extract to configurable object
 
 	strategy, strategyErr := parserStrategies.GetStrategy(tokens)
@@ -69,16 +67,16 @@ func (bps ValueParserStrategy) CanHandle(tokens []PredicateStringToken) bool {
 	return tokenType == STRING_LITERAL || tokenType == VARIABLE
 }
 
-func (bps ValueParserStrategy) Parse(tokens []PredicateStringToken, previousExpression p.Expression) (
-	p.Expression,
+func (bps ValueParserStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
+	Expression,
 	[]PredicateStringToken,
 	error) {
 	val := tokens[0].Val
 	switch tokens[0].TokenType {
 	case STRING_LITERAL:
-		return p.StringLiteral(val), tokens[1:], nil
+		return StringLiteral(val), tokens[1:], nil
 	case VARIABLE:
-		return p.VariableReference(val), tokens[1:], nil
+		return VariableReference(val), tokens[1:], nil
 	}
 	panic("unexpected token type when trying to parse")
 }
@@ -90,8 +88,8 @@ func (bps BooleanParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
 }
 
 // TODO: should I make this generic?
-func (bps BooleanParseStrategy) Parse(tokens []PredicateStringToken, previousExpression p.Expression) (
-	p.Expression,
+func (bps BooleanParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
+	Expression,
 	[]PredicateStringToken,
 	error) {
 
@@ -101,9 +99,9 @@ func (bps BooleanParseStrategy) Parse(tokens []PredicateStringToken, previousExp
 
 	switch tokens[0].Val {
 	case "false":
-		return p.BoolLiteral(false), tokens[1:], nil
+		return BoolLiteral(false), tokens[1:], nil
 	case "true":
-		return p.BoolLiteral(true), tokens[1:], nil
+		return BoolLiteral(true), tokens[1:], nil
 	}
 	panic("Failed to parse token when expected.")
 }
@@ -115,8 +113,8 @@ func (nps NumberParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
 }
 
 // TODO: should I make this generic?
-func (nps NumberParseStrategy) Parse(tokens []PredicateStringToken, previousExpression p.Expression) (
-	p.Expression,
+func (nps NumberParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
+	Expression,
 	[]PredicateStringToken,
 	error) {
 
@@ -128,7 +126,7 @@ func (nps NumberParseStrategy) Parse(tokens []PredicateStringToken, previousExpr
 		panic("Failed to parse integer token when expected.")
 	}
 
-	return p.NumberLiteral(num), tokens[1:], nil
+	return NumberLiteral(num), tokens[1:], nil
 }
 
 type BracketsParseStrategy int
@@ -138,8 +136,8 @@ func (bps BracketsParseStrategy) CanHandle(tokens []PredicateStringToken) bool {
 }
 
 // TODO: should I make this generic?
-func (bps BracketsParseStrategy) Parse(tokens []PredicateStringToken, previousExpression p.Expression) (
-	p.Expression,
+func (bps BracketsParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
+	Expression,
 	[]PredicateStringToken,
 	error) {
 
@@ -169,7 +167,7 @@ func (bps BracketsParseStrategy) Parse(tokens []PredicateStringToken, previousEx
 	res, err := ParsePredicate(tokens[1:endIndex])
 	restOfTokens := tokens[endIndex+1:]
 
-	return p.Brackets{res}, restOfTokens, err
+	return Brackets{res}, restOfTokens, err
 
 }
 
@@ -181,8 +179,8 @@ func (bps BiOperatorParseStrategy) CanHandle(tokens []PredicateStringToken) bool
 	return tokens[0].TokenType == OPERATOR && slices.Contains(biOperators, tokens[0].Val)
 }
 
-func (bps BiOperatorParseStrategy) Parse(tokens []PredicateStringToken, previousExpression p.Expression) (
-	p.Expression,
+func (bps BiOperatorParseStrategy) Parse(tokens []PredicateStringToken, previousExpression Expression) (
+	Expression,
 	[]PredicateStringToken,
 	error) {
 	nextExpression, remainder, err := ParseExpression(tokens[1:], nil)
@@ -191,15 +189,15 @@ func (bps BiOperatorParseStrategy) Parse(tokens []PredicateStringToken, previous
 	}
 	switch tokens[0].Val {
 	case "and":
-		return p.And{previousExpression, nextExpression}, remainder, nil
+		return And{previousExpression, nextExpression}, remainder, nil
 	case "or":
-		return p.Or{previousExpression, nextExpression}, remainder, nil
+		return Or{previousExpression, nextExpression}, remainder, nil
 	case "less_than":
-		return p.LessThan{previousExpression, nextExpression}, remainder, nil
+		return LessThan{previousExpression, nextExpression}, remainder, nil
 	case "more_than":
-		return p.MoreThan{previousExpression, nextExpression}, remainder, nil
+		return MoreThan{previousExpression, nextExpression}, remainder, nil
 	case "equals":
-		return p.Equal{previousExpression, nextExpression}, remainder, nil
+		return Equal{previousExpression, nextExpression}, remainder, nil
 	}
 	panic("unexpected error: couldn't resolve operator type")
 }

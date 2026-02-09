@@ -2,7 +2,7 @@ package mutation
 
 import (
 	"punchcafe.dev/gb-vngine/project"
-	"punchcafe.dev/gb-vngine/services/predicate"
+	e "punchcafe.dev/gb-vngine/services/expression"
 )
 
 // TODO: need to fix this dependency cycle by extracting common syntax into its own
@@ -11,13 +11,13 @@ import (
 // Extract expression to syntaxt module
 
 type SetFunction struct {
-	variable predicate.VariableReference
-	newValue predicate.Expression
+	variable e.VariableReference
+	newValue e.Expression
 }
 
 type AddFunction struct {
-	variable predicate.VariableReference
-	amount   predicate.NumberLiteral
+	variable e.VariableReference
+	amount   e.NumberLiteral
 }
 
 type MutationStatement interface {

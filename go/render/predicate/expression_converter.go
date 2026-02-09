@@ -5,14 +5,14 @@ import (
 
 	"punchcafe.dev/gb-vngine/project"
 	"punchcafe.dev/gb-vngine/services"
-	service "punchcafe.dev/gb-vngine/services/predicate"
+	e "punchcafe.dev/gb-vngine/services/expression"
 
 	// TODO: I think we need a better namespace for this
 	"punchcafe.dev/gb-vngine/services/predicate/validate"
 )
 
 func ConvertExpressionToSource(
-	e service.Expression,
+	e e.Expression,
 	gs project.GameState,
 	sr *services.StringRegistry,
 ) (string, error) {
@@ -30,22 +30,22 @@ type expressionVisitor struct {
 	lastError      error
 }
 
-func (ev *expressionVisitor) VisitVariableReference(vr service.VariableReference) {
+func (ev *expressionVisitor) VisitVariableReference(vr e.VariableReference) {
 	ev.bodyCode = fmt.Sprintf("game_state->%v", string(vr))
 	ev.lastError = nil
 }
 
-func (ev *expressionVisitor) VisitNumberLiteral(nl service.NumberLiteral) {
+func (ev *expressionVisitor) VisitNumberLiteral(nl e.NumberLiteral) {
 	ev.bodyCode = fmt.Sprintf("%d", nl)
 	ev.lastError = nil
 }
 
-func (ev *expressionVisitor) VisitBoolLiteral(bl service.BoolLiteral) {
+func (ev *expressionVisitor) VisitBoolLiteral(bl e.BoolLiteral) {
 	ev.bodyCode = fmt.Sprintf("%v", bool(bl))
 	ev.lastError = nil
 }
 
-func (ev *expressionVisitor) VisitStringLiteral(sl service.StringLiteral) {
+func (ev *expressionVisitor) VisitStringLiteral(sl e.StringLiteral) {
 	ref, err := ev.stringRegistry.Reference(string(sl))
 	if err != nil {
 		panic("unexpected error: string literal not registered in String Registry.")
@@ -54,7 +54,7 @@ func (ev *expressionVisitor) VisitStringLiteral(sl service.StringLiteral) {
 	ev.lastError = nil
 }
 
-func (ev *expressionVisitor) VisitBrackets(b service.Brackets) {
+func (ev *expressionVisitor) VisitBrackets(b e.Brackets) {
 	v := expressionVisitor{}
 	b.InnerExpression.AcceptVisitor(&v)
 	if v.lastError != nil {
@@ -65,15 +65,15 @@ func (ev *expressionVisitor) VisitBrackets(b service.Brackets) {
 	ev.lastError = nil
 }
 
-func (ev *expressionVisitor) VisitAnd(a service.And) {
+func (ev *expressionVisitor) VisitAnd(a e.And) {
 	ev.renderBinaryOperator("&&", a.Lhs, a.Rhs, ev)
 }
 
-func (ev *expressionVisitor) VisitOr(o service.Or) {
+func (ev *expressionVisitor) VisitOr(o e.Or) {
 	ev.renderBinaryOperator("||", o.Lhs, o.Rhs, ev)
 }
 
-func (ev *expressionVisitor) VisitEqual(e service.Equal) {
+func (ev *expressionVisitor) VisitEqual(e e.Equal) {
 	typ, err := ev.typeResolver.ResolveType(e.Lhs)
 	if err != nil {
 		panic("unexpected error: invalid type in equals operator")
@@ -99,17 +99,17 @@ func (ev *expressionVisitor) VisitEqual(e service.Equal) {
 	}
 }
 
-func (ev *expressionVisitor) VisitLessThan(lt service.LessThan) {
+func (ev *expressionVisitor) VisitLessThan(lt e.LessThan) {
 	ev.renderBinaryOperator("<", lt.Lhs, lt.Rhs, ev)
 }
 
-func (ev *expressionVisitor) VisitMoreThan(mt service.MoreThan) {
+func (ev *expressionVisitor) VisitMoreThan(mt e.MoreThan) {
 	ev.renderBinaryOperator(">", mt.Lhs, mt.Rhs, ev)
 }
 
 func (ev *expressionVisitor) renderBinaryOperator(operatorName string,
-	lhsExpression service.Expression,
-	rhsExpression service.Expression,
+	lhsExpression e.Expression,
+	rhsExpression e.Expression,
 	out *expressionVisitor,
 ) {
 	lhs, err := ev.renderExpressionCode(lhsExpression)
@@ -127,7 +127,7 @@ func (ev *expressionVisitor) renderBinaryOperator(operatorName string,
 	out.lastError = nil
 }
 
-func (ev *expressionVisitor) renderExpressionCode(e service.Expression) (string, error) {
+func (ev *expressionVisitor) renderExpressionCode(e e.Expression) (string, error) {
 	v := expressionVisitor{typeResolver: ev.typeResolver, stringRegistry: ev.stringRegistry}
 
 	e.AcceptVisitor(&v)
