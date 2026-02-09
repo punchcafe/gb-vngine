@@ -35,13 +35,13 @@ func ParseStatement(statement string) (MutationStatement, error) {
 	}
 	switch structure.functionName {
 	case "set":
-		return &SetFunction{variable: castVariable, newValue: expression}, nil
+		return SetFunction{variable: castVariable, newValue: expression}, nil
 	case "add":
 		castValue, ok := expression.(predicate.NumberLiteral)
 		if !ok {
 			return nil, fmt.Errorf("Invalid argument in add() statement: second argument must be a valid number")
 		}
-		return &AddFunction{variable: castVariable, amount: castValue}, nil
+		return AddFunction{variable: castVariable, amount: castValue}, nil
 	}
 	return nil, fmt.Errorf("invalid function: unknown mutation function: %v", structure.functionName)
 }
