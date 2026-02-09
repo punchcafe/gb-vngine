@@ -8,7 +8,6 @@ import (
 	"punchcafe.dev/gb-vngine/render"
 	"punchcafe.dev/gb-vngine/services"
 	e "punchcafe.dev/gb-vngine/services/expression"
-	"punchcafe.dev/gb-vngine/services/predicate/name"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
@@ -55,12 +54,12 @@ func (fr *FunctionRenderer) Dependencies() []string {
 	return []string{render.TYPE_DEFINITION_RENDERER_NAME, render.STRING_CONSTANTS_RENDERER_NAME}
 }
 
-func (fr *FunctionRenderer) renderFunction(e e.Expression) (string, error) {
-	name, err := name.ExpressionToSourceName(e, fr.sr)
+func (fr *FunctionRenderer) renderFunction(exp e.Expression) (string, error) {
+	name, err := e.ExpressionToSourceName(exp, fr.sr)
 	if err != nil {
 		return "", err
 	}
-	body, err := ConvertExpressionToSource(e, *fr.gs, fr.sr)
+	body, err := ConvertExpressionToSource(exp, *fr.gs, fr.sr)
 	if err != nil {
 		return "", err
 	}

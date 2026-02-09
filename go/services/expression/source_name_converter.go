@@ -1,13 +1,12 @@
-package name
+package expression
 
 import (
 	"fmt"
 
 	"punchcafe.dev/gb-vngine/services"
-	p "punchcafe.dev/gb-vngine/services/expression"
 )
 
-func ExpressionToSourceName(e p.Expression, sr *services.StringRegistry) (string, error) {
+func ExpressionToSourceName(e Expression, sr *services.StringRegistry) (string, error) {
 	snc := sourceNameConverter{stringRegistry: sr}
 	e.AcceptVisitor(&snc)
 	if snc.lastError != nil {
@@ -22,22 +21,22 @@ type sourceNameConverter struct {
 	stringRegistry *services.StringRegistry
 }
 
-func (nc *sourceNameConverter) VisitVariableReference(vr p.VariableReference) {
+func (nc *sourceNameConverter) VisitVariableReference(vr VariableReference) {
 	nc.lastError = nil
 	nc.sourceName = fmt.Sprintf("VAR_%v", vr)
 }
 
-func (nc *sourceNameConverter) VisitNumberLiteral(nl p.NumberLiteral) {
+func (nc *sourceNameConverter) VisitNumberLiteral(nl NumberLiteral) {
 	nc.lastError = nil
 	nc.sourceName = fmt.Sprintf("%v", nl)
 }
 
-func (nc *sourceNameConverter) VisitBoolLiteral(bl p.BoolLiteral) {
+func (nc *sourceNameConverter) VisitBoolLiteral(bl BoolLiteral) {
 	nc.lastError = nil
 	nc.sourceName = fmt.Sprintf("%v", bl)
 }
 
-func (nc *sourceNameConverter) VisitStringLiteral(sl p.StringLiteral) {
+func (nc *sourceNameConverter) VisitStringLiteral(sl StringLiteral) {
 	sourceName, err := nc.stringRegistry.Reference(string(sl))
 	if err != nil {
 		panic(fmt.Sprintf("unexpected error: non-registered string found in expression: %s", sl))
@@ -46,7 +45,7 @@ func (nc *sourceNameConverter) VisitStringLiteral(sl p.StringLiteral) {
 	nc.sourceName = sourceName
 }
 
-func (nc *sourceNameConverter) VisitBrackets(b p.Brackets) {
+func (nc *sourceNameConverter) VisitBrackets(b Brackets) {
 	v := nc.freshConverter()
 	b.InnerExpression.AcceptVisitor(v)
 	if v.lastError != nil {
@@ -55,7 +54,7 @@ func (nc *sourceNameConverter) VisitBrackets(b p.Brackets) {
 	nc.sourceName = fmt.Sprintf("BO_%v_BC", v.sourceName)
 }
 
-func (nc *sourceNameConverter) VisitAnd(a p.And) {
+func (nc *sourceNameConverter) VisitAnd(a And) {
 	res, err := nc.renderBinaryOperatorName("AND", a.Lhs, a.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -64,7 +63,7 @@ func (nc *sourceNameConverter) VisitAnd(a p.And) {
 	nc.sourceName = res
 }
 
-func (nc *sourceNameConverter) VisitOr(o p.Or) {
+func (nc *sourceNameConverter) VisitOr(o Or) {
 	res, err := nc.renderBinaryOperatorName("OR", o.Lhs, o.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -73,7 +72,7 @@ func (nc *sourceNameConverter) VisitOr(o p.Or) {
 	nc.sourceName = res
 }
 
-func (nc *sourceNameConverter) VisitEqual(e p.Equal) {
+func (nc *sourceNameConverter) VisitEqual(e Equal) {
 	res, err := nc.renderBinaryOperatorName("EQUALS", e.Lhs, e.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -82,7 +81,7 @@ func (nc *sourceNameConverter) VisitEqual(e p.Equal) {
 	nc.sourceName = res
 }
 
-func (nc *sourceNameConverter) VisitLessThan(lt p.LessThan) {
+func (nc *sourceNameConverter) VisitLessThan(lt LessThan) {
 	res, err := nc.renderBinaryOperatorName("LESS_THAN", lt.Lhs, lt.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -91,7 +90,7 @@ func (nc *sourceNameConverter) VisitLessThan(lt p.LessThan) {
 	nc.sourceName = res
 }
 
-func (nc *sourceNameConverter) VisitMoreThan(mt p.MoreThan) {
+func (nc *sourceNameConverter) VisitMoreThan(mt MoreThan) {
 	res, err := nc.renderBinaryOperatorName("MORE_THAN", mt.Lhs, mt.Rhs)
 	if err != nil {
 		nc.lastError = err
@@ -100,7 +99,7 @@ func (nc *sourceNameConverter) VisitMoreThan(mt p.MoreThan) {
 	nc.sourceName = res
 }
 
-func (nc *sourceNameConverter) renderBinaryOperatorName(joinToken string, lhs p.Expression, rhs p.Expression) (string, error) {
+func (nc *sourceNameConverter) renderBinaryOperatorName(joinToken string, lhs Expression, rhs Expression) (string, error) {
 	lhsVisitor := nc.freshConverter()
 	rhsVisitor := nc.freshConverter()
 	lhs.AcceptVisitor(lhsVisitor)
