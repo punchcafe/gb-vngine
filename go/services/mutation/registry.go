@@ -13,6 +13,11 @@ type Registry struct {
 	gameState  project.GameState
 }
 
+func (r *Registry) AllMutationStatements() []MutationStatement {
+	// TODO: make immutable
+	return r.statements
+}
+
 func (r *Registry) registerRawStatement(statement string) error {
 	statementModel, err := ParseStatement(statement)
 	if err != nil {

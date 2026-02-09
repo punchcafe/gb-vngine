@@ -20,7 +20,7 @@ func Test_registerRawStatement(t *testing.T) {
 		err := registry.registerRawStatement(statmentString)
 
 		assert.NoError(t, err)
-		assert.Equal(t, []MutationStatement{statementModel}, registry.statements)
+		assert.Equal(t, []MutationStatement{statementModel}, registry.AllMutationStatements())
 	})
 
 	t.Run("It adds multiple statements to the registry", func(t *testing.T) {
@@ -39,7 +39,7 @@ func Test_registerRawStatement(t *testing.T) {
 		// Assert
 		assert.NoError(t, errOne)
 		assert.NoError(t, errTwo)
-		assert.Equal(t, []MutationStatement{statementModel, otherStatementModel}, registry.statements)
+		assert.Equal(t, []MutationStatement{statementModel, otherStatementModel}, registry.AllMutationStatements())
 	})
 
 	t.Run("It ignores a statement if it's already added", func(t *testing.T) {
@@ -55,7 +55,7 @@ func Test_registerRawStatement(t *testing.T) {
 
 		assert.NoError(t, errOne)
 		assert.NoError(t, errTwo)
-		assert.Equal(t, []MutationStatement{statementModel}, registry.statements)
+		assert.Equal(t, []MutationStatement{statementModel}, registry.AllMutationStatements())
 	})
 
 	t.Run("It returns an error if the statement is invalid", func(t *testing.T) {
