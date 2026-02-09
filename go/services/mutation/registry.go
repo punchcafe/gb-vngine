@@ -13,12 +13,16 @@ type Registry struct {
 	gameState  project.GameState
 }
 
+func EmptyRegistry(gameState project.GameState) *Registry {
+	return &Registry{statements: []MutationStatement{}, gameState: gameState}
+}
+
 func (r *Registry) AllMutationStatements() []MutationStatement {
 	// TODO: make immutable
 	return r.statements
 }
 
-func (r *Registry) registerRawStatement(statement string) error {
+func (r *Registry) RegisterRawStatement(statement string) error {
 	statementModel, err := ParseStatement(statement)
 	if err != nil {
 		return err

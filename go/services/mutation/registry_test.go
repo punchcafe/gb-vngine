@@ -7,17 +7,17 @@ import (
 	"punchcafe.dev/gb-vngine/project"
 )
 
-func Test_registerRawStatement(t *testing.T) {
+func Test_RegisterRawStatement(t *testing.T) {
 
 	t.Run("It adds a statement to the registry", func(t *testing.T) {
 		// Arrange
 		statmentString := "set($some_bool, true)"
 		gameState := project.GameState{"some_bool": project.BOOL}
 		statementModel, _ := ParseStatement(statmentString)
-		registry := newRegistry(gameState)
+		registry := EmptyRegistry(gameState)
 
 		// Act
-		err := registry.registerRawStatement(statmentString)
+		err := registry.RegisterRawStatement(statmentString)
 
 		assert.NoError(t, err)
 		assert.Equal(t, []MutationStatement{statementModel}, registry.AllMutationStatements())
@@ -30,11 +30,11 @@ func Test_registerRawStatement(t *testing.T) {
 		gameState := project.GameState{"some_bool": project.BOOL, "some_int": project.INT}
 		statementModel, _ := ParseStatement(statmentString)
 		otherStatementModel, _ := ParseStatement(otherStatmentString)
-		registry := newRegistry(gameState)
+		registry := EmptyRegistry(gameState)
 
 		// Act
-		errOne := registry.registerRawStatement(statmentString)
-		errTwo := registry.registerRawStatement(otherStatmentString)
+		errOne := registry.RegisterRawStatement(statmentString)
+		errTwo := registry.RegisterRawStatement(otherStatmentString)
 
 		// Assert
 		assert.NoError(t, errOne)
@@ -47,11 +47,11 @@ func Test_registerRawStatement(t *testing.T) {
 		statmentString := "set($some_bool, true)"
 		gameState := project.GameState{"some_bool": project.BOOL}
 		statementModel, _ := ParseStatement(statmentString)
-		registry := newRegistry(gameState)
+		registry := EmptyRegistry(gameState)
 
 		// Act
-		errOne := registry.registerRawStatement(statmentString)
-		errTwo := registry.registerRawStatement(statmentString)
+		errOne := registry.RegisterRawStatement(statmentString)
+		errTwo := registry.RegisterRawStatement(statmentString)
 
 		assert.NoError(t, errOne)
 		assert.NoError(t, errTwo)
@@ -67,18 +67,14 @@ func Test_registerRawStatement(t *testing.T) {
 			// TODO add checks for invalid expression type
 		} {
 			// Arrange
-			registry := newRegistry(gameState)
+			registry := EmptyRegistry(gameState)
 
 			// Act
-			err := registry.registerRawStatement(invalidStatement)
+			err := registry.RegisterRawStatement(invalidStatement)
 
 			assert.Error(t, err)
 			assert.Equal(t, expectedError, err.Error())
 		}
 
 	})
-}
-
-func newRegistry(gameState project.GameState) Registry {
-	return Registry{statements: []MutationStatement{}, gameState: gameState}
 }
