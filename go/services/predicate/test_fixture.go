@@ -1,4 +1,4 @@
-package registry
+package predicate
 
 import "punchcafe.dev/gb-vngine/services/expression"
 

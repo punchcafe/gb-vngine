@@ -7,7 +7,7 @@ import (
 	"punchcafe.dev/gb-vngine/render"
 	"punchcafe.dev/gb-vngine/services/expression"
 	e "punchcafe.dev/gb-vngine/services/expression"
-	"punchcafe.dev/gb-vngine/services/predicate/registry"
+	"punchcafe.dev/gb-vngine/services/predicate"
 )
 
 const PREDICATE_FUNCTION_RENDERER_NAME = "PREDICATE_FUNCTION_RENDERER"
@@ -16,12 +16,12 @@ const PREDICATE_FUNCTION_RENDERER_NAME = "PREDICATE_FUNCTION_RENDERER"
 // in the graph.
 
 type FunctionRenderer struct {
-	ps *registry.Registry
+	ps *predicate.Registry
 	es *expression.Service
 }
 
 func BuildFunctionRenderer(
-	predicateRegistry *registry.Registry,
+	predicateRegistry *predicate.Registry,
 	es *expression.Service,
 ) *FunctionRenderer {
 	return &FunctionRenderer{ps: predicateRegistry, es: es}

@@ -10,7 +10,7 @@ import (
 	predicaterender "punchcafe.dev/gb-vngine/render/predicate"
 	"punchcafe.dev/gb-vngine/services"
 	"punchcafe.dev/gb-vngine/services/expression"
-	predicate "punchcafe.dev/gb-vngine/services/predicate/registry"
+	"punchcafe.dev/gb-vngine/services/predicate"
 )
 
 type App struct {

@@ -6,12 +6,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	s "punchcafe.dev/gb-vngine/services"
 	e "punchcafe.dev/gb-vngine/services/expression"
-	"punchcafe.dev/gb-vngine/services/predicate/registry"
+	"punchcafe.dev/gb-vngine/services/predicate"
 )
 
 func TestBuildStringRegistry(t *testing.T) {
 	t.Run("builds a registry from a predicate registry", func(t *testing.T) {
-		pr := registry.FIXTURE_PredicateRegistryFrom([]e.Expression{
+		pr := predicate.FIXTURE_PredicateRegistryFrom([]e.Expression{
 			e.And{
 				Lhs: e.BoolLiteral(true),
 				Rhs: e.BoolLiteral(true),

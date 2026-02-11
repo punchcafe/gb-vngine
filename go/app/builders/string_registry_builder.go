@@ -3,7 +3,7 @@ package builders
 import (
 	s "punchcafe.dev/gb-vngine/services"
 	e "punchcafe.dev/gb-vngine/services/expression"
-	predicate "punchcafe.dev/gb-vngine/services/predicate/registry"
+	"punchcafe.dev/gb-vngine/services/predicate"
 )
 
 // Expression traversal

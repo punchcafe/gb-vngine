@@ -7,7 +7,7 @@ import (
 	"punchcafe.dev/gb-vngine/app/builders"
 	"punchcafe.dev/gb-vngine/project"
 	"punchcafe.dev/gb-vngine/services/expression"
-	"punchcafe.dev/gb-vngine/services/predicate/registry"
+	"punchcafe.dev/gb-vngine/services/predicate"
 )
 
 func TestXxx(t *testing.T) {
@@ -15,7 +15,7 @@ func TestXxx(t *testing.T) {
 		// TODO: rename these
 		// TODO: add more extensive cases
 		// TODO: add failure cases
-		pr := registry.FIXTURE_PredicateRegistry()
+		pr := predicate.FIXTURE_PredicateRegistry()
 		sr := builders.BuildStringRegistry(&pr)
 		gs := project.GameState{"my_string": project.STRING, "my_num": project.INT}
 		es := expression.BuildService(gs, sr)
