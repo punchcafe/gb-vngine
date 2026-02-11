@@ -9,6 +9,7 @@ import (
 	"punchcafe.dev/gb-vngine/render"
 	predicaterender "punchcafe.dev/gb-vngine/render/predicate"
 	"punchcafe.dev/gb-vngine/services"
+	"punchcafe.dev/gb-vngine/services/expression"
 	predicate "punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
@@ -37,8 +38,7 @@ func (a App) Render() (string, error) {
 	stringConstantRenderers := render.BuildStringConstantsRenderer(servicesLayer.stringRegistry)
 	predicateFunctionsRenderer := predicaterender.BuildFunctionRenderer(
 		servicesLayer.predicateRegsitry,
-		servicesLayer.stringRegistry,
-		&projectLayer.gameState,
+		servicesLayer.expressionService,
 	)
 
 	componentRenders := []render.ComponentRenderer{
@@ -68,6 +68,7 @@ type ServicesLayer struct {
 	gameState         *services.GameStateService
 	predicateRegsitry *predicate.Registry
 	stringRegistry    *services.StringRegistry
+	expressionService *expression.Service
 }
 
 func buildProjectLayer(app App) (*projectLayer, error) {
@@ -105,10 +106,12 @@ func buildServicesLayer(projectLayer *projectLayer) (*ServicesLayer, error) {
 	}
 
 	stringRegistry := builders.BuildStringRegistry(predicateRegistry)
+	expressionService := expression.BuildService(projectLayer.gameState, stringRegistry)
 
 	return &ServicesLayer{
 		gameState:         gameStateService,
 		predicateRegsitry: predicateRegistry,
 		stringRegistry:    stringRegistry,
+		expressionService: expressionService,
 	}, nil
 }

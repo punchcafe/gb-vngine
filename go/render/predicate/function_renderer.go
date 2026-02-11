@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"punchcafe.dev/gb-vngine/project"
 	"punchcafe.dev/gb-vngine/render"
-	"punchcafe.dev/gb-vngine/services"
+	"punchcafe.dev/gb-vngine/services/expression"
 	e "punchcafe.dev/gb-vngine/services/expression"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
@@ -18,17 +17,14 @@ const PREDICATE_FUNCTION_RENDERER_NAME = "PREDICATE_FUNCTION_RENDERER"
 
 type FunctionRenderer struct {
 	ps *registry.Registry
-	sr *services.StringRegistry
-	// TODO: replace this with game state service
-	gs *project.GameState
+	es *expression.Service
 }
 
 func BuildFunctionRenderer(
 	predicateRegistry *registry.Registry,
-	stringRegsitry *services.StringRegistry,
-	gameState *project.GameState,
+	es *expression.Service,
 ) *FunctionRenderer {
-	return &FunctionRenderer{ps: predicateRegistry, sr: stringRegsitry, gs: gameState}
+	return &FunctionRenderer{ps: predicateRegistry, es: es}
 }
 
 func (fr *FunctionRenderer) Render() (string, error) {
@@ -55,11 +51,11 @@ func (fr *FunctionRenderer) Dependencies() []string {
 }
 
 func (fr *FunctionRenderer) renderFunction(exp e.Expression) (string, error) {
-	name, err := e.ExpressionToSourceName(exp, fr.sr)
+	name, err := fr.es.ConvertExpressionToHandleName(exp)
 	if err != nil {
 		return "", err
 	}
-	body, err := ConvertExpressionToSource(exp, *fr.gs, fr.sr)
+	body, err := fr.es.ConvertExpressionToSource(exp)
 	if err != nil {
 		return "", err
 	}

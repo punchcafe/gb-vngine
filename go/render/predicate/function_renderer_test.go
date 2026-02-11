@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"punchcafe.dev/gb-vngine/app/builders"
 	"punchcafe.dev/gb-vngine/project"
+	"punchcafe.dev/gb-vngine/services/expression"
 	"punchcafe.dev/gb-vngine/services/predicate/registry"
 )
 
@@ -17,11 +18,11 @@ func TestXxx(t *testing.T) {
 		pr := registry.FIXTURE_PredicateRegistry()
 		sr := builders.BuildStringRegistry(&pr)
 		gs := project.GameState{"my_string": project.STRING, "my_num": project.INT}
+		es := expression.BuildService(gs, sr)
 
 		subject := FunctionRenderer{
 			ps: &pr,
-			gs: &gs,
-			sr: sr,
+			es: es,
 		}
 
 		expected := `
