@@ -18,6 +18,15 @@ func (s *Service) ConvertExpressionToSource(e Expression) (string, error) {
 	return v.bodyCode, v.lastError
 }
 
+func (s *Service) ConvertExpressionToHandleName(e Expression) (string, error) {
+	snc := sourceNameConverter{stringRegistry: s.sr}
+	e.AcceptVisitor(&snc)
+	if snc.lastError != nil {
+		return "", snc.lastError
+	}
+	return fmt.Sprintf("is_%s", snc.sourceName), nil
+}
+
 // Private functions and types
 
 type expressionVisitor struct {
