@@ -21,7 +21,7 @@ type AddFunction struct {
 }
 
 type MutationStatement interface {
-	Validate(gameState project.GameState) error
+	Validate(project.GameState) error
 }
 
 // TODO: implement these properly, but now use as a type definition.
