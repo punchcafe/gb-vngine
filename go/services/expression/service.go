@@ -170,7 +170,11 @@ func (nc *sourceNameConverter) VisitVariableReference(vr VariableReference) {
 
 func (nc *sourceNameConverter) VisitNumberLiteral(nl NumberLiteral) {
 	nc.lastError = nil
-	nc.sourceName = fmt.Sprintf("%v", nl)
+	if nl < 0 {
+		nc.sourceName = fmt.Sprintf("NEGATIVE_%d", -1*int(nl))
+	} else {
+		nc.sourceName = fmt.Sprintf("%d", nl)
+	}
 }
 
 func (nc *sourceNameConverter) VisitBoolLiteral(bl BoolLiteral) {

@@ -45,9 +45,9 @@ func TestServiceStatementIdentifier(t *testing.T) {
 		es := expression.BuildService(gs, &sr)
 		subject := &Service{expressionService: es}
 		for input, expected := range map[string]string{
-			"add($some_int, 5)": "MUTATION_ADD_is_VAR_some_int_5",
+			"add($some_int, 5)": "MUTATION_ADD_is_VAR_some_int_is_5",
 			// TODO: fix this so negative numbers can be correctly rendered
-			"add($some_int, -5)": "MUTATION_ADD_is_VAR_some_int_-5",
+			"add($some_int, -5)": "MUTATION_ADD_is_VAR_some_int_is_NEGATIVE_5",
 		} {
 			statement, err := ParseStatement(input)
 			assert.NoError(t, err)

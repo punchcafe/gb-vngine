@@ -165,6 +165,7 @@ func TestConvertExpressionToHandleName(t *testing.T) {
 		for expression, expectedName := range map[Expression]string{
 			Equal{BoolLiteral(true), BoolLiteral(false)}:                        "is_true_EQUALS_false",
 			Equal{VariableReference("anInt"), NumberLiteral(1234)}:              "is_VAR_anInt_EQUALS_1234",
+			Equal{VariableReference("anInt"), NumberLiteral(-1234)}:             "is_VAR_anInt_EQUALS_NEGATIVE_1234",
 			Equal{StringLiteral("somestring"), VariableReference("aStringVar")}: fmt.Sprintf("is_%s_EQUALS_VAR_aStringVar", reference),
 		} {
 			res, err := s.ConvertExpressionToHandleName(expression)
