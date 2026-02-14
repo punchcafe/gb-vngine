@@ -3,18 +3,26 @@ package builders
 import (
 	s "punchcafe.dev/gb-vngine/services"
 	e "punchcafe.dev/gb-vngine/services/expression"
+	"punchcafe.dev/gb-vngine/services/mutation"
 	"punchcafe.dev/gb-vngine/services/predicate"
 )
 
 // Expression traversal
 
 // TODO: move to builder layer and keep more generic
-func BuildStringRegistry(ps *predicate.Registry) *s.StringRegistry {
+func BuildStringRegistry(ps *predicate.Registry, mr *mutation.Registry) *s.StringRegistry {
 	sr := s.NewRegistry()
 	v := expressionStringExtractor{sr: &sr}
 
 	for _, e := range ps.AllRegisteredPredicates() {
 		e.AcceptVisitor(&v)
+	}
+
+	for _, s := range mr.AllMutationStatements() {
+		setFunction, ok := s.(mutation.SetFunction)
+		if ok {
+			setFunction.Expression().AcceptVisitor(&v)
+		}
 	}
 
 	return &sr

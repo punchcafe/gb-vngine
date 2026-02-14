@@ -31,6 +31,20 @@ int main()
 }
 
 #define STRING_REG_1 "some constant value"
+#define STRING_REG_2 "new_value"
+
+void MUTATION_ADD_is_VAR_counter_is_0(struct GameState * game_state){
+  game_state->counter += 0;
+}
+void MUTATION_SET_is_VAR_aBool_is_true(struct GameState * game_state){
+  game_state->aBool = true;
+}
+void MUTATION_SET_is_VAR_a_string_is_STRING_REG_2(struct GameState * game_state){
+  game_state->a_string = STRING_REG_2;
+}
+void MUTATION_SET_is_VAR_counter_is_0(struct GameState * game_state){
+  game_state->counter = 0;
+}
 
 bool is_VAR_a_string_EQUALS_STRING_REG_1(struct GameState * game_state) {
 	return (strcmp(game_state->a_string, STRING_REG_1) == 0);

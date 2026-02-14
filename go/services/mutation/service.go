@@ -10,6 +10,11 @@ type Service struct {
 	expressionService *expression.Service
 }
 
+// TODO: come up with convention for factory methods vs actual logical builders.
+func BuildService(es *expression.Service) *Service {
+	return &Service{expressionService: es}
+}
+
 func (s *Service) StatementIdentifier(ms MutationStatement) (string, error) {
 	switch v := ms.(type) {
 	case SetFunction:

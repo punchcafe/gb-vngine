@@ -10,8 +10,11 @@ import (
 	predicaterender "punchcafe.dev/gb-vngine/render/predicate"
 	"punchcafe.dev/gb-vngine/services"
 	"punchcafe.dev/gb-vngine/services/expression"
+	"punchcafe.dev/gb-vngine/services/mutation"
 	"punchcafe.dev/gb-vngine/services/predicate"
 )
+
+// TODO: come up with a formalized way for end-to-end testing this, to mitigate the need for builder / render tests.
 
 type App struct {
 	GameStateVariables string
@@ -41,6 +44,8 @@ func (a App) Render() (string, error) {
 		servicesLayer.expressionService,
 	)
 
+	mutationsFunctionRenderer := render.BuildMutationFunctionsRenderer(servicesLayer.mutationRegistry, servicesLayer.mutationService)
+
 	componentRenders := []render.ComponentRenderer{
 		gameStateRender,
 		predicateFunctionsRenderer,
@@ -48,6 +53,7 @@ func (a App) Render() (string, error) {
 		render.MainRenderer,
 		render.TypeDefinitionRenderer,
 		render.IncludesRenderer,
+		mutationsFunctionRenderer,
 	}
 
 	renderer, err := render.Build(componentRenders)
@@ -69,6 +75,8 @@ type ServicesLayer struct {
 	predicateRegsitry *predicate.Registry
 	stringRegistry    *services.StringRegistry
 	expressionService *expression.Service
+	mutationRegistry  *mutation.Registry
+	mutationService   *mutation.Service
 }
 
 func buildProjectLayer(app App) (*projectLayer, error) {
@@ -105,13 +113,27 @@ func buildServicesLayer(projectLayer *projectLayer) (*ServicesLayer, error) {
 		return nil, err
 	}
 
-	stringRegistry := builders.BuildStringRegistry(predicateRegistry)
+	mutationRegistry, err := builders.BuildMutationRegistry(&projectLayer.chapter, projectLayer.gameState)
+
+	stringRegistry := builders.BuildStringRegistry(predicateRegistry, mutationRegistry)
+
+	if err != nil {
+		return nil, err
+	}
+
 	expressionService := expression.BuildService(projectLayer.gameState, stringRegistry)
+	if err != nil {
+		return nil, err
+	}
+
+	mutationService := mutation.BuildService(expressionService)
 
 	return &ServicesLayer{
 		gameState:         gameStateService,
 		predicateRegsitry: predicateRegistry,
 		stringRegistry:    stringRegistry,
 		expressionService: expressionService,
+		mutationRegistry:  mutationRegistry,
+		mutationService:   mutationService,
 	}, nil
 }

@@ -24,6 +24,10 @@ type MutationStatement interface {
 	Validate(project.GameState) error
 }
 
+func (af SetFunction) Expression() e.Expression {
+	return af.newValue
+}
+
 // TODO: implement these properly, but now use as a type definition.
 func (af AddFunction) Validate(_ project.GameState) error {
 	return nil
