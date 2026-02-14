@@ -61,3 +61,55 @@ func TestServiceStatementIdentifier(t *testing.T) {
 	})
 
 }
+
+func TestServiceStatementSourceCode(t *testing.T) {
+	t.Run("It can convert set mutations", func(t *testing.T) {
+		sr := services.FIXTURE_StringRegistryFrom([]string{"sample_string_a", "sample_string_b"})
+		gs := project.GameState(map[project.GameStateVariableName]project.GameStateVariableType{
+			"some_int":    project.INT,
+			"some_string": project.STRING,
+			"some_bool":   project.BOOL,
+		})
+		es := expression.BuildService(gs, &sr)
+		subject := &Service{expressionService: es}
+		for input, expected := range map[string]string{
+			"set($some_string, \"sample_string_a\")":                     "game_state->some_string = STRING_REG_1;",
+			"set($some_string, \"sample_string_b\")":                     "game_state->some_string = STRING_REG_2;",
+			"set($some_int, 5)":                                          "game_state->some_int = 5;",
+			"set($some_bool, true)":                                      "game_state->some_bool = true;",
+			"set($some_bool, false)":                                     "game_state->some_bool = false;",
+			"set($some_bool, ($some_counter less_than 3) or $some_bool)": "game_state->some_bool = (game_state->some_counter < 3) || game_state->some_bool;",
+		} {
+			statement, err := ParseStatement(input)
+			assert.NoError(t, err)
+			identifier, err := subject.StatementSourceCode(statement)
+			assert.NoError(t, err)
+			// TODO: update expression service to not include is_ prefix and extract to predicate service
+			assert.Equal(t, expected, identifier)
+		}
+
+	})
+
+	t.Run("It can convert add mutations", func(t *testing.T) {
+		sr := services.FIXTURE_StringRegistryFrom([]string{})
+		gs := project.GameState(map[project.GameStateVariableName]project.GameStateVariableType{
+			"some_int": project.INT,
+		})
+		es := expression.BuildService(gs, &sr)
+		subject := &Service{expressionService: es}
+		for input, expected := range map[string]string{
+			"add($some_int, 5)":  "game_state->some_int += 5;",
+			"add($some_int, -5)": "game_state->some_int += -5;",
+		} {
+			statement, err := ParseStatement(input)
+			assert.NoError(t, err)
+			identifier, err := subject.StatementSourceCode(statement)
+			assert.NoError(t, err)
+			// TODO: update expression service to not include is_ prefix and extract to predicate service
+			assert.Equal(t, expected, identifier)
+		}
+
+		// TODO: add invalid cases
+	})
+
+}

@@ -31,3 +31,25 @@ func (s *Service) StatementIdentifier(ms MutationStatement) (string, error) {
 		panic("unexpected error")
 	}
 }
+
+func (s *Service) StatementSourceCode(ms MutationStatement) (string, error) {
+	switch v := ms.(type) {
+	case SetFunction:
+		expressionSource, expressionErr := s.expressionService.ConvertExpressionToSource(v.newValue)
+		variableSource, variableErr := s.expressionService.ConvertExpressionToSource(v.variable)
+		if variableErr != nil || expressionErr != nil {
+			return "", fmt.Errorf("unable to parse set mutation statement")
+		}
+		return fmt.Sprintf("%s = %s;", variableSource, expressionSource), nil
+	case AddFunction:
+		amountSource, amountErr := s.expressionService.ConvertExpressionToSource(v.amount)
+		variableSource, variableErr := s.expressionService.ConvertExpressionToSource(v.variable)
+		if variableErr != nil || amountErr != nil {
+			return "", fmt.Errorf("unable to parse add mutation statement")
+		}
+		return fmt.Sprintf("%s += %s;", variableSource, amountSource), nil
+
+	default:
+		panic("unexpected error")
+	}
+}
