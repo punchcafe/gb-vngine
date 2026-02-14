@@ -3,6 +3,9 @@ typedef unsigned char bool;
 typedef void (*GameStateModification)(struct GameState*);
 typedef bool (*GameStatePredicate)(struct GameState*);
 
+#define true 1
+#define false 0
+
 enum NodeTransitionType {
     PLAYER_BASED_TRANSITION,
     PREDICATE_BASED_TRANSITION
